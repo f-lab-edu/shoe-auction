@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.maven.plugins:maven-gpg-plugin:1.6">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.maven.plugins/maven-gpg-plugin/1.6/4ec125296d79f591e412ccc8ebdfcc3a91e2cdd7/maven-gpg-plugin-1.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.maven.plugins/maven-gpg-plugin/1.6/b07eb9b2a1884f4c9e70f7ecf2bd59b7146cbbf3/maven-gpg-plugin-1.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

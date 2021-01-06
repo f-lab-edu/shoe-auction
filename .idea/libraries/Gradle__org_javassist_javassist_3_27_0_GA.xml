@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.javassist:javassist:3.27.0-GA">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.javassist/javassist/3.27.0-GA/f63e6aa899e15eca8fdaa402a79af4c417252213/javassist-3.27.0-GA.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.javassist/javassist/3.27.0-GA/e5dea2989ab81731501c670be0d1514512dbc13a/javassist-3.27.0-GA-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

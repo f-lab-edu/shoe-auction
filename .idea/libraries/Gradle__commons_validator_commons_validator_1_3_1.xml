@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: commons-validator:commons-validator:1.3.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-validator/commons-validator/1.3.1/d1fd6b1510f25e827adffcf17de3c85fa00e9391/commons-validator-1.3.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-validator/commons-validator/1.3.1/f6cb785bd9d1b6865637b220d2a596a5505a8241/commons-validator-1.3.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

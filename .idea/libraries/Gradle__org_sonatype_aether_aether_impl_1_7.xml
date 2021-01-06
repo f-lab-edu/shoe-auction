@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.sonatype.aether:aether-impl:1.7">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.sonatype.aether/aether-impl/1.7/5cc1803eb7126f759d34007b74e6dc44e9a9fb08/aether-impl-1.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.sonatype.aether/aether-impl/1.7/ddcd717382857f6186f77708eb5d9134fb4a997b/aether-impl-1.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

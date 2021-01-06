@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.sonatype.plexus:plexus-sec-dispatcher:1.4">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.sonatype.plexus/plexus-sec-dispatcher/1.4/43fde524e9b94c883727a9fddb8669181b890ea7/plexus-sec-dispatcher-1.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.sonatype.plexus/plexus-sec-dispatcher/1.4/8c733f36027854485e48fc6a8bbbd7bedb86d4a0/plexus-sec-dispatcher-1.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

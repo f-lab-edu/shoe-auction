@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.mockito:mockito-junit-jupiter:3.6.28">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-junit-jupiter/3.6.28/23149890c3b6047604a682aa3d47151d440e1bfa/mockito-junit-jupiter-3.6.28.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-junit-jupiter/3.6.28/c16ea5cf4c8b06dc63e5bb0af9a9828cce6c5e01/mockito-junit-jupiter-3.6.28-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

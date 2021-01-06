@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.dom4j:dom4j:2.1.3">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.dom4j/dom4j/2.1.3/a75914155a9f5808963170ec20653668a2ffd2fd/dom4j-2.1.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.dom4j/dom4j/2.1.3/fd3c592b44ddb513f9888441ca3510e9f1bcdeb3/dom4j-2.1.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

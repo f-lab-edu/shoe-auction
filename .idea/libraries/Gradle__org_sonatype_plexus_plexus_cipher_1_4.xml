@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.sonatype.plexus:plexus-cipher:1.4">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.sonatype.plexus/plexus-cipher/1.4/50ade46f23bb38cd984b4ec560c46223432aac38/plexus-cipher-1.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.sonatype.plexus/plexus-cipher/1.4/fd919edf211954e41e0e60bc8b042bd2e1e5cc1f/plexus-cipher-1.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

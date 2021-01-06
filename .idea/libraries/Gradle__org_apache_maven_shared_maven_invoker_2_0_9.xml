@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.maven.shared:maven-invoker:2.0.9">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.maven.shared/maven-invoker/2.0.9/9379abfa1e08c4f478d82f4df0aca8ea4af60020/maven-invoker-2.0.9.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.maven.shared/maven-invoker/2.0.9/dfe84b74690e24dc645d455f7108a25cd2392642/maven-invoker-2.0.9-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
