@@ -2,7 +2,7 @@ package com.flab.soft.shoeauction.user.controller;
 
 import com.flab.soft.shoeauction.user.domain.User;
 import com.flab.soft.shoeauction.user.dto.UserDto;
-import com.flab.soft.shoeauction.user.service.UserService;
+import com.flab.soft.shoeauction.user.service.SignUpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,33 +17,33 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final SignUpService signUpService;
 
     @GetMapping
     public List<User> allUsers() {
-        return userService.findAll();
+        return signUpService.findAll();
     }
 
     @GetMapping("/duplicated/email")
     public boolean emailDuplicated(String email) {
-        return userService.emailDuplicateCheck(email);
+        return signUpService.emailDuplicateCheck(email);
     }
 
     @GetMapping("/duplicated/nickname")
     public boolean nickNameDuplicated(String nickname) {
-        return userService.emailDuplicateCheck(nickname);
+        return signUpService.emailDuplicateCheck(nickname);
     }
 
-    @PostMapping("/verification/send")
-    public ResponseEntity<String> sendAuthenticationNumber() {
-        String authenticationNumber = userService.getRandomNumber();
-        return ResponseEntity.ok().body(authenticationNumber);
+    @PostMapping("/certification/send")
+    public ResponseEntity sendCertificationNumber() {
+        signUpService.saveAuthenticationNumber();
+        return ResponseEntity.ok().build();
     }
 
 
     @PostMapping("/new")
-    public ResponseEntity<User> createdUser(@RequestBody @Valid UserDto signUpDto) {
-        User savedUser = userService.saveUser(signUpDto);
+    public ResponseEntity<User> savedUser(@RequestBody @Valid UserDto signUpDto) {
+        User savedUser = signUpService.saveUser(signUpDto);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
