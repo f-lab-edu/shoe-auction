@@ -1,4 +1,4 @@
-package com.flab.soft.shoeauction;
+package com.flab.shoeauction;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
