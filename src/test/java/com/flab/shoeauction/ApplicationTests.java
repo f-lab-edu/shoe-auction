@@ -1,4 +1,4 @@
-package com.flab.soft.shoeauction;
+package com.flab.shoeauction;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
