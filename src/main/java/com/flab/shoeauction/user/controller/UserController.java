@@ -53,7 +53,7 @@ public class UserController {
         return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("/new")
+    @PostMapping
     public ResponseEntity signUp(@RequestBody @Valid UserDto signUpDto) {
         User savedUser = signUpService.saveUser(signUpDto);
         URI uri = WebMvcLinkBuilder.linkTo(UserController.class).slash(savedUser.getId()).toUri();
