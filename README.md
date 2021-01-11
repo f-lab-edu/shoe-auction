@@ -27,7 +27,7 @@
 
 
 
-### Git-Flow 브랜치 전략
+## Git-Flow 브랜치 전략
 
 delvelop의 변경사항을 feature로 가져와서 작업후 Pull Request 를 통한 리뷰 완료 후 merge 
 
