@@ -7,7 +7,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -42,9 +41,11 @@ public class UserDto {
                 .password(EncryptionUtils.encryptSHA256(this.password))
                 .nickname(this.nickname)
                 .phone(this.phone)
-                .createdAt(LocalDateTime.now())
                 .build();
     }
-
+    @Getter
+    public static class CertificationInfo {
+        private String certificationNumber;
+    }
 
 }

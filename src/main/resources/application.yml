@@ -1,31 +1,43 @@
+#애플리케이션 실행시 local profile을 사용한다.
+#org.hibernate.SQL : 로거를 이용한 쿼리문 출력
+#org.hibernate.type : ?로 표시된 쿼리 파라미터 값을 로그로 출력
 spring:
   profiles:
     active: local
-
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type : trace
 ---
+#url : h2 접근 url
+#username / password : h2 접근 id/pw
+#driver-class-name : h2 DB 사용을 위한 설정
+#ddl-create : 개발 초기 환경에서 사용. 애플리케이션 로딩 시점에 모든 테이블을 drop 후 새로 생성, 애플리케이션 서버 종료 후에도 DB 보존
+#show_sql : JPA가 실행하는 query를 모든 console에 출력 (사용하지 않음. logging level에서 출력)
+#format_sql : query의 출력 내용을 서식에 맞게 가독성을 향상시켜 출력
 spring:
-  profiles: dev
-
+  profiles: local
   datasource:
-  url: jdbc:h2:tcp://localhost/~/shoeactions
-  username: sa
-  password:
-  driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/shoeactions
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
 
   jpa:
     hibernate:
       ddl-auto: create
     properties:
-      show_sql: true
-      format_sql : true
+      hibernate:
+#        show_sql : true
+        format_sql: true
+
 
 ---
 spring:
-  profiles: prod
+  profiles: dev
 
-server:
-  port: 8000
-
-logging:
-  level:
-    org.hibernate.SQL: debug
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true

@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/duplicated/nickname")
-    public boolean nickNameDuplicated(String nickname) {
+    public boolean nickname(String nickname) {
         return signUpService.emailDuplicateCheck(nickname);
     }
 
@@ -46,8 +46,8 @@ public class UserController {
     }
 
     @PostMapping("/certification")
-    public ResponseEntity requestCertification(@RequestBody User.CertificationInfo certificationInfo) {
-        if (signUpService.certificationNumberInspection(certificationInfo.getNumber())) {
+    public ResponseEntity requestCertification(@RequestBody UserDto.CertificationInfo certificationInfo) {
+        if (signUpService.certificationNumberInspection(certificationInfo.getCertificationNumber())) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();

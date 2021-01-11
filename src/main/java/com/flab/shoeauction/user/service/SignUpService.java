@@ -7,6 +7,7 @@ import com.flab.shoeauction.user.exception.PasswordMissMatchException;
 import com.flab.shoeauction.user.exception.UserDuplicateException;
 import com.flab.shoeauction.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Random;
 
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class SignUpService {
     private final UserRepository userRepository;
@@ -66,6 +68,6 @@ public class SignUpService {
             stringBuffer.append((rand.nextInt(10)));
         }
         sessionUtils.setCertificationSession(stringBuffer.toString());
-        System.out.println(sessionUtils.getCertificationSession());
+        log.info(sessionUtils.getCertificationSession());
     }
 }
