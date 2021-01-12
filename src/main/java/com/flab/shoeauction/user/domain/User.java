@@ -4,14 +4,16 @@ import com.flab.shoeauction.common.baseEntity.BaseEntity;
 import lombok.*;
 import org.apache.tomcat.jni.Address;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Getter
 @Builder
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
     @Id
     @GeneratedValue
@@ -20,6 +22,7 @@ public class User extends BaseEntity {
     private String email;
 
     private String password;
+
 
     private String nickname;
 

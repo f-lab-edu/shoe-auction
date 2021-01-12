@@ -1,6 +1,6 @@
 package com.flab.shoeauction.user.service;
 
-import com.flab.shoeauction.common.utils.SessionUtils;
+import com.flab.shoeauction.user.utils.AuthenticationSessionUtils;
 import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
 import com.flab.shoeauction.user.exception.PasswordMissMatchException;
@@ -13,13 +13,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Random;
 
+import static com.flab.shoeauction.user.utils.UserConstants.NUMBER_GENERATION_COUNT;
+
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class SignUpService {
     private final UserRepository userRepository;
-    private final SessionUtils sessionUtils;
+    private final AuthenticationSessionUtils authenticationSessionUtils;
 
     //데이터 조회용. 추후 삭제
     public List<User> findAll() {
@@ -28,7 +30,7 @@ public class SignUpService {
 
     public User saveUser(UserDto userDto) {
         signUpValid(userDto);
-        sessionUtils.removeCertificationSession();
+        authenticationSessionUtils.removeCertificationSession();
         User user = userDto.toUser();
         return userRepository.save(user);
     }
@@ -58,16 +60,16 @@ public class SignUpService {
     }
 
     public boolean certificationNumberInspection(String certificationNumber) {
-        return sessionUtils.getCertificationSession().equals(certificationNumber);
+        return authenticationSessionUtils.getCertificationSession().equals(certificationNumber);
     }
 
     public void saveAuthenticationNumber() {
         Random rand = new Random();
         StringBuffer stringBuffer = new StringBuffer();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < NUMBER_GENERATION_COUNT; i++) {
             stringBuffer.append((rand.nextInt(10)));
         }
-        sessionUtils.setCertificationSession(stringBuffer.toString());
-        log.info(sessionUtils.getCertificationSession());
+        authenticationSessionUtils.setCertificationSession(stringBuffer.toString());
+        log.info(authenticationSessionUtils.getCertificationSession());
     }
 }
