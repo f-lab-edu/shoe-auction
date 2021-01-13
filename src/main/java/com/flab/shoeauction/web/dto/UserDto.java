@@ -1,6 +1,6 @@
 package com.flab.shoeauction.web.dto;
 
-import com.flab.shoeauction.domain.users.Users;
+import com.flab.shoeauction.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,13 +44,20 @@ public class UserDto {
             this.phone = phone;
         }
 
-        public Users toEntity() {
-            return Users.builder()
+        public User toEntity() {
+            return User.builder()
                     .nickname(this.nickname)
                     .email(this.email)
                     .password(this.password)
                     .phone(this.phone)
                     .build();
         }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class CertificationRequest {
+        private String phone;
+        private String certificationNumber;
     }
 }

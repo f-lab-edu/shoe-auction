@@ -2,7 +2,6 @@ package com.flab.shoeauction.exception;
 
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
-import com.flab.shoeauction.exception.user.WrongConfirmPasswordException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,16 +29,6 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .message("중복된 닉네임입니다.")
-                .build();
-        log.error(errorResponse.getMessage(), exception);
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-    }
-
-    @ExceptionHandler(WrongConfirmPasswordException.class)
-    public ResponseEntity<ErrorResponse> wrongConfirmPasswordException(WrongConfirmPasswordException exception) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.BAD_REQUEST)
-                .message("비밀번호 확인이 동일하지 않습니다.")
                 .build();
         log.error(errorResponse.getMessage(), exception);
         return new ResponseEntity<>(errorResponse, errorResponse.getStatus());

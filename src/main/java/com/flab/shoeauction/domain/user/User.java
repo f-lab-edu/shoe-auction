@@ -1,4 +1,4 @@
-package com.flab.shoeauction.domain.users;
+package com.flab.shoeauction.domain.user;
 
 import com.flab.shoeauction.common.util.EncryptionUtils;
 import com.flab.shoeauction.domain.BaseTimeEntity;
@@ -14,7 +14,7 @@ import javax.persistence.Id;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Users extends BaseTimeEntity {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -29,7 +29,7 @@ public class Users extends BaseTimeEntity {
     private String phone;
 
     @Builder
-    public Users(String nickname, String email, String password, String phone) {
+    public User(String nickname, String email, String password, String phone) {
         this.nickname = nickname;
         this.email = email;
         this.password = EncryptionUtils.encryptSHA256(password);
