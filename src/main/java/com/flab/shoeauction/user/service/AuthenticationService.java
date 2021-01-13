@@ -1,14 +1,13 @@
-package com.flab.shoeauction.user.utils;
+package com.flab.shoeauction.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
 import javax.servlet.http.HttpSession;
+import static com.flab.shoeauction.user.utils.UserConstants.CERTIFICATION_SESSION_KEY;
 
 @Component
 @RequiredArgsConstructor
-public class AuthenticationSessionUtils {
-    private static final String CERTIFICATION_SESSION_KEY = "certificationNumber";
+public class AuthenticationService {
 
     private final HttpSession session;
 

@@ -1,9 +1,7 @@
 package com.flab.shoeauction.user.service;
 
-import com.flab.shoeauction.user.utils.AuthenticationSessionUtils;
 import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
-import com.flab.shoeauction.user.exception.PasswordMissMatchException;
 import com.flab.shoeauction.user.exception.UserDuplicateException;
 import com.flab.shoeauction.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +19,7 @@ import static com.flab.shoeauction.user.utils.UserConstants.NUMBER_GENERATION_CO
 @RequiredArgsConstructor
 public class SignUpService {
     private final UserRepository userRepository;
-    private final AuthenticationSessionUtils authenticationSessionUtils;
+    private final AuthenticationService authenticationService;
 
     //데이터 조회용. 추후 삭제
     public List<User> findAll() {
@@ -29,27 +27,13 @@ public class SignUpService {
     }
 
     public User saveUser(UserDto userDto) {
-        signUpValid(userDto);
-        authenticationSessionUtils.removeCertificationSession();
-        User user = userDto.toUser();
-        return userRepository.save(user);
-    }
-
-    private void signUpValid(UserDto userDto) {
-
         if (emailDuplicateCheck(userDto.getEmail()) || nicknameDuplicateCheck(userDto.getNickname())) {
             throw new UserDuplicateException("이메일 또는 닉네임을 확인하세요.");
         }
-
-        if (checkPassword(userDto.getPassword(), userDto.getConfirmPassword())) {
-            throw new PasswordMissMatchException("비밀번호가 일치하지 않습니다.");
-        }
+        authenticationService.removeCertificationSession();
+        User user = userDto.toUser();
+        return userRepository.save(user);
     }
-
-    private boolean checkPassword(String password, String confirmPassword) {
-        return !password.equals(confirmPassword);
-    }
-
 
     public boolean emailDuplicateCheck(String email) {
         return userRepository.existsByEmail(email);
@@ -60,7 +44,7 @@ public class SignUpService {
     }
 
     public boolean certificationNumberInspection(String certificationNumber) {
-        return authenticationSessionUtils.getCertificationSession().equals(certificationNumber);
+        return authenticationService.getCertificationSession().equals(certificationNumber);
     }
 
     public void saveAuthenticationNumber() {
@@ -69,7 +53,7 @@ public class SignUpService {
         for (int i = 0; i < NUMBER_GENERATION_COUNT; i++) {
             stringBuffer.append((rand.nextInt(10)));
         }
-        authenticationSessionUtils.setCertificationSession(stringBuffer.toString());
-        log.info(authenticationSessionUtils.getCertificationSession());
+        authenticationService.setCertificationSession(stringBuffer.toString());
+        log.info(authenticationService.getCertificationSession());
     }
 }

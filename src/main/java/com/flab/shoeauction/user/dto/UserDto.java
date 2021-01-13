@@ -19,12 +19,6 @@ public class UserDto {
     @Length(min = 8, max = 50)
     private String password;
 
-
-    @NotBlank
-    @Length(min = 8, max = 50)
-    private String confirmPassword;
-
-
     @NotBlank
     @Length(min = 3, max = 20)
     @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_]{3,20}$")

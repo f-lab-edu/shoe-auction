@@ -39,7 +39,6 @@ class UserControllerTest {
         UserDto userDto = userDto = UserDto.builder()
                 .email("test123@test.com")
                 .password("test1234")
-                .confirmPassword("test1234")
                 .phone("01011112222")
                 .nickname("17171771")
                 .build();
@@ -66,7 +65,6 @@ class UserControllerTest {
         UserDto userDto = userDto = UserDto.builder()
                 .email("test123@test.com")
                 .password("test1234")
-                .confirmPassword("test1234")
                 .phone("01011112222")
                 .nickname("aa")
                 .build();
@@ -78,24 +76,4 @@ class UserControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    @Test
-    @DisplayName("회원가입 실패 - 패스워드 불일치")
-    public void signUpFailedByPasswordMissMatch() throws Exception {
-        UserDto userDto = userDto = UserDto.builder()
-                .email("test123@test.com")
-                .password("test1234")
-                .confirmPassword("test12345")
-                .phone("01011112222")
-                .nickname("shoeAction")
-                .build();
-
-        mockMvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userDto)))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
-    }
-
-
-
- }
+}
