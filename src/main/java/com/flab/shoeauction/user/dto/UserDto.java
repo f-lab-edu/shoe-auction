@@ -1,6 +1,7 @@
 package com.flab.shoeauction.user.dto;
 import com.flab.shoeauction.common.utils.EncryptionUtils;
 import com.flab.shoeauction.user.domain.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
@@ -18,12 +19,6 @@ public class UserDto {
     @NotBlank
     @Length(min = 8, max = 50)
     private String password;
-
-
-    @NotBlank
-    @Length(min = 8, max = 50)
-    private String confirmPassword;
-
 
     @NotBlank
     @Length(min = 3, max = 20)
@@ -46,6 +41,18 @@ public class UserDto {
     @Getter
     public static class CertificationInfo {
         private String certificationNumber;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class LoginDto{
+        private String email;
+        private String password;
+
+        public static LoginDto of(String email, String password){
+            return new LoginDto(email,password);
+        }
+
     }
 
 }

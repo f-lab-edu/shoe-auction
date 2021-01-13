@@ -1,7 +1,11 @@
 package com.flab.shoeauction.user.controller;
 
+import com.flab.shoeauction.common.utils.EncryptionUtils;
 import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
+import com.flab.shoeauction.user.dto.UserDto.CertificationInfo;
+import com.flab.shoeauction.user.dto.UserDto.LoginDto;
+import com.flab.shoeauction.user.service.LoginService;
 import com.flab.shoeauction.user.service.SignUpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -24,6 +28,7 @@ import java.util.List;
 public class UserController {
 
     private final SignUpService signUpService;
+    private final LoginService loginService;
 
     @GetMapping
     public List<User> allUsers() {
@@ -46,7 +51,7 @@ public class UserController {
     }
 
     @PostMapping("/certification")
-    public ResponseEntity requestCertification(@RequestBody UserDto.CertificationInfo certificationInfo) {
+    public ResponseEntity requestCertification(@RequestBody CertificationInfo certificationInfo) {
         if (signUpService.certificationNumberInspection(certificationInfo.getCertificationNumber())) {
             return ResponseEntity.ok().build();
         }
@@ -59,5 +64,20 @@ public class UserController {
         URI uri = WebMvcLinkBuilder.linkTo(UserController.class).slash(savedUser.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody LoginDto loginDto) {
+        String email = loginDto.getEmail();
+        String password = EncryptionUtils.encryptSHA256(loginDto.getPassword());
+        loginService.existByEmailAndPassword(email, password);
+        loginService.login(email);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/logout")
+    public ResponseEntity logout() {
+        loginService.logout();
+        return ResponseEntity.ok().build();
     }
 }

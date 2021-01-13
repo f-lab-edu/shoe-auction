@@ -1,11 +1,10 @@
 package com.flab.shoeauction.user.service;
 
-import com.flab.shoeauction.user.utils.AuthenticationSessionUtils;
 import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
-import com.flab.shoeauction.user.exception.PasswordMissMatchException;
 import com.flab.shoeauction.user.exception.UserDuplicateException;
 import com.flab.shoeauction.user.repository.UserRepository;
+import com.flab.shoeauction.user.utils.AuthenticationSessionUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,21 +28,12 @@ public class SignUpService {
     }
 
     public User saveUser(UserDto userDto) {
-        signUpValid(userDto);
-        authenticationSessionUtils.removeCertificationSession();
-        User user = userDto.toUser();
-        return userRepository.save(user);
-    }
-
-    private void signUpValid(UserDto userDto) {
-
         if (emailDuplicateCheck(userDto.getEmail()) || nicknameDuplicateCheck(userDto.getNickname())) {
             throw new UserDuplicateException("이메일 또는 닉네임을 확인하세요.");
         }
-
-        if (checkPassword(userDto.getPassword(), userDto.getConfirmPassword())) {
-            throw new PasswordMissMatchException("비밀번호가 일치하지 않습니다.");
-        }
+        authenticationSessionUtils.removeCertificationSession();
+        User user = userDto.toUser();
+        return userRepository.save(user);
     }
 
     private boolean checkPassword(String password, String confirmPassword) {

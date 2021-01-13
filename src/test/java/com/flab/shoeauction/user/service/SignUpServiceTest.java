@@ -1,6 +1,5 @@
 package com.flab.shoeauction.user.service;
 import com.flab.shoeauction.user.dto.UserDto;
-import com.flab.shoeauction.user.exception.PasswordMissMatchException;
 import com.flab.shoeauction.user.exception.UserDuplicateException;
 import com.flab.shoeauction.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /**
@@ -36,7 +34,6 @@ class SignUpServiceTest {
         userDto = UserDto.builder()
                 .email("test123@test.com")
                 .password("test1234")
-                .confirmPassword("test1234")
                 .phone("01011112222")
                 .nickname("17171771")
                 .build();
@@ -61,22 +58,6 @@ class SignUpServiceTest {
         assertThrows(UserDuplicateException.class, () -> signUpService.saveUser(userDto));
 
         verify(userRepository, atLeastOnce()).existsByEmail("test123@test.com");
-    }
-
-
-    @Test
-    @DisplayName("비밀번호 불일치로 인한 회원가입 실패")
-    public void passwordMissMatch() {
-        UserDto userDto2 = UserDto.builder()
-                .email("test123@test.com")
-                .password("test1234")
-                .password("test123")
-                .phone("01011112222")
-                .nickname("17171771")
-                .build();
-
-        assertThrows(PasswordMissMatchException.class, () ->
-                signUpService.saveUser(userDto2));
     }
 
 }

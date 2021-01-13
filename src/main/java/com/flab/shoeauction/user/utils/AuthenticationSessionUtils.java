@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 @RequiredArgsConstructor
 public class AuthenticationSessionUtils {
     private static final String CERTIFICATION_SESSION_KEY = "certificationNumber";
-
+    private static final String USER_ID = "email";
     private final HttpSession session;
 
     public void setCertificationSession(String certificationNumber) {
@@ -20,8 +20,20 @@ public class AuthenticationSessionUtils {
         return (String) session.getAttribute(CERTIFICATION_SESSION_KEY);
     }
 
-    public void removeCertificationSession(){
+    public void removeCertificationSession() {
         session.removeAttribute(CERTIFICATION_SESSION_KEY);
+    }
+
+    public void setLoginSession(String email) {
+        session.setAttribute(USER_ID, email);
+    }
+
+    public String getLoginSession() {
+        return (String) session.getAttribute(USER_ID);
+    }
+
+    public void removeLoginSession() {
+        session.removeAttribute(USER_ID);
     }
 
 
