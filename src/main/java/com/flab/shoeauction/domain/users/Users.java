@@ -2,6 +2,7 @@ package com.flab.shoeauction.domain.users;
 
 import com.flab.shoeauction.common.util.EncryptionUtils;
 import com.flab.shoeauction.domain.BaseTimeEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Users extends BaseTimeEntity {
 
