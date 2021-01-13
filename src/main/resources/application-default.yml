@@ -1,0 +1,9 @@
+# 애플리케이션 실행시 local profile을 사용한다. (미적용시 default)
+# org.hibernate.SQL : 로거를 이용한 쿼리문 출력
+# org.hibernate.type.descriptor.sql : ?로 표시된 쿼리 파라미터 값을 로그로 출력
+spring:
+  profiles:
+    active: local
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
