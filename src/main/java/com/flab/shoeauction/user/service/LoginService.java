@@ -2,7 +2,7 @@ package com.flab.shoeauction.user.service;
 
 import com.flab.shoeauction.user.exception.UserNotFoundException;
 import com.flab.shoeauction.user.repository.UserRepository;
-import com.flab.shoeauction.user.utils.AuthenticationSessionUtils;
+import com.flab.shoeauction.user.utils.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class LoginService {
 
     private final UserRepository userRepository;
-    private final AuthenticationSessionUtils authenticationSessionUtils;
+    private final AuthenticationService authenticationService;
 
     public void existByEmailAndPassword(String email, String password) {
         if(!userRepository.existsByEmailAndPassword(email,password)) {
@@ -22,12 +22,12 @@ public class LoginService {
     }
 
     public void login(String email) {
-        authenticationSessionUtils.setLoginSession(email);
-        log.info(authenticationSessionUtils.getLoginSession());
+        authenticationService.setLoginSession(email);
+        log.info(authenticationService.getLoginSession());
     }
 
     public void logout() {
-        authenticationSessionUtils.removeCertificationSession();
+        authenticationService.removeLoginSession();
         log.info("Logout successful");
     }
 

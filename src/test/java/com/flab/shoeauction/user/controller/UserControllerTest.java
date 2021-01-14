@@ -110,14 +110,6 @@ class UserControllerTest {
     @DisplayName("로그인 실패 - id/pw 불일치")
     public void loginFailed() throws Exception {
 
-        UserDto userDto = UserDto.builder()
-                .email("test1234@test.com")
-                .password("test12345")
-                .phone("01011111111")
-                .nickname("1717")
-                .build();
-
-
         LoginDto loginDto = LoginDto.of("testCase@test.com", "test1234");
         mockMvc.perform(post("/users/login")
                 .contentType(MediaType.APPLICATION_JSON)

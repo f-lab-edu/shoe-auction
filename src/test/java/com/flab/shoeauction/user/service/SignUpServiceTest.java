@@ -1,4 +1,5 @@
 package com.flab.shoeauction.user.service;
+
 import com.flab.shoeauction.user.dto.UserDto;
 import com.flab.shoeauction.user.exception.UserDuplicateException;
 import com.flab.shoeauction.user.repository.UserRepository;
@@ -37,6 +38,16 @@ class SignUpServiceTest {
                 .phone("01011112222")
                 .nickname("17171771")
                 .build();
+    }
+
+    @Test
+    @DisplayName("회원가입 성공")
+    public void successfulSignUp() {
+        when(userRepository.existsByNickname("17171771")).thenReturn(false);
+        when(userRepository.existsByEmail("test123@test.com")).thenReturn(false);
+
+      signUpService.saveUser(userDto);
+      verify(userRepository).save(any());
     }
 
 

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 
 @Component
 @RequiredArgsConstructor
-public class AuthenticationSessionUtils {
+public class AuthenticationService {
     private static final String CERTIFICATION_SESSION_KEY = "certificationNumber";
     private static final String USER_ID = "email";
     private final HttpSession session;
@@ -34,6 +34,7 @@ public class AuthenticationSessionUtils {
 
     public void removeLoginSession() {
         session.removeAttribute(USER_ID);
+
     }
 
 

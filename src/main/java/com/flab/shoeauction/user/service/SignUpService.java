@@ -4,7 +4,7 @@ import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
 import com.flab.shoeauction.user.exception.UserDuplicateException;
 import com.flab.shoeauction.user.repository.UserRepository;
-import com.flab.shoeauction.user.utils.AuthenticationSessionUtils;
+import com.flab.shoeauction.user.utils.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import static com.flab.shoeauction.user.utils.UserConstants.NUMBER_GENERATION_CO
 @RequiredArgsConstructor
 public class SignUpService {
     private final UserRepository userRepository;
-    private final AuthenticationSessionUtils authenticationSessionUtils;
+    private final AuthenticationService authenticationService;
 
     //데이터 조회용. 추후 삭제
     public List<User> findAll() {
@@ -31,13 +31,8 @@ public class SignUpService {
         if (emailDuplicateCheck(userDto.getEmail()) || nicknameDuplicateCheck(userDto.getNickname())) {
             throw new UserDuplicateException("이메일 또는 닉네임을 확인하세요.");
         }
-        authenticationSessionUtils.removeCertificationSession();
         User user = userDto.toUser();
         return userRepository.save(user);
-    }
-
-    private boolean checkPassword(String password, String confirmPassword) {
-        return !password.equals(confirmPassword);
     }
 
 
@@ -50,7 +45,7 @@ public class SignUpService {
     }
 
     public boolean certificationNumberInspection(String certificationNumber) {
-        return authenticationSessionUtils.getCertificationSession().equals(certificationNumber);
+        return authenticationService.getCertificationSession().equals(certificationNumber);
     }
 
     public void saveAuthenticationNumber() {
@@ -59,7 +54,7 @@ public class SignUpService {
         for (int i = 0; i < NUMBER_GENERATION_COUNT; i++) {
             stringBuffer.append((rand.nextInt(10)));
         }
-        authenticationSessionUtils.setCertificationSession(stringBuffer.toString());
-        log.info(authenticationSessionUtils.getCertificationSession());
+        authenticationService.setCertificationSession(stringBuffer.toString());
+        log.info(authenticationService.getCertificationSession());
     }
 }

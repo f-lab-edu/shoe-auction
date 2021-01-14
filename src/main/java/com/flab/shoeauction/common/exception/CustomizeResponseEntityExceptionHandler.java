@@ -18,7 +18,7 @@ public class CustomizeResponseEntityExceptionHandler extends ResponseEntityExcep
 
     @ExceptionHandler(UserDuplicateException.class)
     public final ResponseEntity<ExceptionResponse> handleUserDuplicateException(UserDuplicateException ex, WebRequest request) {
-        log.error(ex.getMessage());
+        log.error(ex.getMessage(),ex);
         ExceptionResponse exceptionResponse =
                 new ExceptionResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity(exceptionResponse, HttpStatus.CONFLICT);
@@ -27,7 +27,7 @@ public class CustomizeResponseEntityExceptionHandler extends ResponseEntityExcep
 
     @ExceptionHandler(UserNotFoundException.class)
     public final ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
-        log.error("UserNotFoundException",ex);
+        log.error(ex.getMessage(),ex);
         ExceptionResponse exceptionResponse =
                 new ExceptionResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity(exceptionResponse, HttpStatus.UNAUTHORIZED);
