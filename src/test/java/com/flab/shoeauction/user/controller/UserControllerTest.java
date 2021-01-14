@@ -62,7 +62,7 @@ class UserControllerTest {
     @Test
     @DisplayName("회원가입 실패 - 정보 입력 오류")
     public void signUpFailed() throws Exception {
-        UserDto userDto = userDto = UserDto.builder()
+        UserDto userDto = UserDto.builder()
                 .email("test123@test.com")
                 .password("test1234")
                 .phone("01011112222")

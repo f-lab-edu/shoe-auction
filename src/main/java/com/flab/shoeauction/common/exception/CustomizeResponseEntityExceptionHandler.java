@@ -17,7 +17,7 @@ public class CustomizeResponseEntityExceptionHandler extends ResponseEntityExcep
 
     @ExceptionHandler(UserDuplicateException.class)
     public final ResponseEntity<Object> handleUserDuplicateException(UserDuplicateException ex, WebRequest request) {
-        log.error("UserDuplicateException", ex);
+        log.error(ex.getMessage(), ex);
         ExceptionResponse exceptionResponse =
                 new ExceptionResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity(exceptionResponse, HttpStatus.CONFLICT);

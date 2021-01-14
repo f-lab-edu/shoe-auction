@@ -19,7 +19,7 @@ import static com.flab.shoeauction.user.utils.UserConstants.NUMBER_GENERATION_CO
 @RequiredArgsConstructor
 public class SignUpService {
     private final UserRepository userRepository;
-    private final AuthenticationService authenticationService;
+    private final SmsCertificationService smsCertificationService;
 
     //데이터 조회용. 추후 삭제
     public List<User> findAll() {
@@ -30,7 +30,6 @@ public class SignUpService {
         if (emailDuplicateCheck(userDto.getEmail()) || nicknameDuplicateCheck(userDto.getNickname())) {
             throw new UserDuplicateException("이메일 또는 닉네임을 확인하세요.");
         }
-        authenticationService.removeCertificationSession();
         User user = userDto.toUser();
         return userRepository.save(user);
     }
@@ -44,7 +43,7 @@ public class SignUpService {
     }
 
     public boolean certificationNumberInspection(String certificationNumber) {
-        return authenticationService.getCertificationSession().equals(certificationNumber);
+        return smsCertificationService.getCertificationSession().equals(certificationNumber);
     }
 
     public void saveAuthenticationNumber() {
@@ -53,7 +52,7 @@ public class SignUpService {
         for (int i = 0; i < NUMBER_GENERATION_COUNT; i++) {
             stringBuffer.append((rand.nextInt(10)));
         }
-        authenticationService.setCertificationSession(stringBuffer.toString());
-        log.info(authenticationService.getCertificationSession());
+        smsCertificationService.setCertificationSession(stringBuffer.toString());
+        log.info(smsCertificationService.getCertificationSession());
     }
 }
