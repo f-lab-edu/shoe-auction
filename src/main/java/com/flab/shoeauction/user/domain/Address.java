@@ -14,6 +14,7 @@ import javax.persistence.Embeddable;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
-    private String roadNameAddress;
-    private String detailedAddress;
+
+  private String roadNameAddress;
+  private String detailedAddress;
 }
