@@ -1,7 +1,8 @@
 package com.flab.shoeauction.web;
 
-import com.flab.shoeauction.service.CertificationService;
-import com.flab.shoeauction.service.user.UserService;
+import com.flab.shoeauction.util.response.ResponseConstants;
+import com.flab.shoeauction.service.SmsCertificationService;
+import com.flab.shoeauction.service.UserService;
 import com.flab.shoeauction.web.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class UserApiController {
 
     private final UserService userService;
 
-    private final CertificationService certificationService;
+    private final SmsCertificationService smsCertificationService;
 
     @GetMapping("/duplication/email")
     public ResponseEntity<Boolean> checkEmailDuplicate(@RequestParam String email) {
@@ -33,20 +34,19 @@ public class UserApiController {
     @PostMapping
     public ResponseEntity<Void> createUser(@Valid @RequestBody UserDto.SaveRequest requestDto) {
         userService.save(requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseConstants.CREATED_RESPONSE;
     }
 
     @PostMapping("/certification/sms")
     public ResponseEntity<Void> sendSms(@RequestBody Map<String, String> map) {
-        System.out.println(map.get("phone"));
-        certificationService.sendSms(map.get("phone"));
-        return ResponseEntity.status(HttpStatus.OK).build();
+        smsCertificationService.sendSms(map.get("phone"));
+        return ResponseConstants.CREATED_RESPONSE;
     }
 
     @PostMapping("/certification/verification")
     public ResponseEntity<Void> phoneVerification(@RequestBody UserDto.CertificationRequest requestDto) {
-        if (!certificationService.phoneVerification(requestDto))
+        if (!smsCertificationService.phoneVerification(requestDto))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseConstants.OK_RESPONSE;
     }
 }

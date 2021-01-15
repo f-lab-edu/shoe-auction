@@ -5,7 +5,7 @@ gradlew
 gradlew.bat
 build/
 !gradle/wrapper/gradle-wrapper.jar
-
+lib/*
 
 ### IntelliJ IDEA ###
 .idea

@@ -1,5 +1,6 @@
-package com.flab.shoeauction.service.user;
+package com.flab.shoeauction.service;
 
+import com.flab.shoeauction.util.encrytion.EncryptionUtils;
 import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
@@ -15,6 +16,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final EncryptionUtils encryptionUtils;
+
     public boolean checkEmailDuplicate(String email) {
         return userRepository.existsByEmail(email);
     }
@@ -28,6 +31,8 @@ public class UserService {
             throw new DuplicateEmailException();
         if (checkNicknameDuplicate(requestDto.getNickname()))
             throw new DuplicateNicknameException();
+        requestDto.passwordEncryption(encryptionUtils);
+
         userRepository.save(requestDto.toEntity());
     }
 }

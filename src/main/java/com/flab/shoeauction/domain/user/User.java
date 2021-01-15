@@ -1,6 +1,5 @@
 package com.flab.shoeauction.domain.user;
 
-import com.flab.shoeauction.common.util.EncryptionUtils;
 import com.flab.shoeauction.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,7 +31,7 @@ public class User extends BaseTimeEntity {
     public User(String nickname, String email, String password, String phone) {
         this.nickname = nickname;
         this.email = email;
-        this.password = EncryptionUtils.encryptSHA256(password);
+        this.password = password;
         this.phone = phone;
     }
 }

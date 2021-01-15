@@ -1,5 +1,6 @@
 package com.flab.shoeauction.web.dto;
 
+import com.flab.shoeauction.util.encrytion.EncryptionUtils;
 import com.flab.shoeauction.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,6 +43,10 @@ public class UserDto {
             this.email = email;
             this.password = password;
             this.phone = phone;
+        }
+
+        public void passwordEncryption(EncryptionUtils encryptionUtils) {
+            this.password = encryptionUtils.encrypt(password);
         }
 
         public User toEntity() {

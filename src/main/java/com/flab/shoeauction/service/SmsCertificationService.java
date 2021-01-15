@@ -5,18 +5,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.util.Random;
 
-/*
- * SMS 인증 API 사용하려면
- */
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class CertificationService {
+public class SmsCertificationService {
 
-    private final HttpSession session;
+    private final SessionService sessionService;
 
     // 6자리 난수 생성
     public String makeRandomNumber() {
@@ -27,14 +23,14 @@ public class CertificationService {
     // sms 보내기 (log 찍는것으로 대체)
     public void sendSms(String phone) {
         String randomNumber = makeRandomNumber();
-        session.setAttribute(phone, randomNumber);
-        log.info("인증번호: " + randomNumber);
+        sessionService.saveSmsCertificationNumber(randomNumber);
+        log.info(phone + "에 인증번호 [" + randomNumber + "] 발송");
     }
 
-    // 인증번호가 세션에 발급된 인증번호와 동일한지 체크
+    // 입력한 인증번호가 발급되었던(세션에 저장된) 인증번호와 동일한지 체크
     public boolean phoneVerification(UserDto.CertificationRequest requestDto) {
-        if (session.getAttribute(requestDto.getPhone()).equals(requestDto.getCertificationNumber())) {
-            session.removeAttribute(requestDto.getPhone());
+        if (sessionService.getSmsCertificationNumber().equals(requestDto.getCertificationNumber())) {
+            sessionService.removeSmsCertificationNumber();
             return true;
         }
         return false;
