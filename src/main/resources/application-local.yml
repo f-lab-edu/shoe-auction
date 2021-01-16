@@ -1,5 +1,5 @@
+# local profile에 적용되는 properties
 # ddl-auto (create) : 개발 초기 환경에서 사용. 애플리케이션 로딩 시점에 모든 테이블을 drop 후 새로 생성, 애플리케이션 서버 종료 후에도 DB 보존 (개발 초기단계에 사용)
-# format_sql : query의 출력 내용을 서식에 맞게 가독성을 향상시켜 출력
 spring:
   profiles: local
   datasource:
@@ -7,10 +7,6 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
-
   jpa:
     hibernate:
       ddl-auto: create
-    properties:
-      hibernate:
-        format_sql: true

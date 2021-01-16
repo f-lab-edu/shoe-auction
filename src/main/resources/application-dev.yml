@@ -1,3 +1,4 @@
+# dev profile에 적용되는 properties
 # ddl-auto (validate) : 엔티티와 테이블이 정상적으로 매핑되었는지만 확인한다. (테스트단계와 스테이징 서버에서 사용)
 spring:
   profiles: dev
@@ -5,6 +6,3 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    properties:
-      hibernate:
-        format_sql: true
