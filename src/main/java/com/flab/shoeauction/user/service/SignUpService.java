@@ -1,7 +1,5 @@
 package com.flab.shoeauction.user.service;
 
-import static com.flab.shoeauction.user.utils.UserConstants.NUMBER_GENERATION_COUNT;
-
 import com.flab.shoeauction.common.utils.encrytion.EncryptionUtils;
 import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
@@ -9,7 +7,6 @@ import com.flab.shoeauction.user.exception.EmailDuplicateException;
 import com.flab.shoeauction.user.exception.NicknameDuplicateException;
 import com.flab.shoeauction.user.repository.UserRepository;
 import java.util.List;
-import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +20,6 @@ public class SignUpService {
   private final UserRepository userRepository;
   private final SmsCertificationService smsCertificationService;
   private final EncryptionUtils encryptionUtils;
-  private final SmsSendService smsSendService;
 
   //데이터 조회용. 추후 삭제
   public List<User> findAll() {
@@ -48,19 +44,5 @@ public class SignUpService {
 
   public boolean nicknameDuplicateCheck(String nickname) {
     return userRepository.existsByNickname(nickname);
-  }
-
-  public boolean certificationNumberInspection(String certificationNumber) {
-    return smsCertificationService.getSmsCertificationService().equals(certificationNumber);
-  }
-
-  public void saveAuthenticationNumber(String phoneNumber) {
-    Random rand = new Random();
-    StringBuilder stringBuilder = new StringBuilder();
-    for (int i = 0; i < NUMBER_GENERATION_COUNT; i++) {
-      stringBuilder.append((rand.nextInt(10)));
-    }
-    smsCertificationService.setSmsCertificationService(stringBuilder.toString());
-    smsSendService.sendMessage(phoneNumber, smsCertificationService.getSmsCertificationService());
   }
 }

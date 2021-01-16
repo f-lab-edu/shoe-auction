@@ -1,12 +1,12 @@
 package com.flab.shoeauction.user.controller;
 
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_BAD_REQUEST;
-import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_OK;
 
 import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
 import com.flab.shoeauction.user.dto.UserDto.CertificationInfo;
 import com.flab.shoeauction.user.service.SignUpService;
+import com.flab.shoeauction.user.service.SmsCertificationService;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
+  private final SmsCertificationService smsCertificationService;
   private final SignUpService signUpService;
 
   @GetMapping
@@ -49,13 +50,13 @@ public class UserController {
 
   @PostMapping("/certification/send")
   public void sendCertificationNumber(@RequestBody CertificationInfo certificationInfo) {
-    signUpService.saveAuthenticationNumber(certificationInfo.getPhoneNumber());
+    smsCertificationService.sendCertificationNumber(certificationInfo.getPhoneNumber());
   }
 
   @PostMapping("/certification")
   public ResponseEntity requestCertification(@RequestBody CertificationInfo certificationInfo) {
-    if (signUpService.certificationNumberInspection(certificationInfo.getCertificationNumber())) {
-      return RESPONSE_OK;
+    if (smsCertificationService.certificationNumberInspection(certificationInfo.getCertificationNumber())) {
+      return ResponseEntity.ok().build();
     }
     return RESPONSE_BAD_REQUEST;
   }
