@@ -1,12 +1,13 @@
 package com.flab.shoeauction.user.controller;
 
-import com.flab.shoeauction.common.utils.EncryptionUtils;
+import com.flab.shoeauction.common.utils.encrytion.EncryptionUtils;
 import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
 import com.flab.shoeauction.user.dto.UserDto.CertificationInfo;
 import com.flab.shoeauction.user.dto.UserDto.LoginDto;
 import com.flab.shoeauction.user.service.LoginService;
 import com.flab.shoeauction.user.service.SignUpService;
+import com.flab.shoeauction.user.service.SmsCertificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -29,30 +30,33 @@ public class UserController {
 
     private final SignUpService signUpService;
     private final LoginService loginService;
+    private final EncryptionUtils encryptionUtils;
+    private final SmsCertificationService smsCertificationService;
 
     @GetMapping
     public List<User> allUsers() {
         return signUpService.findAll();
     }
 
-    @GetMapping("/duplicated/email")
-    public boolean emailDuplicated(String email) {
+    @GetMapping("/user-emails/{email}/exist")
+    public boolean emailDuplicated(@PathVariable String email) {
         return signUpService.emailDuplicateCheck(email);
     }
 
-    @GetMapping("/duplicated/nickname")
-    public boolean nickname(String nickname) {
-        return signUpService.emailDuplicateCheck(nickname);
+    @GetMapping("/user-nicknames/{nickname}/exist")
+    public boolean nickname(@PathVariable String nickname) {
+        return signUpService.nicknameDuplicateCheck(nickname);
     }
 
+
     @PostMapping("/certification/send")
-    public void sendCertificationNumber() {
-        signUpService.saveAuthenticationNumber();
+    public void sendCertificationNumber(@RequestBody CertificationInfo certificationInfo) {
+        smsCertificationService.sendCertificationNumber(certificationInfo.getPhoneNumber());
     }
 
     @PostMapping("/certification")
     public ResponseEntity requestCertification(@RequestBody CertificationInfo certificationInfo) {
-        if (signUpService.certificationNumberInspection(certificationInfo.getCertificationNumber())) {
+        if (smsCertificationService.certificationNumberInspection(certificationInfo.getCertificationNumber())) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
@@ -69,7 +73,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginDto loginDto) {
         String email = loginDto.getEmail();
-        String password = EncryptionUtils.encryptSHA256(loginDto.getPassword());
+        String password = encryptionUtils.encrypt(loginDto.getPassword());
         loginService.existByEmailAndPassword(email, password);
         loginService.login(email);
         return ResponseEntity.ok().build();
