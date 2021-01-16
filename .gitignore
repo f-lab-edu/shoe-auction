@@ -16,4 +16,6 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+### CoolSMS ###
+src/main/java/com/flab/shoeauction/util/coolSms/coolSmsKeyConstants.java
 

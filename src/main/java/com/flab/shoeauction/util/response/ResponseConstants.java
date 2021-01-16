@@ -16,4 +16,7 @@ public class ResponseConstants {
 
     public static final ResponseEntity<String> DUPLICATION_NICKNAME_RESPONSE =
             new ResponseEntity<>("중복된 닉네임입니다.", HttpStatus.CONFLICT);
+
+    public static final ResponseEntity<String> SMS_SEND_FAILED =
+            new ResponseEntity<>("SMS 발송에 실패하였습니다.", HttpStatus.BAD_REQUEST);
 }

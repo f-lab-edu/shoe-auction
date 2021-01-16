@@ -61,7 +61,7 @@ public class UserDto {
 
     @Getter
     @NoArgsConstructor
-    public static class CertificationRequest {
+    public static class SmsCertificationRequest {
         private String phone;
         private String certificationNumber;
     }

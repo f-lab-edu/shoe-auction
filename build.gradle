@@ -35,6 +35,9 @@ dependencies {
 
     // springboot 2.3 버전부터 Valid 가 Web-starter 에서 제외됨으로 추가
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // SMS API
+    compile group: 'net.nurigo', name: 'javaSDK', version: '2.2'
 }
 
 test {
