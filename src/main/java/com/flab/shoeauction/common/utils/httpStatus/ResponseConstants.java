@@ -18,4 +18,9 @@ public class ResponseConstants {
   public static final ResponseEntity<String> RESPONSE_ENTITY_UNAUTHORIZED = new ResponseEntity<>(
       "ID 또는 PW를 확인하세요.", HttpStatus.UNAUTHORIZED
   );
+
+  public static final ResponseEntity<String> RESPONSE_LOGIN_UNAUTHORIZED = new ResponseEntity<>(
+          "Unauthenticated user" , HttpStatus.UNAUTHORIZED
+  );
+
 }

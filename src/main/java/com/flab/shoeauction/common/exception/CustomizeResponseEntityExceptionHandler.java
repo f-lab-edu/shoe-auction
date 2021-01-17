@@ -2,10 +2,12 @@ package com.flab.shoeauction.common.exception;
 
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_EMAIL_CONFLICT;
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_ENTITY_UNAUTHORIZED;
+import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_LOGIN_UNAUTHORIZED;
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_NICKNAME_CONFLICT;
 
 import com.flab.shoeauction.user.exception.EmailDuplicateException;
 import com.flab.shoeauction.user.exception.NicknameDuplicateException;
+import com.flab.shoeauction.user.exception.UnauthenticatedUserException;
 import com.flab.shoeauction.user.exception.UserNotFoundException;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
@@ -44,4 +46,11 @@ public class CustomizeResponseEntityExceptionHandler extends ResponseEntityExcep
     return RESPONSE_ENTITY_UNAUTHORIZED;
   }
 
+  @ExceptionHandler(UnauthenticatedUserException.class)
+  public final ResponseEntity<String> handleUnauthenticatedUserException(
+      UnauthenticatedUserException ex, WebRequest request) {
+    log.error("Failed to Execution ::  {}, detection time={} ", request.getDescription(false),
+        LocalDateTime.now(), ex);
+    return RESPONSE_LOGIN_UNAUTHORIZED;
+  }
 }
