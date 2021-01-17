@@ -1,13 +1,8 @@
 # profile을 타지않는 전역 설정
-# org.hibernate.SQL : 로거를 이용한 쿼리문 출력
 # format_sql : query의 출력 내용을 서식에 맞게 가독성을 향상시켜 출력
-# org.hibernate.type.descriptor.sql : ?로 표시된 쿼리 파라미터 값을 로그로 출력
+
 spring:
   jpa:
     properties:
       hibernate:
         format_sql: true
-
-logging.level:
-  org.hibernate.SQL: debug
-  org.hibernate.type: trace
