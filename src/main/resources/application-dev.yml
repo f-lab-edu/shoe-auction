@@ -3,7 +3,6 @@
 # org.hibernate.type : ?로 표시된 쿼리 파라미터 값을 로그로 출력
 # ddl-auto (validate) : 엔티티와 테이블이 정상적으로 매핑되었는지만 확인한다. (테스트단계와 스테이징 서버에서 사용)
 spring:
-  profiles: dev
   jpa:
     hibernate:
       ddl-auto: validate
