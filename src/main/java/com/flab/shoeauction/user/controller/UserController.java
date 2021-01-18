@@ -1,6 +1,7 @@
 package com.flab.shoeauction.user.controller;
 
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_BAD_REQUEST;
+import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_OK;
 
 import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
@@ -49,14 +50,15 @@ public class UserController {
   }
 
   @PostMapping("/certification/send")
-  public void sendCertificationNumber(@RequestBody CertificationInfo certificationInfo) {
+  public ResponseEntity sendCertificationNumber(@RequestBody CertificationInfo certificationInfo) {
     smsCertificationService.sendCertificationNumber(certificationInfo.getPhoneNumber());
+    return RESPONSE_OK;
   }
 
   @PostMapping("/certification")
   public ResponseEntity requestCertification(@RequestBody CertificationInfo certificationInfo) {
     if (smsCertificationService.certificationNumberInspection(certificationInfo.getCertificationNumber())) {
-      return ResponseEntity.ok().build();
+      return RESPONSE_OK;
     }
     return RESPONSE_BAD_REQUEST;
   }

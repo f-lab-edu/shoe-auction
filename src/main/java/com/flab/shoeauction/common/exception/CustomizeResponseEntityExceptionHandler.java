@@ -1,9 +1,11 @@
 package com.flab.shoeauction.common.exception;
 
+import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_BAD_REQUEST;
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_EMAIL_CONFLICT;
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_NICKNAME_CONFLICT;
 
 import com.flab.shoeauction.user.exception.EmailDuplicateException;
+import com.flab.shoeauction.user.exception.FailedToSendMessageException;
 import com.flab.shoeauction.user.exception.NicknameDuplicateException;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
@@ -31,5 +33,10 @@ public class CustomizeResponseEntityExceptionHandler extends ResponseEntityExcep
     log.error("Failed to signUp ::  {}, detection time={} ", request.getDescription(false),
         LocalDateTime.now(), ex);
     return RESPONSE_NICKNAME_CONFLICT;
+  }
+
+  @ExceptionHandler(FailedToSendMessageException.class)
+  public final ResponseEntity handleFailedToSendMessageException() {
+    return RESPONSE_BAD_REQUEST;
   }
 }
