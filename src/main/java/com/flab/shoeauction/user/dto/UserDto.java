@@ -1,4 +1,5 @@
 package com.flab.shoeauction.user.dto;
+
 import com.flab.shoeauction.common.utils.encrytion.EncryptionUtils;
 import com.flab.shoeauction.user.domain.User;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Builder
 public class UserDto {
+
     @Email
     @NotBlank
     private String email;
@@ -46,18 +48,20 @@ public class UserDto {
 
     @Getter
     public static class CertificationInfo {
+
         private String certificationNumber;
         private String phoneNumber;
     }
 
     @Getter
     @AllArgsConstructor
-    public static class LoginDto{
+    public static class LoginDto {
+
         private String email;
         private String password;
 
-        public static LoginDto of(String email, String password){
-            return new LoginDto(email,password);
+        public static LoginDto of(String email, String password) {
+            return new LoginDto(email, password);
         }
     }
 }

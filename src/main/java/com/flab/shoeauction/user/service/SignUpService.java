@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class SignUpService {
+
     private final UserRepository userRepository;
     private final EncryptionUtils encryptionUtils;
 
@@ -43,9 +44,6 @@ public class SignUpService {
     public boolean nicknameDuplicateCheck(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
-
-
-
 
 
 }

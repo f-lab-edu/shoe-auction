@@ -1,5 +1,6 @@
 package com.flab.shoeauction.user.controller;
 
+import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.common.utils.encrytion.EncryptionUtils;
 import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
@@ -18,9 +19,8 @@ import java.net.URI;
 import java.util.List;
 
 /**
- * 휴대폰 인증시 전송받은 인증번호를 session에 저장하여 User가 입력한 인증번호화 일치하는지 확인
- * 인증번호 일치 여부에 따라 200 또는 400 반환
- * 회원가입 완료 후 마이페이지로 이동할 수 있는 URI를 HEADER의 Location에 제공하기 위해 HATEOAS 사용
+ * 휴대폰 인증시 전송받은 인증번호를 session에 저장하여 User가 입력한 인증번호화 일치하는지 확인 인증번호 일치 여부에 따라 200 또는 400 반환 회원가입 완료 후
+ * 마이페이지로 이동할 수 있는 URI를 HEADER의 Location에 제공하기 위해 HATEOAS 사용
  */
 
 @RestController
@@ -56,7 +56,8 @@ public class UserController {
 
     @PostMapping("/certification")
     public ResponseEntity requestCertification(@RequestBody CertificationInfo certificationInfo) {
-        if (smsCertificationService.certificationNumberInspection(certificationInfo.getCertificationNumber())) {
+        if (smsCertificationService
+            .certificationNumberInspection(certificationInfo.getCertificationNumber())) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
@@ -79,6 +80,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @LoginCheck
     @DeleteMapping("/logout")
     public ResponseEntity logout() {
         loginService.logout();

@@ -15,6 +15,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
+
     @Id
     @GeneratedValue
     private Long id;
@@ -32,8 +33,6 @@ public class User extends BaseEntity {
 
     @Embedded
     private Account account;
-
-
 
     // TODO: 2021-01-06 : Item 엔티티 생성 후 찜 목록(관심상품) 값 타입 컬렉션 추가하기
 
