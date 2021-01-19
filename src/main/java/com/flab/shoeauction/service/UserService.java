@@ -1,9 +1,9 @@
 package com.flab.shoeauction.service;
 
-import com.flab.shoeauction.util.encrytion.EncryptionUtils;
 import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
+import com.flab.shoeauction.util.encrytion.EncryptionUtils;
 import com.flab.shoeauction.web.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

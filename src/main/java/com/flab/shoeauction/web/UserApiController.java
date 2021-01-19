@@ -33,19 +33,19 @@ public class UserApiController {
     @PostMapping
     public ResponseEntity<Void> createUser(@Valid @RequestBody UserDto.SaveRequest requestDto) {
         userService.save(requestDto);
-        return ResponseConstants.CREATED_RESPONSE;
+        return ResponseConstants.CREATED;
     }
 
-    @PostMapping("/certification/sms")
+    @PostMapping("/sms-certification/sends")
     public ResponseEntity<Void> sendSms(@RequestBody UserDto.SmsCertificationRequest requestDto) {
         smsCertificationService.sendSms(requestDto.getPhone());
-        return ResponseConstants.CREATED_RESPONSE;
+        return ResponseConstants.CREATED;
     }
 
-    @PostMapping("/certification/confirms")
-    public ResponseEntity<Void> phoneVerification(@RequestBody UserDto.SmsCertificationRequest requestDto) {
-        if (!smsCertificationService.phoneVerification(requestDto))
+    @PostMapping("/sms-certification/confirms")
+    public ResponseEntity<Void> SmsVerification(@RequestBody UserDto.SmsCertificationRequest requestDto) {
+        if (!smsCertificationService.verifySms(requestDto.getCertificationNumber()))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        return ResponseConstants.OK_RESPONSE;
+        return ResponseConstants.OK;
     }
 }

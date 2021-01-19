@@ -18,13 +18,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateEmailException.class)
     public ResponseEntity<String> duplicateEmailException(DuplicateEmailException exception) {
         log.error("중복된 이메일입니다.", exception);
-        return ResponseConstants.DUPLICATION_EMAIL_RESPONSE;
+        return ResponseConstants.DUPLICATION_EMAIL;
     }
 
     @ExceptionHandler(DuplicateNicknameException.class)
     public ResponseEntity<String> duplicateNicknameException(DuplicateNicknameException exception) {
         log.error("중복된 닉네임입니다.", exception);
-        return ResponseConstants.DUPLICATION_NICKNAME_RESPONSE;
+        return ResponseConstants.DUPLICATION_NICKNAME;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
