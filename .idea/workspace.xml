@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6f1bca90-3b17-4d3f-9b10-cc535f71c01f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/flab/shoeauction/user/service/SmSCertificationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flab/shoeauction/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flab/shoeauction/user/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flab/shoeauction/user/service/SmsCertificationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flab/shoeauction/user/utils/UserConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flab/shoeauction/user/utils/UserConstants.java" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="shoeauction" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="AnnotationType" />
+        <option value="JUnit5 Test Class" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1mjOklzz2QwDaMtU8wqnGvoHuGK" />
+  <component name="PropertiesComponent">
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="add_unversioned_files" value="$PROJECT_DIR$/.gradle/.gitignore" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
+    <property name="dynamic.classpath" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../마크다운 정리/플젝(신발)/json-simple-1.1.1.jar!/" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.flab.shoeauction.user.service" />
+      <recent name="com.flab.soft.shoeauction.user.controller" />
+      <recent name="com.flab.soft.shoeauction.user.service" />
+    </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.flab.shoeauction.user.controller" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\jungk\Desktop\KH\shoe-action\src\main\resources" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.Application (1)">
+    <configuration name="LoginServiceTest.FailedToLogin" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--tests &quot;com.flab.shoeauction.user.service.LoginServiceTest.FailedToLogin&quot;" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":cleanTest" />
+            <option value=":test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>false</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="LoginServiceTest.loginSuccess" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--tests &quot;com.flab.shoeauction.user.service.LoginServiceTest.loginSuccess&quot;" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":cleanTest" />
+            <option value=":test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>false</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="LoginServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="shoeauction.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.flab.shoeauction.user.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.flab.shoeauction.user.service" />
+      <option name="MAIN_CLASS_NAME" value="com.flab.shoeauction.user.service.LoginServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SignUpServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="shoeauction.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.flab.shoeauction.user.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.flab.shoeauction.user.service" />
+      <option name="MAIN_CLASS_NAME" value="com.flab.shoeauction.user.service.SignUpServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="shoeauction.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.flab.shoeauction.user.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.flab.shoeauction.user.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.flab.shoeauction.user.controller.UserControllerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="shoeauction.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.flab.shoeauction.Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="shoeauction.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.flab.soft.shoeauction.Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.UserControllerTest" />
+        <item itemvalue="JUnit.SignUpServiceTest" />
+        <item itemvalue="JUnit.LoginServiceTest" />
+        <item itemvalue="Gradle.LoginServiceTest.FailedToLogin" />
+        <item itemvalue="Gradle.LoginServiceTest.loginSuccess" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="allServicesViewState">
+      <serviceView>
+        <treeState>
+          <expand />
+          <select />
+        </treeState>
+      </serviceView>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6f1bca90-3b17-4d3f-9b10-cc535f71c01f" name="Default Changelist" comment="" />
+      <created>1610003678641</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1610003678641</updated>
+      <workItem from="1610003685110" duration="1217000" />
+      <workItem from="1610006908963" duration="70000" />
+      <workItem from="1610007598922" duration="1883000" />
+      <workItem from="1610072361845" duration="1054000" />
+      <workItem from="1610073438067" duration="65000" />
+      <workItem from="1610073817946" duration="124000" />
+      <workItem from="1610074157786" duration="356000" />
+      <workItem from="1610074531362" duration="417000" />
+      <workItem from="1610074965302" duration="10827000" />
+      <workItem from="1610109254472" duration="2405000" />
+      <workItem from="1610166791429" duration="8601000" />
+      <workItem from="1610177768773" duration="799000" />
+      <workItem from="1610293130529" duration="2890000" />
+      <workItem from="1610327008340" duration="7771000" />
+      <workItem from="1610348910090" duration="63000" />
+      <workItem from="1610349035163" duration="1955000" />
+      <workItem from="1610365187789" duration="1338000" />
+      <workItem from="1610423106272" duration="19857000" />
+      <workItem from="1610506014118" duration="8418000" />
+      <workItem from="1610534253904" duration="2333000" />
+      <workItem from="1610544941376" duration="93000" />
+      <workItem from="1610598023507" duration="4980000" />
+      <workItem from="1610626540960" duration="118000" />
+      <workItem from="1610676035316" duration="3761000" />
+      <workItem from="1610679831911" duration="13018000" />
+      <workItem from="1610698268990" duration="14000" />
+      <workItem from="1610709762339" duration="1672000" />
+      <workItem from="1610769261867" duration="19000" />
+      <workItem from="1610783452457" duration="41000" />
+      <workItem from="1610783950390" duration="4492000" />
+      <workItem from="1610796245600" duration="6000" />
+      <workItem from="1610874866568" duration="2783000" />
+      <workItem from="1610898324983" duration="1491000" />
+      <workItem from="1610947044783" duration="6361000" />
+      <workItem from="1610954027886" duration="10795000" />
+      <workItem from="1611029448559" duration="5815000" />
+      <workItem from="1611035300337" duration="436000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

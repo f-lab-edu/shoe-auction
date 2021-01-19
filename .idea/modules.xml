@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/shoeauction.iml" filepath="$PROJECT_DIR$/.idea/modules/shoeauction.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/shoeauction.main.iml" filepath="$PROJECT_DIR$/.idea/modules/shoeauction.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/shoeauction.test.iml" filepath="$PROJECT_DIR$/.idea/modules/shoeauction.test.iml" />
+    </modules>
+  </component>
+</project>

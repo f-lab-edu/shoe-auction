@@ -7,7 +7,7 @@ import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
 import com.flab.shoeauction.user.dto.UserDto.CertificationInfo;
 import com.flab.shoeauction.user.service.SignUpService;
-import com.flab.shoeauction.user.service.SmsCertificationService;
+import com.flab.shoeauction.user.service.SmSCertificationService;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
@@ -31,43 +31,49 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-  private final SmsCertificationService smsCertificationService;
-  private final SignUpService signUpService;
+    private final SignUpService signUpService;
+    private final SmSCertificationService smsCertificationService;
 
-  @GetMapping
-  public List<User> allUsers() {
-    return signUpService.findAll();
-  }
-
-  @GetMapping("/user-emails/{email}/exist")
-  public boolean emailDuplicated(@PathVariable String email) {
-    return signUpService.emailDuplicateCheck(email);
-  }
-
-  @GetMapping("/user-nicknames/{nickname}/exist")
-  public boolean nickname(@PathVariable String nickname) {
-    return signUpService.nicknameDuplicateCheck(nickname);
-  }
-
-  @PostMapping("/certification/send")
-  public ResponseEntity sendCertificationNumber(@RequestBody CertificationInfo certificationInfo) {
-    smsCertificationService.sendCertificationNumber(certificationInfo.getPhoneNumber());
-    return RESPONSE_OK;
-  }
-
-  @PostMapping("/certification")
-  public ResponseEntity requestCertification(@RequestBody CertificationInfo certificationInfo) {
-    if (smsCertificationService.certificationNumberInspection(certificationInfo.getCertificationNumber())) {
-      return RESPONSE_OK;
+    @GetMapping
+    public List<User> allUsers() {
+        return signUpService.findAll();
     }
-    return RESPONSE_BAD_REQUEST;
-  }
 
-  @PostMapping
-  public ResponseEntity signUp(@RequestBody @Valid UserDto signUpDto) {
-    User savedUser = signUpService.saveUser(signUpDto);
-    URI uri = WebMvcLinkBuilder.linkTo(UserController.class).slash(savedUser.getId()).toUri();
+    @GetMapping("/user-emails/{email}/exist")
+    public boolean emailDuplicated(@PathVariable String email) {
+        return signUpService.emailDuplicateCheck(email);
+    }
 
-    return ResponseEntity.created(uri).build();
-  }
+    @GetMapping("/user-nicknames/{nickname}/exist")
+    public boolean nickname(@PathVariable String nickname) {
+        return signUpService.nicknameDuplicateCheck(nickname);
+    }
+
+    @PostMapping("/certification/send")
+    public ResponseEntity sendCertificationNumber(
+        @RequestBody CertificationInfo certificationInfo) {
+
+        smsCertificationService.setCertificationInformation(certificationInfo.getPhoneNumber());
+
+        return RESPONSE_OK;
+    }
+
+    @PostMapping("/certification")
+    public ResponseEntity requestCertification(@RequestBody CertificationInfo certificationInfo) {
+        if (smsCertificationService
+            .certificationNumberInspection(certificationInfo.getCertificationNumber(),
+                certificationInfo.getPhoneNumber())) {
+            return RESPONSE_OK;
+        }
+
+        return RESPONSE_BAD_REQUEST;
+    }
+
+    @PostMapping
+    public ResponseEntity signUp(@RequestBody @Valid UserDto signUpDto) {
+        User savedUser = signUpService.saveUser(signUpDto);
+        URI uri = WebMvcLinkBuilder.linkTo(UserController.class).slash(savedUser.getId()).toUri();
+
+        return ResponseEntity.created(uri).build();
+    }
 }

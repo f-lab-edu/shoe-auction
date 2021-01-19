@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="javaSDK-2.2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../마크다운 정리/플젝(신발)/javaSDK-2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../마크다운 정리/플젝(신발)/json-simple-1.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

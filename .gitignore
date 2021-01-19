@@ -15,5 +15,8 @@ build/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+**/src/main/java/com/flab/shoeauction/user/utils/UserConstants.java
 
 
+
+!/.idea/
