@@ -1,22 +1,27 @@
 package com.flab.shoeauction.user.controller;
 
+import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_OK;
+
 import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.common.utils.encrytion.EncryptionUtils;
 import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
-import com.flab.shoeauction.user.dto.UserDto.CertificationInfo;
 import com.flab.shoeauction.user.dto.UserDto.LoginDto;
 import com.flab.shoeauction.user.service.LoginService;
 import com.flab.shoeauction.user.service.SignUpService;
-import com.flab.shoeauction.user.service.SmsCertificationService;
+import java.net.URI;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 휴대폰 인증시 전송받은 인증번호를 session에 저장하여 User가 입력한 인증번호화 일치하는지 확인 인증번호 일치 여부에 따라 200 또는 400 반환 회원가입 완료 후
@@ -31,8 +36,8 @@ public class UserController {
     private final SignUpService signUpService;
     private final LoginService loginService;
     private final EncryptionUtils encryptionUtils;
-    private final SmsCertificationService smsCertificationService;
 
+    //테스트시 조회용 - 추후 삭제
     @GetMapping
     public List<User> allUsers() {
         return signUpService.findAll();
@@ -49,20 +54,6 @@ public class UserController {
     }
 
 
-    @PostMapping("/certification/send")
-    public void sendCertificationNumber(@RequestBody CertificationInfo certificationInfo) {
-        smsCertificationService.sendCertificationNumber(certificationInfo.getPhoneNumber());
-    }
-
-    @PostMapping("/certification")
-    public ResponseEntity requestCertification(@RequestBody CertificationInfo certificationInfo) {
-        if (smsCertificationService
-            .certificationNumberInspection(certificationInfo.getCertificationNumber())) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.badRequest().build();
-    }
-
     @PostMapping
     public ResponseEntity signUp(@RequestBody @Valid UserDto signUpDto) {
         User savedUser = signUpService.saveUser(signUpDto);
@@ -77,13 +68,13 @@ public class UserController {
         String password = encryptionUtils.encrypt(loginDto.getPassword());
         loginService.existByEmailAndPassword(email, password);
         loginService.login(email);
-        return ResponseEntity.ok().build();
+        return RESPONSE_OK;
     }
 
     @LoginCheck
     @DeleteMapping("/logout")
     public ResponseEntity logout() {
         loginService.logout();
-        return ResponseEntity.ok().build();
+        return RESPONSE_OK;
     }
 }

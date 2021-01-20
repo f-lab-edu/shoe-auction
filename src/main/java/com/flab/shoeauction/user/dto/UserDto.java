@@ -47,13 +47,6 @@ public class UserDto {
 
 
     @Getter
-    public static class CertificationInfo {
-
-        private String certificationNumber;
-        private String phoneNumber;
-    }
-
-    @Getter
     @AllArgsConstructor
     public static class LoginDto {
 

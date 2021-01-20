@@ -1,13 +1,11 @@
 package com.flab.shoeauction.common.exception;
 
-import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_BAD_REQUEST;
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_EMAIL_CONFLICT;
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_ENTITY_UNAUTHORIZED;
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_LOGIN_UNAUTHORIZED;
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_NICKNAME_CONFLICT;
 
 import com.flab.shoeauction.user.exception.EmailDuplicateException;
-import com.flab.shoeauction.user.exception.FailedToSendMessageException;
 import com.flab.shoeauction.user.exception.NicknameDuplicateException;
 import com.flab.shoeauction.user.exception.UnauthenticatedUserException;
 import com.flab.shoeauction.user.exception.UserNotFoundException;
@@ -56,8 +54,4 @@ public class CustomizeResponseEntityExceptionHandler extends ResponseEntityExcep
         return RESPONSE_LOGIN_UNAUTHORIZED;
     }
 
-    @ExceptionHandler(FailedToSendMessageException.class)
-    public final ResponseEntity handleFailedToSendMessageException() {
-        return RESPONSE_BAD_REQUEST;
-    }
 }
