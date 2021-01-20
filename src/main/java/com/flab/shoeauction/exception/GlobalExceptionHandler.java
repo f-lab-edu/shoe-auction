@@ -1,6 +1,5 @@
 package com.flab.shoeauction.exception;
 
-import com.flab.shoeauction.exception.smsCetification.SmsSendFailedException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
 import com.flab.shoeauction.util.response.ResponseConstants;
@@ -31,11 +30,5 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
         log.error(exception.getFieldError().getDefaultMessage(), exception);
         return new ResponseEntity<>(exception.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(SmsSendFailedException.class)
-    public ResponseEntity<String> smsSendFailedException(SmsSendFailedException exception) {
-        log.error("SMS 발송이 실패하였습니다.", exception);
-        return ResponseConstants.SMS_SEND_FAILED;
     }
 }

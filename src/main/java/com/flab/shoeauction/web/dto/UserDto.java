@@ -58,11 +58,4 @@ public class UserDto {
                     .build();
         }
     }
-
-    @Getter
-    @NoArgsConstructor
-    public static class SmsCertificationRequest {
-        private String phone;
-        private String certificationNumber;
-    }
 }
