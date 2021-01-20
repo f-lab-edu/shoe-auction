@@ -1,13 +1,9 @@
 package com.flab.shoeauction.user.controller;
 
-import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_BAD_REQUEST;
-import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_OK;
 
 import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
-import com.flab.shoeauction.user.dto.UserDto.CertificationInfo;
 import com.flab.shoeauction.user.service.SignUpService;
-import com.flab.shoeauction.user.service.SmSCertificationService;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
@@ -32,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final SignUpService signUpService;
-    private final SmSCertificationService smsCertificationService;
 
     @GetMapping
     public List<User> allUsers() {
@@ -47,26 +42,6 @@ public class UserController {
     @GetMapping("/user-nicknames/{nickname}/exist")
     public boolean nickname(@PathVariable String nickname) {
         return signUpService.nicknameDuplicateCheck(nickname);
-    }
-
-    @PostMapping("/certification/send")
-    public ResponseEntity sendCertificationNumber(
-        @RequestBody CertificationInfo certificationInfo) {
-
-        smsCertificationService.setCertificationInformation(certificationInfo.getPhoneNumber());
-
-        return RESPONSE_OK;
-    }
-
-    @PostMapping("/certification")
-    public ResponseEntity requestCertification(@RequestBody CertificationInfo certificationInfo) {
-        if (smsCertificationService
-            .certificationNumberInspection(certificationInfo.getCertificationNumber(),
-                certificationInfo.getPhoneNumber())) {
-            return RESPONSE_OK;
-        }
-
-        return RESPONSE_BAD_REQUEST;
     }
 
     @PostMapping
