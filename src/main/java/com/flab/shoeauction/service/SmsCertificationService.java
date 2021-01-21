@@ -1,22 +1,17 @@
 package com.flab.shoeauction.service;
 
-import com.flab.shoeauction.exception.smsCetification.SmsSendFailedException;
-import com.flab.shoeauction.util.coolSms.SentSmsCertificationInfo;
+import com.flab.shoeauction.dao.SmsCertificationDao;
 import com.flab.shoeauction.util.coolSms.SmsMessageTemplate;
+import com.flab.shoeauction.web.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.api.Message;
-import net.nurigo.java_sdk.exceptions.CoolsmsException;
-import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Random;
 
-import static com.flab.shoeauction.util.coolSms.coolSmsKeyConstants.*;
-import static com.flab.shoeauction.util.session.SessionConstants.SMS_LIMIT_TIME_SECONDS;
+import static com.flab.shoeauction.util.coolSms.coolSmsConstants.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,6 +19,8 @@ import static com.flab.shoeauction.util.session.SessionConstants.SMS_LIMIT_TIME_
 public class SmsCertificationService {
 
     private final SessionService sessionService;
+
+    private final SmsCertificationDao smsCertificationDao;
 
     // 6자리 난수 생성
     public String makeRandomNumber() {
@@ -55,25 +52,23 @@ public class SmsCertificationService {
         String content = makeSmsContent(randomNumber);
         HashMap<String, String> params = makeParams(phone, content);
 
+        /*
+        * SMS 발송 비용으로 인한 일시 주석 처리
         try {
             JSONObject result = coolsms.send(params);
             if (result.get("success_count").toString().equals("0")) throw new SmsSendFailedException();
         } catch (CoolsmsException exception) {
             exception.printStackTrace();
-        }
+        }*/
 
-        sessionService.saveSmsCertificationInfo(new SentSmsCertificationInfo(randomNumber));
+        smsCertificationDao.createSmsCertification(phone, randomNumber);
     }
 
-    /*
-     * 입력한 인증번호가 발송되었던(세션에 저장된) 인증번호와 동일하면 제한 시간 내 인지 확인
-     */
-    public boolean verifySms(String certificationNumber) {
-        SentSmsCertificationInfo info = sessionService.getSmsCertificationInfo();
-
-        if (info.getCertificationNumber().equals(certificationNumber)
-                && ChronoUnit.SECONDS.between(info.getSentTime(), LocalDateTime.now()) <= SMS_LIMIT_TIME_SECONDS) {
-            sessionService.removeSmsCertificationInfo();
+    // 입력한 인증번호가 발송되었던(세션에 저장된) 인증번호가 동일한지 확인
+    public boolean verifySms(UserDto.SmsCertificationRequest requestDto) {
+        if (smsCertificationDao.hasKey(requestDto.getPhone()) &&
+                smsCertificationDao.getSmsCertification(requestDto.getPhone()).equals(requestDto.getCertificationNumber())) {
+            smsCertificationDao.removeSmsCertification(requestDto.getPhone());
             return true;
         }
         return false;

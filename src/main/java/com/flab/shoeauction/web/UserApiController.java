@@ -5,7 +5,6 @@ import com.flab.shoeauction.service.UserService;
 import com.flab.shoeauction.util.response.ResponseConstants;
 import com.flab.shoeauction.web.dto.UserDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,8 +43,8 @@ public class UserApiController {
 
     @PostMapping("/sms-certification/confirms")
     public ResponseEntity<Void> SmsVerification(@RequestBody UserDto.SmsCertificationRequest requestDto) {
-        if (!smsCertificationService.verifySms(requestDto.getCertificationNumber()))
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        if (!smsCertificationService.verifySms(requestDto))
+            return ResponseConstants.BAD_REQUEST;
         return ResponseConstants.OK;
     }
 }
