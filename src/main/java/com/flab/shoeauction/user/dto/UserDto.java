@@ -1,6 +1,6 @@
 package com.flab.shoeauction.user.dto;
 
-import com.flab.shoeauction.common.utils.encrytion.EncryptionUtils;
+import com.flab.shoeauction.user.service.encrytion.EncryptionService;
 import com.flab.shoeauction.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,8 +32,8 @@ public class UserDto {
     private String phone;
 
 
-    public void passwordEncryption(EncryptionUtils encryptionUtils) {
-        this.password = encryptionUtils.encrypt(password);
+    public void passwordEncryption(EncryptionService encryptionService) {
+        this.password = encryptionService.encrypt(password);
     }
 
     public User toUser() {

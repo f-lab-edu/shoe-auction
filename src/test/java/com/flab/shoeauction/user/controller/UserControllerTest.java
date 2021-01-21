@@ -45,7 +45,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("회원 가입 성공")
+    @DisplayName("회원 가입 성공 - 모든 유효성 검증에 통과한 경우 회원가입 성공")
     public void signUpSuccess() throws Exception {
 
         mockMvc.perform(post("/users")
@@ -58,7 +58,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("회원가입 실패 - 정보 입력 오류")
+    @DisplayName("회원가입 실패 - 회원 정보 유효성 검증 실패로 회원가입 실패")
     public void signUpFailedByInformationEntryError() throws Exception {
         UserDto userDto2 = UserDto.builder()
             .email("test2@test.com")
@@ -95,7 +95,7 @@ class UserControllerTest {
 
 
     @Test
-    @DisplayName("로그인 성공")
+    @DisplayName("로그인 성공 - id/pw 가 일치하면 로그인 성공")
     public void loginSuccessful() throws Exception {
 
         LoginDto loginDto = LoginDto.of("test1@test.com", "test1234");
@@ -107,7 +107,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("로그인 실패 - id/pw 불일치")
+    @DisplayName("로그인 실패 - 존재하지 않는 id 또는 pw 불일치로 로그인 실패")
     public void loginFailed() throws Exception {
 
         LoginDto loginDto = LoginDto.of("testCase@test.com", "test1234");

@@ -3,7 +3,6 @@ package com.flab.shoeauction.user.controller;
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_OK;
 
 import com.flab.shoeauction.common.annotation.LoginCheck;
-import com.flab.shoeauction.common.utils.encrytion.EncryptionUtils;
 import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
 import com.flab.shoeauction.user.dto.UserDto.LoginDto;
@@ -35,7 +34,6 @@ public class UserController {
 
     private final SignUpService signUpService;
     private final LoginService loginService;
-    private final EncryptionUtils encryptionUtils;
 
     //테스트시 조회용 - 추후 삭제
     @GetMapping
@@ -64,10 +62,8 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginDto loginDto) {
-        String email = loginDto.getEmail();
-        String password = encryptionUtils.encrypt(loginDto.getPassword());
-        loginService.existByEmailAndPassword(email, password);
-        loginService.login(email);
+        loginService.existByEmailAndPassword(loginDto);
+        loginService.login(loginDto.getEmail());
         return RESPONSE_OK;
     }
 

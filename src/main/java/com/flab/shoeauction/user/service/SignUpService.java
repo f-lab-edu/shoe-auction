@@ -1,6 +1,6 @@
 package com.flab.shoeauction.user.service;
 
-import com.flab.shoeauction.common.utils.encrytion.EncryptionUtils;
+import com.flab.shoeauction.user.service.encrytion.EncryptionService;
 import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
 import com.flab.shoeauction.user.exception.EmailDuplicateException;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class SignUpService {
 
     private final UserRepository userRepository;
-    private final EncryptionUtils encryptionUtils;
+    private final EncryptionService encryptionService;
 
     //데이터 조회용. 추후 삭제
     public List<User> findAll() {
@@ -33,7 +33,7 @@ public class SignUpService {
             throw new NicknameDuplicateException("이미 존재하는 닉네임 입니다. 다른 닉네임을 사용해주세요.");
         }
 
-        userDto.passwordEncryption(encryptionUtils);
+        userDto.passwordEncryption(encryptionService);
         return userRepository.save(userDto.toUser());
     }
 

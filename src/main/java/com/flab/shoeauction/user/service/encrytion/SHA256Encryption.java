@@ -1,10 +1,10 @@
-package com.flab.shoeauction.common.utils.encrytion;
+package com.flab.shoeauction.user.service.encrytion;
 
 import java.security.MessageDigest;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
-public class SHA256Encryption implements EncryptionUtils {
+@Service
+public class SHA256Encryption implements EncryptionService {
 
     @Override
     public String encrypt(String s) {

@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import com.flab.shoeauction.user.dto.UserDto.LoginDto;
 import com.flab.shoeauction.user.exception.UserNotFoundException;
 import com.flab.shoeauction.user.repository.UserRepository;
+import com.flab.shoeauction.user.service.encrytion.EncryptionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,9 @@ class LoginServiceTest {
 
     @Mock
     UserRepository userRepository;
+
+    @Mock
+    EncryptionService encryptionService;
 
     @InjectMocks
     LoginService loginService;
@@ -35,13 +39,14 @@ class LoginServiceTest {
     public void loginSuccess() {
         LoginDto loginDto = createLoginDto();
 
-        when(userRepository.existsByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword()))
+        when(userRepository.existsByEmailAndPassword(loginDto.getEmail(),
+            encryptionService.encrypt(loginDto.getPassword())))
             .thenReturn(true);
 
-        loginService.existByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword());
+        loginService.existByEmailAndPassword(loginDto);
 
         verify(userRepository, atLeastOnce())
-            .existsByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword());
+            .existsByEmailAndPassword(loginDto.getEmail(),encryptionService.encrypt(loginDto.getPassword()));
     }
 
     @Test
@@ -49,15 +54,15 @@ class LoginServiceTest {
     public void FailedToLogin() {
         LoginDto loginDto = createLoginDto();
 
-        when(userRepository.existsByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword()))
+        when(userRepository.existsByEmailAndPassword(loginDto.getEmail(), encryptionService.encrypt(loginDto.getPassword())))
             .thenReturn(false);
 
         assertThrows(UserNotFoundException.class,
             () -> loginService
-                .existByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword()));
+                .existByEmailAndPassword(loginDto));
 
         verify(userRepository, atLeastOnce())
-            .existsByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword());
+            .existsByEmailAndPassword(loginDto.getEmail(), encryptionService.encrypt(loginDto.getPassword()));
 
     }
 }

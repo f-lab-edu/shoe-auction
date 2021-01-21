@@ -6,7 +6,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.flab.shoeauction.common.utils.encrytion.EncryptionUtils;
+import com.flab.shoeauction.user.service.encrytion.EncryptionService;
 import com.flab.shoeauction.user.dto.UserDto;
 import com.flab.shoeauction.user.exception.EmailDuplicateException;
 import com.flab.shoeauction.user.exception.NicknameDuplicateException;
@@ -30,7 +30,7 @@ class SignUpServiceTest {
     @Mock
     UserRepository userRepository;
     @Mock
-    EncryptionUtils encryptionUtils;
+    EncryptionService encryptionService;
     @InjectMocks
     SignUpService signUpService;
 
