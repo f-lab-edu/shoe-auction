@@ -16,4 +16,10 @@ public class ResponseConstants {
 
     public static final ResponseEntity<String> DUPLICATION_NICKNAME =
             new ResponseEntity<>("중복된 닉네임입니다.", HttpStatus.CONFLICT);
+
+    public static final ResponseEntity<String> USER_NOT_FOUND =
+            new ResponseEntity<>("아이디 또는 비밀번호를 확인해주세요.", HttpStatus.BAD_REQUEST);
+
+    public static final ResponseEntity<String> NOT_LOGIN_EXCEPTION =
+            new ResponseEntity<>("로그인 후 이용해주세요.", HttpStatus.UNAUTHORIZED);
 }

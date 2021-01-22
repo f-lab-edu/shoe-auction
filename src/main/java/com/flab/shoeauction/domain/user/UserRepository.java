@@ -3,7 +3,11 @@ package com.flab.shoeauction.domain.user;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    boolean existsByEmail(String email);
+    public boolean existsByEmail(String email);
 
-    boolean existsByNickname(String nickname);
+    public boolean existsByNickname(String nickname);
+
+    public boolean existsByEmailAndPassword(String email, String password);
+
+    public User findByEmail(String email);
 }

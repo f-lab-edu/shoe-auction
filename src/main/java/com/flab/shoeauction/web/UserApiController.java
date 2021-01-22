@@ -1,7 +1,9 @@
 package com.flab.shoeauction.web;
 
+import com.flab.shoeauction.annotation.CheckLogin;
+import com.flab.shoeauction.service.LoginService;
+import com.flab.shoeauction.service.SessionService;
 import com.flab.shoeauction.service.UserService;
-import com.flab.shoeauction.util.response.ResponseConstants;
 import com.flab.shoeauction.web.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -9,12 +11,19 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static com.flab.shoeauction.util.response.ResponseConstants.CREATED;
+import static com.flab.shoeauction.util.response.ResponseConstants.OK;
+
 @RequiredArgsConstructor
 @RequestMapping("/users")
 @RestController
 public class UserApiController {
 
     private final UserService userService;
+
+    private final LoginService loginService;
+
+    private final SessionService sessionService;
 
     @GetMapping("/user-emails/{email}/exists")
     public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email) {
@@ -29,6 +38,28 @@ public class UserApiController {
     @PostMapping
     public ResponseEntity<Void> createUser(@Valid @RequestBody UserDto.SaveRequest requestDto) {
         userService.save(requestDto);
-        return ResponseConstants.CREATED;
+        return OK;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Void> login(@RequestBody UserDto.LoginRequest requestDto) {
+        loginService.checkLoginInfo(requestDto);
+        sessionService.saveLoginUserEmail(requestDto.getEmail());
+        return CREATED;
+    }
+
+    @CheckLogin
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        sessionService.removeLoginUserEmail();
+        return OK;
+    }
+
+    @CheckLogin
+    @GetMapping("/loggedin-user")
+    public ResponseEntity<UserDto.LoggedinUserResponse> loggedinUserInfo() {
+        String email = sessionService.getLoginUserEmail();
+        UserDto.LoggedinUserResponse responseDto = loginService.getLoggedinUser(email);
+        return ResponseEntity.ok().body(responseDto);
     }
 }

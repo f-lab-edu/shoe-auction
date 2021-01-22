@@ -37,7 +37,6 @@ public class UserDto {
         @Pattern(regexp = "(01[016789])(\\d{3,4})(\\d{4})", message = "올바른 휴대폰 번호를 입력해주세요.")
         private String phone;
 
-        @Builder
         public SaveRequest(String nickName, String email, String password, String confirmPassword, String phone) {
             this.nickname = nickname;
             this.email = email;
@@ -56,6 +55,34 @@ public class UserDto {
                     .password(this.password)
                     .phone(this.phone)
                     .build();
+        }
+    }
+
+    @Getter
+    public static class LoginRequest {
+        private String email;
+        private String password;
+
+        public void passwordEncryption(EncryptionUtils encryptionUtils) {
+            this.password = encryptionUtils.encrypt(password);
+        }
+
+        public LoginRequest(String email, String password) {
+            this.email = email;
+            this.password = password;
+        }
+    }
+
+    @Getter
+    public static class LoggedinUserResponse {
+        private String email;
+        private String nickname;
+        private String phone;
+
+        public LoggedinUserResponse(User user) {
+            this.email = user.getEmail();
+            this.nickname = user.getNickname();
+            this.phone = user.getPhone();
         }
     }
 }
