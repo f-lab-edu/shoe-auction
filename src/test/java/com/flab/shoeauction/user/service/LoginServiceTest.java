@@ -29,13 +29,14 @@ class LoginServiceTest {
     LoginService loginService;
 
 
+
     public LoginDto createLoginDto() {
         return LoginDto.of("test@test.com", "test1234");
 
     }
 
     @Test
-    @DisplayName("로그인 성공")
+    @DisplayName("로그인 성공 - 아이디와 비밀번호 일치.")
     public void loginSuccess() {
         LoginDto loginDto = createLoginDto();
 
@@ -63,6 +64,5 @@ class LoginServiceTest {
 
         verify(userRepository, atLeastOnce())
             .existsByEmailAndPassword(loginDto.getEmail(), encryptionService.encrypt(loginDto.getPassword()));
-
     }
 }

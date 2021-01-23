@@ -44,6 +44,4 @@ public class SignUpService {
     public boolean nicknameDuplicateCheck(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
-
-
 }

@@ -31,8 +31,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        String loginId = loginService.getUser();
-        if (loginId == null) {
+        if (loginService.getLoinUser() == null) {
             throw new UnauthenticatedUserException("로그인 후 이용 가능합니다.");
         }
         return true;

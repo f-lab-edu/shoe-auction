@@ -1,13 +1,16 @@
 package com.flab.shoeauction.user.domain;
 
 import com.flab.shoeauction.common.baseEntity.BaseEntity;
-import lombok.*;
-import org.apache.tomcat.jni.Address;
-
+import com.flab.shoeauction.user.dto.UserDto.UserInfoDto;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
@@ -33,6 +36,17 @@ public class User extends BaseEntity {
 
     @Embedded
     private Account account;
+
+
+    public  UserInfoDto toUserInfoDto() {
+        return UserInfoDto.builder()
+            .email(this.getEmail())
+            .nickname(this.getNickname())
+            .phone(this.getPhone())
+            .address(this.getAddress())
+            .account(this.getAccount())
+            .build();
+    }
 
     // TODO: 2021-01-06 : Item 엔티티 생성 후 찜 목록(관심상품) 값 타입 컬렉션 추가하기
 

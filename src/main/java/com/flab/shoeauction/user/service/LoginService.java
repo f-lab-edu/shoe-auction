@@ -2,6 +2,8 @@ package com.flab.shoeauction.user.service;
 
 import static com.flab.shoeauction.user.utils.UserConstants.USER_ID;
 
+import com.flab.shoeauction.user.domain.User;
+import com.flab.shoeauction.user.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.user.service.encrytion.EncryptionService;
 import com.flab.shoeauction.user.dto.UserDto.LoginDto;
 import com.flab.shoeauction.user.exception.UserNotFoundException;
@@ -19,28 +21,26 @@ public class LoginService {
     private final EncryptionService encryptionService;
 
     public void existByEmailAndPassword(LoginDto loginDto) {
+        loginDto.passwordEncryption(encryptionService);
         String email = loginDto.getEmail();
-        String password = passwordEncryption(loginDto.getPassword());
+        String password = loginDto.getPassword();
         if (!userRepository.existsByEmailAndPassword(email, password)) {
             throw new UserNotFoundException("아이디 또는 비밀번호가 일치하지 않습니다.");
         }
     }
 
-    private String passwordEncryption(String password) {
-        return encryptionService.encrypt(password);
-    }
-
 
     public void login(String email) {
-        session.setAttribute(USER_ID, email);
+        User user = userRepository.findByEmail(email);
+        UserInfoDto userInfo = user.toUserInfoDto();
+        session.setAttribute(USER_ID, userInfo);
     }
 
     public void logout() {
         session.removeAttribute(USER_ID);
     }
 
-    public String getUser() {
-        return (String) session.getAttribute(USER_ID);
+    public UserInfoDto getLoinUser() {
+        return (UserInfoDto) session.getAttribute(USER_ID);
     }
-
 }

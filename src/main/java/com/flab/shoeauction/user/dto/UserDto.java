@@ -1,5 +1,7 @@
 package com.flab.shoeauction.user.dto;
 
+import com.flab.shoeauction.user.domain.Account;
+import com.flab.shoeauction.user.domain.Address;
 import com.flab.shoeauction.user.service.encrytion.EncryptionService;
 import com.flab.shoeauction.user.domain.User;
 import lombok.AllArgsConstructor;
@@ -56,5 +58,26 @@ public class UserDto {
         public static LoginDto of(String email, String password) {
             return new LoginDto(email, password);
         }
+
+        public void passwordEncryption(EncryptionService encryptionService) {
+            this.password = encryptionService.encrypt(password);
+        }
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class UserInfoDto {
+
+        private String email;
+        private String nickname;
+        private String phone;
+        private Address address;
+        private Account account;
+
+        public static UserInfoDto of(String email, String nickname, String phone, Address address, Account account){
+            return new UserInfoDto(email,nickname,phone,address,account);
+        }
+    }
+
 }

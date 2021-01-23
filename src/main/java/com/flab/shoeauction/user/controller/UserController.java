@@ -3,9 +3,11 @@ package com.flab.shoeauction.user.controller;
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_OK;
 
 import com.flab.shoeauction.common.annotation.LoginCheck;
+import com.flab.shoeauction.common.annotation.LoginUser;
 import com.flab.shoeauction.user.domain.User;
 import com.flab.shoeauction.user.dto.UserDto;
 import com.flab.shoeauction.user.dto.UserDto.LoginDto;
+import com.flab.shoeauction.user.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.user.service.LoginService;
 import com.flab.shoeauction.user.service.SignUpService;
 import java.net.URI;
@@ -51,7 +53,6 @@ public class UserController {
         return signUpService.nicknameDuplicateCheck(nickname);
     }
 
-
     @PostMapping
     public ResponseEntity signUp(@RequestBody @Valid UserDto signUpDto) {
         User savedUser = signUpService.saveUser(signUpDto);
@@ -72,5 +73,11 @@ public class UserController {
     public ResponseEntity logout() {
         loginService.logout();
         return RESPONSE_OK;
+    }
+
+    @LoginCheck
+    @GetMapping("/profile")
+    public ResponseEntity<UserInfoDto> myPage(@LoginUser UserInfoDto userInfoDto) {
+        return ResponseEntity.ok(userInfoDto);
     }
 }
