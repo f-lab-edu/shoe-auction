@@ -5,3 +5,5 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+server.servlet.session.timeout : 24h

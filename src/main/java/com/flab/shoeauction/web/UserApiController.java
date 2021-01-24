@@ -56,10 +56,10 @@ public class UserApiController {
     }
 
     @CheckLogin
-    @GetMapping("/loggedin-user")
-    public ResponseEntity<UserDto.LoggedinUserResponse> loggedinUserInfo() {
+    @GetMapping("/my-infos")
+    public ResponseEntity<UserDto.InfoResponse> myInfo() {
         String email = sessionService.getLoginUserEmail();
-        UserDto.LoggedinUserResponse responseDto = loginService.getLoggedinUser(email);
+        UserDto.InfoResponse responseDto = loginService.getMyInfo(email);
         return ResponseEntity.ok().body(responseDto);
     }
 }

@@ -74,12 +74,12 @@ public class UserDto {
     }
 
     @Getter
-    public static class LoggedinUserResponse {
+    public static class InfoResponse {
         private String email;
         private String nickname;
         private String phone;
 
-        public LoggedinUserResponse(User user) {
+        public InfoResponse(User user) {
             this.email = user.getEmail();
             this.nickname = user.getNickname();
             this.phone = user.getPhone();

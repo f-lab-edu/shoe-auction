@@ -14,7 +14,6 @@ public class LoginService {
 
     private final UserRepository userRepository;
 
-
     private final EncryptionUtils encryptionUtils;
 
     public void checkLoginInfo(UserDto.LoginRequest requestDto) {
@@ -26,9 +25,11 @@ public class LoginService {
             throw new UserNotFoundException();
     }
 
-    public UserDto.LoggedinUserResponse getLoggedinUser(String email) {
+    public UserDto.InfoResponse getMyInfo(String email) {
         User loggedinUser = userRepository.findByEmail(email);
-        UserDto.LoggedinUserResponse loggedinUserResponse = new UserDto.LoggedinUserResponse(loggedinUser);
-        return loggedinUserResponse;
+        UserDto.InfoResponse myInfo = new UserDto.InfoResponse(loggedinUser);
+        return myInfo;
     }
+
+
 }

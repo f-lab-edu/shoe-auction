@@ -19,7 +19,5 @@ public class SessionService {
         session.removeAttribute(LOGIN_USER_EMAIL);
     }
 
-    public String getLoginUserEmail() {
-        return (String) session.getAttribute(LOGIN_USER_EMAIL);
-    }
+    public String getLoginUserEmail() { return (String) session.getAttribute(LOGIN_USER_EMAIL); }
 }

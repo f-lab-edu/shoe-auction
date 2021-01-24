@@ -21,12 +21,20 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         CheckLogin checkLogin = ((HandlerMethod) handler).getMethodAnnotation(CheckLogin.class);
 
-        if (checkLogin != null && sessionService.getLoginUserEmail() == null)
+        if (isNotLogin(checkLogin))
             throw new NotLoginException();
+
         return true;
     }
-    
+
+    private boolean isNotLogin(CheckLogin checkLogin) {
+        if (checkLogin == null) return false;
+        if (sessionService.getLoginUserEmail() != null) return false;
+
+        return true;
+    }
+
     /*
-    * 권한 별 접근 구현 예정 
-    */
+     * 권한 별 접근 구현 예정
+     */
 }
