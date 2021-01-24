@@ -28,8 +28,11 @@ public class LoginInterceptor implements HandlerInterceptor {
     }
 
     private boolean isNotLogin(CheckLogin checkLogin) {
-        if (checkLogin == null) return false;
-        if (sessionService.getLoginUserEmail() != null) return false;
+        if (checkLogin == null) {
+            return false;
+        } else if (sessionService.getLoginUserEmail() != null) {
+            return false;
+        }
 
         return true;
     }
