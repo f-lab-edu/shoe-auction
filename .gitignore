@@ -18,3 +18,6 @@ out/
 
 
 application.yml
+application-prod.yml
+application-local.yml
+application-dev.yml

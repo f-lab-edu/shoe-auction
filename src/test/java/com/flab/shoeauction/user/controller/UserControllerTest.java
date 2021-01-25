@@ -163,6 +163,4 @@ class UserControllerTest {
             .andDo(print())
             .andExpect(status().isUnauthorized());
     }
-
-
 }
