@@ -2,12 +2,11 @@ package com.flab.shoeauction.user.service;
 
 import static com.flab.shoeauction.user.utils.UserConstants.USER_ID;
 
-import com.flab.shoeauction.user.domain.User;
-import com.flab.shoeauction.user.dto.UserDto.UserInfoDto;
-import com.flab.shoeauction.user.service.encrytion.EncryptionService;
 import com.flab.shoeauction.user.dto.UserDto.LoginDto;
+import com.flab.shoeauction.user.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.user.exception.UserNotFoundException;
 import com.flab.shoeauction.user.repository.UserRepository;
+import com.flab.shoeauction.user.service.encrytion.EncryptionService;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,16 +30,19 @@ public class LoginService {
 
 
     public void login(String email) {
-        User user = userRepository.findByEmail(email);
-        UserInfoDto userInfo = user.toUserInfoDto();
-        session.setAttribute(USER_ID, userInfo);
+        session.setAttribute(USER_ID, email);
     }
 
     public void logout() {
         session.removeAttribute(USER_ID);
     }
 
-    public UserInfoDto getLoinUser() {
-        return (UserInfoDto) session.getAttribute(USER_ID);
+    public String getLoginUser() {
+        return (String) session.getAttribute(USER_ID);
     }
+
+    public UserInfoDto findByEmail(String email){
+        return userRepository.findByEmail(email).toUserInfoDto();
+    }
+
 }

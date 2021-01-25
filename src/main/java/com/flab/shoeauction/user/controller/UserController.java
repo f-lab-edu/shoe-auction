@@ -76,8 +76,9 @@ public class UserController {
     }
 
     @LoginCheck
-    @GetMapping("/profile")
-    public ResponseEntity<UserInfoDto> myPage(@LoginUser UserInfoDto userInfoDto) {
-        return ResponseEntity.ok(userInfoDto);
+    @GetMapping("/my-info")
+    public ResponseEntity<UserInfoDto> myPage(@LoginUser String email) {
+        UserInfoDto loginUser = loginService.findByEmail(email);
+        return ResponseEntity.ok(loginUser);
     }
 }
