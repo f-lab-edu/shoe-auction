@@ -1,21 +1,18 @@
 package com.flab.shoeauction.user.controller;
 
 import static com.flab.shoeauction.user.utils.UserConstants.USER_ID;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.shoeauction.user.dto.UserDto;
 import com.flab.shoeauction.user.dto.UserDto.LoginDto;
 import com.flab.shoeauction.user.dto.UserDto.UserInfoDto;
-import com.flab.shoeauction.user.repository.UserRepository;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +20,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
@@ -35,9 +31,6 @@ class UserControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
-
-    @Autowired
-    UserRepository userRepository;
 
 
     public UserDto setUser() {
@@ -104,13 +97,13 @@ class UserControllerTest {
     @Test
     @DisplayName("로그인 성공 - id/pw 가 일치하면 로그인 성공")
     public void loginSuccessful() throws Exception {
+        UserDto userDto = setUser();
         LoginDto loginDto = LoginDto.of("test1@test.com", "test1234");
 
         mockMvc.perform(post("/users/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(loginDto)))
             .andDo(print())
-            .andExpect(request().sessionAttribute(USER_ID, notNullValue()))
             .andExpect(status().isOk());
     }
 
@@ -126,40 +119,12 @@ class UserControllerTest {
             .andExpect(status().isUnauthorized());
     }
 
-    @Test
-    @DisplayName("로그아웃 성공 - 로그인 한 상태에서 로그아웃 요청시 로그아웃에 성공")
-    public void logoutSuccessful() throws Exception {
-        MockHttpSession mockHttpSession = new MockHttpSession();
-        UserDto.UserInfoDto userInfoDto = UserInfoDto
-            .of("test1@test.com", "17171771", "01011112222", null, null);
-        mockHttpSession.setAttribute(USER_ID, userInfoDto);
-        mockMvc.perform(delete("/users/logout")
-            .session(mockHttpSession))
-            .andDo(print())
-            .andExpect(request().sessionAttribute(USER_ID,nullValue()))
-            .andExpect(status().isOk());
-    }
 
-    @Test
-    @DisplayName("마이페이지 요청 성공 - 로그인 한 상태에서 유저의 정보를 요청하면 성공")
-    public void requestUserInfo_Successful() throws Exception {
-        MockHttpSession mockHttpSession = new MockHttpSession();
-        UserDto.UserInfoDto userInfoDto = UserInfoDto
-            .of("test1@test.com", "17171771", "01011112222", null, null);
-        mockHttpSession.setAttribute(USER_ID, userInfoDto);
-
-        mockMvc.perform(get("/users/profile")
-            .session(mockHttpSession)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(userInfoDto)))
-            .andDo(print())
-            .andExpect(status().isOk());
-    }
 
     @Test
     @DisplayName("마이페이지 요청 실패 - 로그인하지 않은 상태로 유저 정보 요청하면 실패")
     public void requestUserInfo_failure() throws Exception {
-        mockMvc.perform(get("/users/profile"))
+        mockMvc.perform(get("/users/my-info"))
             .andDo(print())
             .andExpect(status().isUnauthorized());
     }
