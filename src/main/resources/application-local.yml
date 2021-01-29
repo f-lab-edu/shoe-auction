@@ -1,6 +1,4 @@
 # local profile에 적용되는 properties
-# org.hibernate.SQL : 로거를 이용한 쿼리문 출력
-# org.hibernate.type : ?로 표시된 쿼리 파라미터 값을 로그로 출력
 # ddl-auto (create) : 개발 초기 환경에서 사용. 애플리케이션 로딩 시점에 모든 테이블을 drop 후 새로 생성, 애플리케이션 서버 종료 후에도 DB 보존 (개발 초기단계에 사용)
 spring:
   datasource:
