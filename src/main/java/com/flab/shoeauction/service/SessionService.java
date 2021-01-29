@@ -13,11 +13,15 @@ public class SessionService {
 
     private final HttpSession session;
 
-    public void saveLoginUserEmail(String email) { session.setAttribute(LOGIN_USER_EMAIL, email); }
+    public void saveLoginUserEmail(String email) {
+        session.setAttribute(LOGIN_USER_EMAIL, email);
+    }
 
     public void removeLoginUserEmail() {
         session.removeAttribute(LOGIN_USER_EMAIL);
     }
 
-    public String getLoginUserEmail() { return (String) session.getAttribute(LOGIN_USER_EMAIL); }
+    public String getLoginUserEmail() {
+        return (String) session.getAttribute(LOGIN_USER_EMAIL);
+    }
 }

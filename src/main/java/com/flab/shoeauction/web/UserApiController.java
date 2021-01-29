@@ -3,7 +3,9 @@ package com.flab.shoeauction.web;
 import com.flab.shoeauction.annotation.CheckLogin;
 import com.flab.shoeauction.service.LoginService;
 import com.flab.shoeauction.service.SessionService;
+import com.flab.shoeauction.service.SmsCertificationService;
 import com.flab.shoeauction.service.UserService;
+import com.flab.shoeauction.util.response.ResponseConstants;
 import com.flab.shoeauction.web.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ public class UserApiController {
     private final LoginService loginService;
 
     private final SessionService sessionService;
+
+    private final SmsCertificationService smsCertificationService;
 
     @GetMapping("/user-emails/{email}/exists")
     public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email) {
@@ -61,5 +65,12 @@ public class UserApiController {
         String email = sessionService.getLoginUserEmail();
         UserDto.InfoResponse responseDto = loginService.getMyInfo(email);
         return ResponseEntity.ok().body(responseDto);
+    }
+
+    @PostMapping("/sms-certification/confirms")
+    public ResponseEntity<Void> SmsVerification(@RequestBody UserDto.SmsCertificationRequest requestDto) {
+        if (!smsCertificationService.verifySms(requestDto))
+            return ResponseConstants.BAD_REQUEST;
+        return ResponseConstants.OK;
     }
 }
