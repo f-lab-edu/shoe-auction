@@ -1,5 +1,6 @@
 package com.flab.shoeauction.web;
 
+import com.flab.shoeauction.service.SmsCertificationService;
 import com.flab.shoeauction.service.UserService;
 import com.flab.shoeauction.util.response.ResponseConstants;
 import com.flab.shoeauction.web.dto.UserDto;
@@ -16,6 +17,8 @@ public class UserApiController {
 
     private final UserService userService;
 
+    private final SmsCertificationService smsCertificationService;
+
     @GetMapping("/user-emails/{email}/exists")
     public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email) {
         return ResponseEntity.ok(userService.checkEmailDuplicate(email));
@@ -30,5 +33,18 @@ public class UserApiController {
     public ResponseEntity<Void> createUser(@Valid @RequestBody UserDto.SaveRequest requestDto) {
         userService.save(requestDto);
         return ResponseConstants.CREATED;
+    }
+
+    @PostMapping("/sms-certification/sends")
+    public ResponseEntity<Void> sendSms(@RequestBody UserDto.SmsCertificationRequest requestDto) {
+        smsCertificationService.sendSms(requestDto.getPhone());
+        return ResponseConstants.CREATED;
+    }
+
+    @PostMapping("/sms-certification/confirms")
+    public ResponseEntity<Void> SmsVerification(@RequestBody UserDto.SmsCertificationRequest requestDto) {
+        if (!smsCertificationService.verifySms(requestDto))
+            return ResponseConstants.BAD_REQUEST;
+        return ResponseConstants.OK;
     }
 }
