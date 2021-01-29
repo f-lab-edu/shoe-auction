@@ -1,7 +1,7 @@
 package com.flab.shoeauction.common.configs;
 
 import com.flab.shoeauction.common.annotation.LoginUser;
-import com.flab.shoeauction.user.service.LoginService;
+import com.flab.shoeauction.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

@@ -1,12 +1,12 @@
-package com.flab.shoeauction.user.service;
+package com.flab.shoeauction.service;
 
-import static com.flab.shoeauction.user.utils.UserConstants.USER_ID;
+import static com.flab.shoeauction.common.utils.user.UserConstants.USER_ID;
 
-import com.flab.shoeauction.user.dto.UserDto.LoginDto;
-import com.flab.shoeauction.user.dto.UserDto.UserInfoDto;
-import com.flab.shoeauction.user.exception.UserNotFoundException;
-import com.flab.shoeauction.user.repository.UserRepository;
-import com.flab.shoeauction.user.service.encrytion.EncryptionService;
+import com.flab.shoeauction.web.dto.UserDto.LoginDto;
+import com.flab.shoeauction.web.dto.UserDto.UserInfoDto;
+import com.flab.shoeauction.exception.user.UserNotFoundException;
+import com.flab.shoeauction.domain.user.UserRepository;
+import com.flab.shoeauction.service.encrytion.EncryptionService;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

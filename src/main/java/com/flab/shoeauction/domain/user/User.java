@@ -1,7 +1,7 @@
-package com.flab.shoeauction.user.domain;
+package com.flab.shoeauction.domain.user;
 
-import com.flab.shoeauction.common.baseEntity.BaseEntity;
-import com.flab.shoeauction.user.dto.UserDto.UserInfoDto;
+import com.flab.shoeauction.domain.BaseEntity;
+import com.flab.shoeauction.web.dto.UserDto.UserInfoDto;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

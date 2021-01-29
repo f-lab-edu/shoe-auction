@@ -1,9 +1,9 @@
-package com.flab.shoeauction.user.dto;
+package com.flab.shoeauction.web.dto;
 
-import com.flab.shoeauction.user.domain.Account;
-import com.flab.shoeauction.user.domain.Address;
-import com.flab.shoeauction.user.service.encrytion.EncryptionService;
-import com.flab.shoeauction.user.domain.User;
+import com.flab.shoeauction.domain.user.Account;
+import com.flab.shoeauction.domain.user.Address;
+import com.flab.shoeauction.service.encrytion.EncryptionService;
+import com.flab.shoeauction.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

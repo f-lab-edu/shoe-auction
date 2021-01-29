@@ -1,8 +1,8 @@
 package com.flab.shoeauction.common.interceptor;
 
 import com.flab.shoeauction.common.annotation.LoginCheck;
-import com.flab.shoeauction.user.exception.UnauthenticatedUserException;
-import com.flab.shoeauction.user.service.LoginService;
+import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
+import com.flab.shoeauction.service.LoginService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

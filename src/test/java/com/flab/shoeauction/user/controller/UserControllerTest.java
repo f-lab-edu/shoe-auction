@@ -1,6 +1,5 @@
 package com.flab.shoeauction.user.controller;
 
-import static com.flab.shoeauction.user.utils.UserConstants.USER_ID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -8,11 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flab.shoeauction.user.dto.UserDto;
-import com.flab.shoeauction.user.dto.UserDto.LoginDto;
-import com.flab.shoeauction.user.dto.UserDto.UserInfoDto;
-import java.util.HashMap;
-import java.util.Map;
+import com.flab.shoeauction.web.dto.UserDto;
+import com.flab.shoeauction.web.dto.UserDto.LoginDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,7 +120,7 @@ class UserControllerTest {
     @Test
     @DisplayName("마이페이지 요청 실패 - 로그인하지 않은 상태로 유저 정보 요청하면 실패")
     public void requestUserInfo_failure() throws Exception {
-        mockMvc.perform(get("/users/my-info"))
+        mockMvc.perform(get("/users/my-infos"))
             .andDo(print())
             .andExpect(status().isUnauthorized());
     }

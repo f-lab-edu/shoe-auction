@@ -1,6 +1,5 @@
-package com.flab.shoeauction.user.repository;
+package com.flab.shoeauction.domain.user;
 
-import com.flab.shoeauction.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

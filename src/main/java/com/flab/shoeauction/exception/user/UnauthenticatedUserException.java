@@ -1,4 +1,4 @@
-package com.flab.shoeauction.user.exception;
+package com.flab.shoeauction.exception.user;
 
 public class UnauthenticatedUserException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package com.flab.shoeauction.user.service.encrytion;
+package com.flab.shoeauction.service.encrytion;
 
 import java.security.MessageDigest;
 import org.springframework.stereotype.Service;

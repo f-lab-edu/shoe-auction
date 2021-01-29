@@ -1,11 +1,11 @@
-package com.flab.shoeauction.user.service;
+package com.flab.shoeauction.service;
 
-import com.flab.shoeauction.user.service.encrytion.EncryptionService;
-import com.flab.shoeauction.user.domain.User;
-import com.flab.shoeauction.user.dto.UserDto;
-import com.flab.shoeauction.user.exception.EmailDuplicateException;
-import com.flab.shoeauction.user.exception.NicknameDuplicateException;
-import com.flab.shoeauction.user.repository.UserRepository;
+import com.flab.shoeauction.service.encrytion.EncryptionService;
+import com.flab.shoeauction.domain.user.User;
+import com.flab.shoeauction.web.dto.UserDto;
+import com.flab.shoeauction.exception.user.EmailDuplicateException;
+import com.flab.shoeauction.exception.user.NicknameDuplicateException;
+import com.flab.shoeauction.domain.user.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

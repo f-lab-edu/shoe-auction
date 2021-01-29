@@ -1,14 +1,14 @@
-package com.flab.shoeauction.common.exception;
+package com.flab.shoeauction.exception;
 
-import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_EMAIL_CONFLICT;
+import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.DUPLICATION_EMAIL;
+import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.DUPLICATION_NICKNAME;
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_ENTITY_UNAUTHORIZED;
 import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_LOGIN_UNAUTHORIZED;
-import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_NICKNAME_CONFLICT;
 
-import com.flab.shoeauction.user.exception.EmailDuplicateException;
-import com.flab.shoeauction.user.exception.NicknameDuplicateException;
-import com.flab.shoeauction.user.exception.UnauthenticatedUserException;
-import com.flab.shoeauction.user.exception.UserNotFoundException;
+import com.flab.shoeauction.exception.user.EmailDuplicateException;
+import com.flab.shoeauction.exception.user.NicknameDuplicateException;
+import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
+import com.flab.shoeauction.exception.user.UserNotFoundException;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class CustomizeResponseEntityExceptionHandler extends ResponseEntityExcep
         WebRequest request) {
         log.error("Failed to signUp ::  {}, detection time={} ", request.getDescription(false),
             LocalDateTime.now(), ex);
-        return RESPONSE_EMAIL_CONFLICT;
+        return DUPLICATION_EMAIL;
     }
 
     @ExceptionHandler(NicknameDuplicateException.class)
@@ -34,7 +34,7 @@ public class CustomizeResponseEntityExceptionHandler extends ResponseEntityExcep
         NicknameDuplicateException ex, WebRequest request) {
         log.error("Failed to signUp ::  {}, detection time={} ", request.getDescription(false),
             LocalDateTime.now(), ex);
-        return RESPONSE_NICKNAME_CONFLICT;
+        return DUPLICATION_NICKNAME;
     }
 
 

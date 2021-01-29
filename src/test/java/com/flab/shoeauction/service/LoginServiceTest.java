@@ -1,4 +1,4 @@
-package com.flab.shoeauction.user.service;
+package com.flab.shoeauction.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -7,13 +7,13 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.flab.shoeauction.user.domain.User;
-import com.flab.shoeauction.user.dto.UserDto;
-import com.flab.shoeauction.user.dto.UserDto.LoginDto;
-import com.flab.shoeauction.user.dto.UserDto.UserInfoDto;
-import com.flab.shoeauction.user.exception.UserNotFoundException;
-import com.flab.shoeauction.user.repository.UserRepository;
-import com.flab.shoeauction.user.service.encrytion.EncryptionService;
+import com.flab.shoeauction.domain.user.User;
+import com.flab.shoeauction.web.dto.UserDto;
+import com.flab.shoeauction.web.dto.UserDto.LoginDto;
+import com.flab.shoeauction.web.dto.UserDto.UserInfoDto;
+import com.flab.shoeauction.exception.user.UserNotFoundException;
+import com.flab.shoeauction.domain.user.UserRepository;
+import com.flab.shoeauction.service.encrytion.EncryptionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

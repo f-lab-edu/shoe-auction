@@ -1,15 +1,15 @@
-package com.flab.shoeauction.user.controller;
+package com.flab.shoeauction.web;
 
-import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.RESPONSE_OK;
+import static com.flab.shoeauction.common.utils.httpStatus.ResponseConstants.OK;
 
 import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.common.annotation.LoginUser;
-import com.flab.shoeauction.user.domain.User;
-import com.flab.shoeauction.user.dto.UserDto;
-import com.flab.shoeauction.user.dto.UserDto.LoginDto;
-import com.flab.shoeauction.user.dto.UserDto.UserInfoDto;
-import com.flab.shoeauction.user.service.LoginService;
-import com.flab.shoeauction.user.service.SignUpService;
+import com.flab.shoeauction.domain.user.User;
+import com.flab.shoeauction.service.LoginService;
+import com.flab.shoeauction.service.SignUpService;
+import com.flab.shoeauction.web.dto.UserDto;
+import com.flab.shoeauction.web.dto.UserDto.LoginDto;
+import com.flab.shoeauction.web.dto.UserDto.UserInfoDto;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
@@ -65,18 +65,18 @@ public class UserController {
     public ResponseEntity login(@RequestBody LoginDto loginDto) {
         loginService.existByEmailAndPassword(loginDto);
         loginService.login(loginDto.getEmail());
-        return RESPONSE_OK;
+        return OK;
     }
 
     @LoginCheck
     @DeleteMapping("/logout")
     public ResponseEntity logout() {
         loginService.logout();
-        return RESPONSE_OK;
+        return OK;
     }
 
     @LoginCheck
-    @GetMapping("/my-info")
+    @GetMapping("/my-infos")
     public ResponseEntity<UserInfoDto> myPage(@LoginUser String email) {
         UserInfoDto loginUser = loginService.findByEmail(email);
         return ResponseEntity.ok(loginUser);

@@ -5,15 +5,20 @@ import org.springframework.http.ResponseEntity;
 
 public class ResponseConstants {
 
-    public static final ResponseEntity RESPONSE_OK = ResponseEntity.ok().build();
+    public static final ResponseEntity<Void> OK =
+        ResponseEntity.ok().build();
 
-    public static final ResponseEntity RESPONSE_BAD_REQUEST = ResponseEntity.badRequest().build();
+    public static final ResponseEntity<Void> CREATED =
+        ResponseEntity.status(HttpStatus.CREATED).build();
 
-    public static final ResponseEntity<String> RESPONSE_NICKNAME_CONFLICT = new ResponseEntity<>(
-        "닉네임 중복", HttpStatus.CONFLICT);
+    public static final ResponseEntity<Void> BAD_REQUEST =
+        ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
-    public static final ResponseEntity<String> RESPONSE_EMAIL_CONFLICT = new ResponseEntity<>(
-        "이메일 중복", HttpStatus.CONFLICT);
+    public static final ResponseEntity<String> DUPLICATION_EMAIL =
+        new ResponseEntity<>("중복된 이메일입니다.", HttpStatus.CONFLICT);
+
+    public static final ResponseEntity<String> DUPLICATION_NICKNAME =
+        new ResponseEntity<>("중복된 닉네임입니다.", HttpStatus.CONFLICT);
 
     public static final ResponseEntity<String> RESPONSE_ENTITY_UNAUTHORIZED = new ResponseEntity<>(
         "ID 또는 PW를 확인하세요.", HttpStatus.UNAUTHORIZED

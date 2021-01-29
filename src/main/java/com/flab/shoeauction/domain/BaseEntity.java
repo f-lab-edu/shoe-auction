@@ -1,4 +1,4 @@
-package com.flab.shoeauction.common.baseEntity;
+package com.flab.shoeauction.domain;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
