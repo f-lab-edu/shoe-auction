@@ -1,9 +1,5 @@
 package com.flab.shoeauction.common.configs;
 
-/**
- *
- */
-
 import com.flab.shoeauction.common.interceptor.LoginCheckInterceptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
