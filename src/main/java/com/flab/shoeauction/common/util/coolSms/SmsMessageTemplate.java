@@ -1,4 +1,4 @@
-package com.flab.shoeauction.util.coolSms;
+package com.flab.shoeauction.common.util.coolSms;
 
 public class SmsMessageTemplate {
     private final String prefix = "[Shoe-Auction] 인증번호는 ";

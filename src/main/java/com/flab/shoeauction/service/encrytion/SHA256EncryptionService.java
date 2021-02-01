@@ -1,11 +1,11 @@
-package com.flab.shoeauction.util.encrytion;
+package com.flab.shoeauction.service.encrytion;
 
 import org.springframework.stereotype.Component;
 
 import java.security.MessageDigest;
 
 @Component
-public class SHA256EncryptionUtils implements EncryptionUtils {
+public class SHA256EncryptionService implements EncryptionService {
 
     public String encrypt(String s) {
         try {

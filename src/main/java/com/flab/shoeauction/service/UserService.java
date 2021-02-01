@@ -3,8 +3,8 @@ package com.flab.shoeauction.service;
 import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
-import com.flab.shoeauction.util.encrytion.EncryptionUtils;
-import com.flab.shoeauction.web.dto.UserDto;
+import com.flab.shoeauction.service.encrytion.EncryptionService;
+import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private final EncryptionUtils encryptionUtils;
+    private final EncryptionService encryptionService;
 
     public boolean checkEmailDuplicate(String email) {
         return userRepository.existsByEmail(email);
@@ -26,12 +26,12 @@ public class UserService {
         return userRepository.existsByNickname(nickname);
     }
 
-    public void save(UserDto.SaveRequest requestDto) {
+    public void save(SaveRequest requestDto) {
         if (checkEmailDuplicate(requestDto.getEmail()))
             throw new DuplicateEmailException();
         if (checkNicknameDuplicate(requestDto.getNickname()))
             throw new DuplicateNicknameException();
-        requestDto.passwordEncryption(encryptionUtils);
+        requestDto.passwordEncryption(encryptionService);
 
         userRepository.save(requestDto.toEntity());
     }

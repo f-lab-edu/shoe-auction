@@ -1,4 +1,4 @@
-package com.flab.shoeauction.config;
+package com.flab.shoeauction.common.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

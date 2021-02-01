@@ -1,4 +1,4 @@
-package com.flab.shoeauction.util.coolSms;
+package com.flab.shoeauction.common.util.coolSms;
 
 public class coolSmsConstants {
     public static String COOLSMS_KEY = "NCSNEETJ1Z3IPXZ0";

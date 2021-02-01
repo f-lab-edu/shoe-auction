@@ -1,9 +1,17 @@
 package com.flab.shoeauction.service;
 
+import static com.flab.shoeauction.common.util.coolSms.coolSmsConstants.APP_VERSION;
+import static com.flab.shoeauction.common.util.coolSms.coolSmsConstants.COOLSMS_KEY;
+import static com.flab.shoeauction.common.util.coolSms.coolSmsConstants.COOLSMS_SECRET;
+import static com.flab.shoeauction.common.util.coolSms.coolSmsConstants.OFFICIAL_PHONE;
+import static com.flab.shoeauction.common.util.coolSms.coolSmsConstants.SMS_TYPE;
+
+import com.flab.shoeauction.common.util.coolSms.SmsMessageTemplate;
 import com.flab.shoeauction.dao.SmsCertificationDao;
 import com.flab.shoeauction.exception.smsCetification.SmsSendFailedException;
-import com.flab.shoeauction.util.coolSms.SmsMessageTemplate;
-import com.flab.shoeauction.web.dto.UserDto;
+import com.flab.shoeauction.controller.dto.UserDto;
+import java.util.HashMap;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.api.Message;
@@ -11,17 +19,10 @@ import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Random;
-
-import static com.flab.shoeauction.util.coolSms.coolSmsConstants.*;
-
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class SmsCertificationService {
-
-    private final SessionService sessionService;
 
     private final SmsCertificationDao smsCertificationDao;
 

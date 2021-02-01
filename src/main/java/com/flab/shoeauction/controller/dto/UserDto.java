@@ -1,16 +1,17 @@
-package com.flab.shoeauction.web.dto;
+package com.flab.shoeauction.controller.dto;
 
-import com.flab.shoeauction.util.encrytion.EncryptionUtils;
 import com.flab.shoeauction.domain.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import com.flab.shoeauction.domain.user.account.Account;
+import com.flab.shoeauction.domain.user.address.Address;
+import com.flab.shoeauction.service.encrytion.EncryptionService;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
@@ -38,15 +39,15 @@ public class UserDto {
         private String phone;
 
         @Builder
-        public SaveRequest(String nickName, String email, String password, String confirmPassword, String phone) {
+        public SaveRequest(String nickname, String email, String password, String confirmPassword, String phone) {
             this.nickname = nickname;
             this.email = email;
             this.password = password;
             this.phone = phone;
         }
 
-        public void passwordEncryption(EncryptionUtils encryptionUtils) {
-            this.password = encryptionUtils.encrypt(password);
+        public void passwordEncryption(EncryptionService encryptionService) {
+            this.password = encryptionService.encrypt(password);
         }
 
         public User toEntity() {
@@ -65,4 +66,37 @@ public class UserDto {
         private String phone;
         private String certificationNumber;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class LoginRequest {
+
+        private String email;
+        private String password;
+
+        public static LoginRequest of(String email, String password) {
+            return new LoginRequest(email, password);
+        }
+
+        public void passwordEncryption(EncryptionService encryptionService) {
+            this.password = encryptionService.encrypt(password);
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class UserInfoDto {
+
+        private String email;
+        private String nickname;
+        private String phone;
+        private Address address;
+        private Account account;
+
+        public static UserInfoDto of(String email, String nickname, String phone, Address address, Account account){
+            return new UserInfoDto(email,nickname,phone,address,account);
+        }
+    }
+
 }
