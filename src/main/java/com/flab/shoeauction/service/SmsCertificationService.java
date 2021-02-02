@@ -7,9 +7,9 @@ import static com.flab.shoeauction.common.util.coolSms.coolSmsConstants.OFFICIAL
 import static com.flab.shoeauction.common.util.coolSms.coolSmsConstants.SMS_TYPE;
 
 import com.flab.shoeauction.common.util.coolSms.SmsMessageTemplate;
+import com.flab.shoeauction.controller.dto.UserDto.SmsCertificationRequest;
 import com.flab.shoeauction.dao.SmsCertificationDao;
 import com.flab.shoeauction.exception.smsCetification.SmsSendFailedException;
-import com.flab.shoeauction.controller.dto.UserDto;
 import java.util.HashMap;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +68,7 @@ public class SmsCertificationService {
     }
 
     // 입력한 인증번호가 발송되었던(세션에 저장된) 인증번호가 동일한지 확인
-    public boolean verifySms(UserDto.SmsCertificationRequest requestDto) {
+    public boolean verifySms(SmsCertificationRequest requestDto) {
         if (smsCertificationDao.hasKey(requestDto.getPhone()) &&
                 smsCertificationDao.getSmsCertification(requestDto.getPhone()).equals(requestDto.getCertificationNumber())) {
             smsCertificationDao.removeSmsCertification(requestDto.getPhone());

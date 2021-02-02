@@ -39,7 +39,8 @@ public class UserDto {
         private String phone;
 
         @Builder
-        public SaveRequest(String nickname, String email, String password, String confirmPassword, String phone) {
+        public SaveRequest(String nickname, String email, String password, String confirmPassword,
+            String phone) {
             this.nickname = nickname;
             this.email = email;
             this.password = password;
@@ -52,18 +53,27 @@ public class UserDto {
 
         public User toEntity() {
             return User.builder()
-                    .nickname(this.nickname)
-                    .email(this.email)
-                    .password(this.password)
-                    .phone(this.phone)
-                    .build();
+                .nickname(this.nickname)
+                .email(this.email)
+                .password(this.password)
+                .phone(this.phone)
+                .build();
         }
     }
 
     @Getter
     @NoArgsConstructor
     public static class SmsCertificationRequest {
+
         private String phone;
+        private String certificationNumber;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class EmailCertificationRequest {
+
+        private String email;
         private String certificationNumber;
     }
 
@@ -94,9 +104,33 @@ public class UserDto {
         private Address address;
         private Account account;
 
-        public static UserInfoDto of(String email, String nickname, String phone, Address address, Account account){
-            return new UserInfoDto(email,nickname,phone,address,account);
+        public static UserInfoDto of(String email, String nickname, String phone, Address address,
+            Account account) {
+            return new UserInfoDto(email, nickname, phone, address, account);
         }
     }
+
+    @Getter
+    @Builder
+    public static class FindUserRequest {
+
+        private String email;
+        private String phone;
+    }
+
+    @Getter
+    public static class ChangePasswordRequest {
+
+        private String email;
+
+        @NotBlank(message = "비밀번호를 입력해주세요.")
+        @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 입력해주세요.")
+        private String password;
+
+        public void passwordEncryption(EncryptionService encryptionService) {
+            this.password = encryptionService.encrypt(password);
+        }
+    }
+
 
 }

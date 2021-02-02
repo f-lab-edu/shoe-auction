@@ -40,7 +40,9 @@ public class LoginService {
         return (String) session.getAttribute(USER_ID);
     }
 
-    public UserInfoDto getCurrentUser(String email){
-        return userRepository.findByEmail(email).toUserInfoDto();
+    public UserInfoDto getCurrentUser(String email) {
+
+        return userRepository.findByEmail(email)
+            .orElseThrow().toUserInfoDto();
     }
 }
