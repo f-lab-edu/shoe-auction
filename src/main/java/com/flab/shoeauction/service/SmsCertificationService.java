@@ -1,12 +1,12 @@
 package com.flab.shoeauction.service;
 
-import static com.flab.shoeauction.common.util.coolSms.coolSmsConstants.APP_VERSION;
-import static com.flab.shoeauction.common.util.coolSms.coolSmsConstants.COOLSMS_KEY;
-import static com.flab.shoeauction.common.util.coolSms.coolSmsConstants.COOLSMS_SECRET;
-import static com.flab.shoeauction.common.util.coolSms.coolSmsConstants.OFFICIAL_PHONE;
-import static com.flab.shoeauction.common.util.coolSms.coolSmsConstants.SMS_TYPE;
+import static com.flab.shoeauction.common.utils.certification.coolSms.coolSmsConstants.APP_VERSION;
+import static com.flab.shoeauction.common.utils.certification.coolSms.coolSmsConstants.COOLSMS_KEY;
+import static com.flab.shoeauction.common.utils.certification.coolSms.coolSmsConstants.COOLSMS_SECRET;
+import static com.flab.shoeauction.common.utils.certification.coolSms.coolSmsConstants.OFFICIAL_PHONE;
+import static com.flab.shoeauction.common.utils.certification.coolSms.coolSmsConstants.SMS_TYPE;
 
-import com.flab.shoeauction.common.util.coolSms.SmsMessageTemplate;
+import com.flab.shoeauction.common.utils.certification.coolSms.SmsMessageTemplate;
 import com.flab.shoeauction.controller.dto.UserDto.SmsCertificationRequest;
 import com.flab.shoeauction.dao.SmsCertificationDao;
 import com.flab.shoeauction.exception.smsCetification.SmsSendFailedException;

@@ -1,11 +1,11 @@
-package com.flab.shoeauction.common.util.email;
+package com.flab.shoeauction.common.utils.certification.coolSms;
 
-public class EmailContentTemplate {
+public class SmsMessageTemplate {
     private final String prefix = "[Shoe-Auction] 인증번호는 ";
     private final String suffix = "입니다.";
     private String certificationNumber;
 
-    public void setCertificationNumber(String certificationNumber) {
+    public void setcertificationNumber(String certificationNumber) {
         this.certificationNumber = certificationNumber;
     }
 

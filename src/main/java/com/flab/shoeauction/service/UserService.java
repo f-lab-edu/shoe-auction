@@ -1,7 +1,7 @@
 package com.flab.shoeauction.service;
 
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
-import com.flab.shoeauction.controller.dto.UserDto.FindUserRequest;
+import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.domain.user.User;
 import com.flab.shoeauction.domain.user.UserRepository;
@@ -44,7 +44,7 @@ public class UserService {
         userRepository.save(requestDto.toEntity());
     }
 
-    public FindUserRequest getPhoneNumber(String email) {
+    public FindUserResponse getUserResource(String email) {
         return userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 email 입니다.")).toFindUserDto();
     }

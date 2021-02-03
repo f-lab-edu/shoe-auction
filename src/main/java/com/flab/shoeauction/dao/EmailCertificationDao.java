@@ -19,11 +19,11 @@ public class EmailCertificationDao {
             .set(PREFIX + email, certificationNumber, Duration.ofSeconds(LIMIT_TIME));
     }
 
-    public String getEmailCertification(String email){
+    public String getEmailCertification(String email) {
         return stringRedisTemplate.opsForValue().get(PREFIX + email);
     }
 
-    public void removeSmsCertification(String email) {
+    public void removeEmailCertification(String email) {
         stringRedisTemplate.delete(PREFIX + email);
     }
 

@@ -1,6 +1,6 @@
 package com.flab.shoeauction.service;
 
-import static com.flab.shoeauction.common.util.user.UserConstants.USER_ID;
+import static com.flab.shoeauction.common.utils.user.UserConstants.USER_ID;
 
 import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.UserNotFoundException;

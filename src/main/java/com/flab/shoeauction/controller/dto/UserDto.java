@@ -112,7 +112,7 @@ public class UserDto {
 
     @Getter
     @Builder
-    public static class FindUserRequest {
+    public static class FindUserResponse {
 
         private String email;
         private String phone;

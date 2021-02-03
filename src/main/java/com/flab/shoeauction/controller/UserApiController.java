@@ -1,14 +1,14 @@
 package com.flab.shoeauction.controller;
 
-import static com.flab.shoeauction.common.util.response.ResponseConstants.BAD_REQUEST;
-import static com.flab.shoeauction.common.util.response.ResponseConstants.CREATED;
-import static com.flab.shoeauction.common.util.response.ResponseConstants.OK;
+import static com.flab.shoeauction.common.utils.response.ResponseConstants.BAD_REQUEST;
+import static com.flab.shoeauction.common.utils.response.ResponseConstants.CREATED;
+import static com.flab.shoeauction.common.utils.response.ResponseConstants.OK;
 
 import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.EmailCertificationRequest;
-import com.flab.shoeauction.controller.dto.UserDto.FindUserRequest;
+import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.UserDto.SmsCertificationRequest;
@@ -93,13 +93,15 @@ public class UserApiController {
         return ResponseEntity.ok(loginUser);
     }
 
-    //비밀번호 찾기 : 이메일 입력시, 존재하는 이메일이면 휴대폰인증과 이메일인증 중 택1 하도록 구현
-    //휴대폰 인증 선택시 : sendSms / SmsVerification 핸들러
-    //이메일 인증 선택시 : sendEmail / emailVerification 핸들러
-    @GetMapping("/find/password/{email}")
-    public ResponseEntity<FindUserRequest> forget_password(@PathVariable String email) {
-        FindUserRequest findUserRequest = userService.getPhoneNumber(email);
-        return ResponseEntity.ok(findUserRequest);
+    /**
+    비밀번호 찾기 : 이메일 입력시, 존재하는 이메일이면 휴대폰인증과 이메일인증 중 택1 하도록 구현
+    휴대폰 인증 선택시 : sendSms / SmsVerification 핸들러
+    이메일 인증 선택시 : sendEmail / emailVerification 핸들러
+    */
+    @GetMapping("/find/{email}")
+    public ResponseEntity<FindUserResponse> findUser(@PathVariable String email) {
+        FindUserResponse findUserResponse = userService.getUserResource(email);
+        return ResponseEntity.ok(findUserResponse);
     }
 
     @PostMapping("/email-certification/sends")
@@ -110,12 +112,11 @@ public class UserApiController {
 
     @PostMapping("/email-certification/confirms")
     public ResponseEntity emailVerification(@RequestBody EmailCertificationRequest requestDto) {
-        if(!emailCertificationService.verifyEmail(requestDto)) {
-            return BAD_REQUEST;
-        }
+        emailCertificationService.verifyEmail(requestDto);
         return OK;
-    }
 
+    }
+    // TODO: 2021-02-03 : URI 네이밍 고민
     @PatchMapping("password-nonLogin")
     public ResponseEntity changePassword_nonLogin(@RequestBody ChangePasswordRequest requestDto) {
         userService.updatePassword(requestDto);

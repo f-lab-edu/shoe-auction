@@ -1,10 +1,10 @@
 package com.flab.shoeauction.domain.user;
 
-import com.flab.shoeauction.controller.dto.UserDto.FindUserRequest;
+import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
+import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.BaseTimeEntity;
 import com.flab.shoeauction.domain.user.account.Account;
 import com.flab.shoeauction.domain.user.address.Address;
-import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -51,8 +51,8 @@ public class User extends BaseTimeEntity {
             .build();
     }
 
-    public FindUserRequest toFindUserDto() {
-        return FindUserRequest.builder()
+    public FindUserResponse toFindUserDto() {
+        return FindUserResponse.builder()
             .email(this.getEmail())
             .phone(this.getPhone())
             .build();

@@ -1,9 +1,12 @@
 package com.flab.shoeauction.exception;
 
-import static com.flab.shoeauction.common.util.response.ResponseConstants.LOGIN_UNAUTHORIZED;
-import static com.flab.shoeauction.common.util.response.ResponseConstants.UNAUTHORIZED;
+import static com.flab.shoeauction.common.utils.response.ResponseConstants.BAD_REQUEST;
+import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_EMAIL;
+import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_NICKNAME;
+import static com.flab.shoeauction.common.utils.response.ResponseConstants.LOGIN_UNAUTHORIZED;
+import static com.flab.shoeauction.common.utils.response.ResponseConstants.USER_NOT_FOUND;
 
-import com.flab.shoeauction.common.util.response.ResponseConstants;
+import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
@@ -22,19 +25,19 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateEmailException.class)
-    public ResponseEntity<String> duplicateEmailException(DuplicateEmailException exception) {
+    public final ResponseEntity<String> duplicateEmailException(DuplicateEmailException exception) {
         log.error("중복된 이메일입니다.", exception);
-        return ResponseConstants.DUPLICATION_EMAIL;
+        return DUPLICATION_EMAIL;
     }
 
     @ExceptionHandler(DuplicateNicknameException.class)
-    public ResponseEntity<String> duplicateNicknameException(DuplicateNicknameException exception) {
+    public final ResponseEntity<String> duplicateNicknameException(DuplicateNicknameException exception) {
         log.error("중복된 닉네임입니다.", exception);
-        return ResponseConstants.DUPLICATION_NICKNAME;
+        return DUPLICATION_NICKNAME;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
+    public final ResponseEntity<String> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
         log.error(exception.getFieldError().getDefaultMessage(), exception);
         return new ResponseEntity<>(exception.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
     }
@@ -44,7 +47,7 @@ public class GlobalExceptionHandler {
         UserNotFoundException ex, WebRequest request) {
         log.error("Failed to signUp ::  {}, detection time={} ", request.getDescription(false),
             LocalDateTime.now(), ex);
-        return UNAUTHORIZED;
+        return USER_NOT_FOUND;
     }
 
     @ExceptionHandler(UnauthenticatedUserException.class)
@@ -53,6 +56,14 @@ public class GlobalExceptionHandler {
         log.error("Failed to Execution ::  {}, detection time={} ", request.getDescription(false),
             LocalDateTime.now(), ex);
         return LOGIN_UNAUTHORIZED;
+    }
+
+    @ExceptionHandler(AuthenticationNumberMismatchException.class)
+    public final ResponseEntity<Void> handleAuthenticationNumberMismatchException(
+        AuthenticationNumberMismatchException ex, WebRequest request) {
+        log.error("인증번호가 일치하지 않습니다 :  {}, detection time={} ", request.getDescription(false),
+            LocalDateTime.now(), ex);
+        return BAD_REQUEST;
     }
 
 }
