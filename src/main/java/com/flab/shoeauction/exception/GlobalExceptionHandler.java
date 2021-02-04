@@ -3,7 +3,7 @@ package com.flab.shoeauction.exception;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.BAD_REQUEST;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_EMAIL;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_NICKNAME;
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.LOGIN_UNAUTHORIZED;
+import static com.flab.shoeauction.common.utils.response.ResponseConstants.UNAUTHORIZED_USER;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.USER_NOT_FOUND;
 
 import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException;
@@ -44,9 +44,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public final ResponseEntity<String> handleUserNotFoundException(
-        UserNotFoundException ex, WebRequest request) {
-        log.error("Failed to signUp ::  {}, detection time={} ", request.getDescription(false),
-            LocalDateTime.now(), ex);
+        UserNotFoundException ex) {
+        log.info("로그인 실패 : 존재하지 않는 ID 또는 패스워드 불일치",ex);
         return USER_NOT_FOUND;
     }
 
@@ -55,14 +54,13 @@ public class GlobalExceptionHandler {
         UnauthenticatedUserException ex, WebRequest request) {
         log.error("Failed to Execution ::  {}, detection time={} ", request.getDescription(false),
             LocalDateTime.now(), ex);
-        return LOGIN_UNAUTHORIZED;
+        return UNAUTHORIZED_USER;
     }
 
     @ExceptionHandler(AuthenticationNumberMismatchException.class)
     public final ResponseEntity<Void> handleAuthenticationNumberMismatchException(
-        AuthenticationNumberMismatchException ex, WebRequest request) {
-        log.error("인증번호가 일치하지 않습니다 :  {}, detection time={} ", request.getDescription(false),
-            LocalDateTime.now(), ex);
+        AuthenticationNumberMismatchException ex) {
+        log.info("인증번호 불일치", ex);
         return BAD_REQUEST;
     }
 

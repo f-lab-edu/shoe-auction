@@ -9,7 +9,7 @@ import com.flab.shoeauction.dao.EmailCertificationDao;
 import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -17,22 +17,21 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@ConfigurationProperties("external")
 public class EmailCertificationService {
-
-    @Value("${external.email}")
-    private String FROM_ADDRESS;
     private final JavaMailSender mailSender;
     private final EmailCertificationDao emailCertificationDao;
-
+    private String emailFromAddress;
 
     // 이메일 전송 및 인증번호 저장
     public void sendEmail(String email) {
+
         String randomNumber = makeRandomNumber();
         String content = makeEmailContent(randomNumber);
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
-        message.setFrom(FROM_ADDRESS);
+        message.setFrom(emailFromAddress);
         message.setSubject(TITLE);
         message.setText(content);
         mailSender.send(message);

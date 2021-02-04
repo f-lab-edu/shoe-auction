@@ -2,11 +2,12 @@ package com.flab.shoeauction.service;
 
 import static com.flab.shoeauction.common.utils.user.UserConstants.USER_ID;
 
-import com.flab.shoeauction.domain.user.UserRepository;
-import com.flab.shoeauction.exception.user.UserNotFoundException;
-import com.flab.shoeauction.service.encrytion.EncryptionService;
 import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
+import com.flab.shoeauction.domain.user.UserRepository;
+import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
+import com.flab.shoeauction.exception.user.UserNotFoundException;
+import com.flab.shoeauction.service.encrytion.EncryptionService;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,6 @@ public class LoginService {
     public UserInfoDto getCurrentUser(String email) {
 
         return userRepository.findByEmail(email)
-            .orElseThrow().toUserInfoDto();
+            .orElseThrow(() -> new UnauthenticatedUserException("error : 인증되지 않은 사용자")).toUserInfoDto();
     }
 }

@@ -1,6 +1,5 @@
 package com.flab.shoeauction.controller;
 
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.BAD_REQUEST;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.CREATED;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.OK;
 
@@ -66,9 +65,7 @@ public class UserApiController {
 
     @PostMapping("/sms-certification/confirms")
     public ResponseEntity<Void> SmsVerification(@RequestBody SmsCertificationRequest requestDto) {
-        if (!smsCertificationService.verifySms(requestDto)) {
-            return BAD_REQUEST;
-        }
+        smsCertificationService.verifySms(requestDto);
         return OK;
     }
 
@@ -118,7 +115,7 @@ public class UserApiController {
     }
     // TODO: 2021-02-03 : URI 네이밍 고민
     @PatchMapping("password-nonLogin")
-    public ResponseEntity changePassword_nonLogin(@RequestBody ChangePasswordRequest requestDto) {
+    public ResponseEntity changePassword_nonLogin(@Valid @RequestBody ChangePasswordRequest requestDto) {
         userService.updatePassword(requestDto);
         return OK;
     }

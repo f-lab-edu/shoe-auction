@@ -1,4 +1,4 @@
-package com.flab.shoeauction.domain.user.account;
+package com.flab.shoeauction.domain.user;
 
 import lombok.AccessLevel;
 import lombok.Getter;

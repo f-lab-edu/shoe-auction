@@ -3,8 +3,7 @@ package com.flab.shoeauction.domain.user;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.BaseTimeEntity;
-import com.flab.shoeauction.domain.user.account.Account;
-import com.flab.shoeauction.domain.user.address.Address;
+import java.time.LocalDateTime;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,6 +38,8 @@ public class User extends BaseTimeEntity {
 
     @Embedded
     private Account account;
+
+    private LocalDateTime emailSendDate;
 
 
     public UserInfoDto toUserInfoDto() {
