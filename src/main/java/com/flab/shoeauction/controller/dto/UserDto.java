@@ -4,14 +4,15 @@ import com.flab.shoeauction.domain.user.User;
 import com.flab.shoeauction.domain.user.account.Account;
 import com.flab.shoeauction.domain.user.address.Address;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Getter
 @AllArgsConstructor
@@ -39,7 +40,7 @@ public class UserDto {
         private String phone;
 
         @Builder
-        public SaveRequest(String nickname, String email, String password, String confirmPassword, String phone) {
+        public SaveRequest(String nickname, String email, String password, String phone) {
             this.nickname = nickname;
             this.email = email;
             this.password = password;
@@ -99,4 +100,9 @@ public class UserDto {
         }
     }
 
+    @Getter
+    @NoArgsConstructor
+    public static class PasswordRequest {
+        private String password;
+    }
 }

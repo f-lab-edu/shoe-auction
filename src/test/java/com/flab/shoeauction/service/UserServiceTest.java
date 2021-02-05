@@ -1,22 +1,20 @@
 package com.flab.shoeauction.service;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
-
+import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
+import com.flab.shoeauction.exception.user.WrongPasswordException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
-import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 /**
  * @ExtendWith : Junit5의 확장 어노테이션을 사용할 수 있다.
@@ -36,11 +34,11 @@ class UserServiceTest {
 
     private SaveRequest createUser() {
         SaveRequest saveRequest = SaveRequest.builder()
-            .email("test123@test.com")
-            .password("test1234")
-            .phone("01011112222")
-            .nickname("17171771")
-            .build();
+                .email("test123@test.com")
+                .password("test1234")
+                .phone("01011112222")
+                .nickname("17171771")
+                .build();
         return saveRequest;
     }
 
@@ -80,5 +78,33 @@ class UserServiceTest {
         verify(userRepository, atLeastOnce()).existsByNickname("17171771");
     }
 
+    @DisplayName("비밀번호가 일치하여 회원 탈퇴 성공한다.")
+    @Test
+    public void deleteSuccess() {
+        SaveRequest saveRequest = createUser();
+        String email = saveRequest.getEmail();
+        String password = saveRequest.getPassword();
 
+        when(userRepository.existsByEmailAndPassword(email, encryptionService.encrypt(password)))
+                .thenReturn(true);
+
+        userService.delete(email, password);
+
+        verify(userRepository, atLeastOnce()).deleteByEmail(email);
+    }
+
+    @DisplayName("비밀번호가 일치하지 않아 회원 탈퇴 실패한다.")
+    @Test
+    public void deleteFailure() {
+        SaveRequest saveRequest = createUser();
+        String email = saveRequest.getEmail();
+        String password = saveRequest.getPassword();
+
+        when(userRepository.existsByEmailAndPassword(email, encryptionService.encrypt(password)))
+                .thenReturn(false);
+
+        assertThrows(WrongPasswordException.class, () -> userService.delete(email, password));
+
+        verify(userRepository, never()).deleteByEmail(email);
+    }
 }

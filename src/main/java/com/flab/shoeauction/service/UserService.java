@@ -1,13 +1,15 @@
 package com.flab.shoeauction.service;
 
+import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
+import com.flab.shoeauction.exception.user.WrongPasswordException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
-import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,5 +36,12 @@ public class UserService {
         requestDto.passwordEncryption(encryptionService);
 
         userRepository.save(requestDto.toEntity());
+    }
+
+    @Transactional
+    public void delete(String email, String password) {
+        if (!userRepository.existsByEmailAndPassword(email, encryptionService.encrypt(password)))
+            throw new WrongPasswordException();
+        userRepository.deleteByEmail(email);
     }
 }
