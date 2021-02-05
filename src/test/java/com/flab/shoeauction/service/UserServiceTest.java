@@ -1,16 +1,23 @@
 package com.flab.shoeauction.service;
 
+import static com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest.of;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
 
+import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
+import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
+import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
+import com.flab.shoeauction.domain.user.User;
 import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
+import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
-import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -79,6 +86,50 @@ class UserServiceTest {
 
         verify(userRepository, atLeastOnce()).existsByNickname("17171771");
     }
+
+    @Test
+    @DisplayName("비밀번호 찾기 성공 - 전달받은 객체(이메일)가 회원이라면 비밀번호 변경에 성공한다.")
+    public void updatePassword() {
+        ChangePasswordRequest changePasswordRequest = of("test123.test.com", "test12345");
+        User user = createUser().toEntity();
+
+        when(userRepository.findByEmail(changePasswordRequest.getEmail())).thenReturn(Optional.of(user));
+
+        userService.updatePassword(changePasswordRequest);
+
+        assertThat(user.getPassword()).isEqualTo(changePasswordRequest.getPassword());
+
+        verify(userRepository, atLeastOnce()).findByEmail(changePasswordRequest.getEmail());
+    }
+
+    @Test
+    @DisplayName("가입된 이메일 입력시 비밀번호 찾기(재설정)에 필요한 리소스를 리턴한다.")
+    public void SuccessToGetUserResource() {
+        String email = "test123@test.com";
+        User user = createUser().toEntity();
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+
+        FindUserResponse userResource = userService.getUserResource(email);
+
+        assertThat(userResource.getEmail()).isEqualTo(user.getEmail());
+        assertThat(userResource.getPhone()).isEqualTo(user.getPhone());
+
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 이메일 입력시 비밀번호 찾기(재설정)에 필요한 리소스 리턴에 실패한다.")
+    public void failToGetUserResource() {
+
+        String email = "non@test.com";
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.getUserResource("non@test.com"));
+
+        verify(userRepository, atLeastOnce()).findByEmail(email);
+    }
+
 
 
 }

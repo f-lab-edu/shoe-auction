@@ -1,4 +1,4 @@
-package com.flab.shoeauction.service;
+package com.flab.shoeauction.service.certification;
 
 import static com.flab.shoeauction.common.utils.certification.RandomNumberGeneration.makeRandomNumber;
 import static com.flab.shoeauction.common.utils.certification.coolSms.coolSmsConstants.APP_VERSION;
@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 @ConfigurationProperties("external")
 public class SmsCertificationService {
     private final SmsCertificationDao smsCertificationDao;
+
     private String coolSmsKey;
     private String coolSmsSecret;
     private String coolSmsFromPhoneNumber;

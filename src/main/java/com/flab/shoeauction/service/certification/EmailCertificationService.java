@@ -1,4 +1,4 @@
-package com.flab.shoeauction.service;
+package com.flab.shoeauction.service.certification;
 
 import static com.flab.shoeauction.common.utils.certification.RandomNumberGeneration.makeRandomNumber;
 import static com.flab.shoeauction.common.utils.certification.email.EmailConstants.TITLE;

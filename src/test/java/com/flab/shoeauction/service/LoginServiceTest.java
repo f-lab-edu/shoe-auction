@@ -1,5 +1,6 @@
 package com.flab.shoeauction.service;
 
+import static java.util.Optional.ofNullable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -61,7 +62,7 @@ class LoginServiceTest {
 
     @Test
     @DisplayName("로그인 성공 - 아이디와 비밀번호 일치.")
-    public void loginSuccess() {
+    public void loginSucceed() {
         LoginRequest loginRequest = createLoginDto();
 
         when(userRepository.existsByEmailAndPassword(loginRequest.getEmail(),
@@ -77,7 +78,7 @@ class LoginServiceTest {
 
     @Test
     @DisplayName("로그인 실패 - 비밀번호가 일치하지 않거나 존재하지 않는 ID를 요청할 경우 UserNotFoundException이 발생한다.")
-    public void FailedToLogin() {
+    public void loginFailed() {
         LoginRequest loginRequest = createLoginDto();
 
         when(userRepository.existsByEmailAndPassword(loginRequest.getEmail(),
@@ -99,7 +100,8 @@ class LoginServiceTest {
 
         LoginRequest loginRequest = createLoginDto();
 
-        when(userRepository.findByEmail(loginRequest.getEmail())).thenReturn(user);
+        when(userRepository.findByEmail(loginRequest.getEmail())).thenReturn(
+            ofNullable(user));
 
         UserInfoDto userInfoDto = loginService.getCurrentUser(loginRequest.getEmail());
 
