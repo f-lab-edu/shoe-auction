@@ -1,20 +1,21 @@
-package com.flab.shoeauction.domain.user;
+package com.flab.shoeauction.domain.AddressBook;
 
+import javax.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Embeddable;
 
 /**
  * 도로명 주소,상세주소
  */
 
-@Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Embeddable
 public class Address {
 
+    private String addressName;
     private String roadNameAddress;
     private String detailedAddress;
+    private String postalCode;
 }

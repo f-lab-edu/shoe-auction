@@ -2,7 +2,7 @@ package com.flab.shoeauction.controller.dto;
 
 import com.flab.shoeauction.domain.user.User;
 import com.flab.shoeauction.domain.user.Account;
-import com.flab.shoeauction.domain.user.Address;
+import com.flab.shoeauction.domain.AddressBook.Address;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -140,6 +140,20 @@ public class UserDto {
         public static ChangePasswordRequest of(String email, String newPassword, String existingPassword) {
             return new ChangePasswordRequest(email, newPassword,existingPassword);
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class ChangeAccountRequest {
+        private String bankName;
+        private String accountNumber;
+        private String depositor;
+
+        public static ChangeAccountRequest of(String bankName, String accountNumber, String depositor) {
+            return new ChangeAccountRequest(bankName, accountNumber, depositor);
+        }
+
+
     }
 
 

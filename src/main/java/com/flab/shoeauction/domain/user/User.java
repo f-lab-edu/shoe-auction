@@ -2,12 +2,19 @@ package com.flab.shoeauction.domain.user;
 
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
+import com.flab.shoeauction.domain.AddressBook.Address;
+import com.flab.shoeauction.domain.AddressBook.AddressBook;
 import com.flab.shoeauction.domain.BaseTimeEntity;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +30,7 @@ public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
+    @Column(name ="USER_ID")
     private Long id;
 
     private String nickname;
@@ -39,8 +47,10 @@ public class User extends BaseTimeEntity {
     @Embedded
     private Account account;
 
-    private LocalDateTime emailSendDate;
 
+    @OneToMany(cascade= CascadeType.ALL , orphanRemoval = true)
+    @JoinColumn(name ="USER_ID")
+    private List<AddressBook> addressesBook = new ArrayList<>();
 
     public UserInfoDto toUserInfoDto() {
         return UserInfoDto.builder()
@@ -62,5 +72,10 @@ public class User extends BaseTimeEntity {
 
     public void updatePassword(String password) {
         this.password = password;
+    }
+
+    public void updateAccount(String bankName, String accountNumber, String depositor) {
+        Account account = new Account(bankName, accountNumber, depositor);
+        this.account = account;
     }
 }

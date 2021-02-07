@@ -1,5 +1,6 @@
 package com.flab.shoeauction.service;
 
+import com.flab.shoeauction.controller.dto.UserDto.ChangeAccountRequest;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
@@ -74,5 +75,15 @@ public class UserService {
             .orElseThrow(() -> new UnauthenticatedUserException("Unauthenticated user"));
 
         user.updatePassword(passwordAfter);
+    }
+
+    @Transactional
+    public void updateAccount(String email, ChangeAccountRequest requestDto) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UnauthenticatedUserException("Unauthenticated user"));
+        String bankName = requestDto.getBankName();
+        String accountNumber = requestDto.getAccountNumber();
+        String depositor = requestDto.getDepositor();
+        user.updateAccount(bankName, accountNumber, depositor);
     }
 }
