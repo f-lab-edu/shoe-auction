@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 @Setter
-@ConfigurationProperties("certification-related constants")
+@ConfigurationProperties("certification-related-constants")
 public class SmsCertificationService {
     private final SmsCertificationDao smsCertificationDao;
 

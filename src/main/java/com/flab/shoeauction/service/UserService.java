@@ -50,14 +50,29 @@ public class UserService {
     }
 
     @Transactional
-    public void updatePassword(ChangePasswordRequest requestDto) {
+    public void updatePasswordByForget(ChangePasswordRequest requestDto) {
         String email = requestDto.getEmail();
         requestDto.passwordEncryption(encryptionService);
 
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UnauthenticatedUserException("Unauthenticated user"));
 
-        user.updatePassword(requestDto.getPassword());
+        user.updatePassword(requestDto.getPasswordAfter());
+    }
 
+    @Transactional
+    public void updatePassword(String email, ChangePasswordRequest requestDto) {
+        requestDto.passwordEncryption(encryptionService);
+        String passwordBefore = requestDto.getPasswordBefore();
+        String passwordAfter = requestDto.getPasswordAfter();
+        System.out.println(email);
+        if (!userRepository.existsByEmailAndPassword(email, passwordBefore)) {
+            throw new UnauthenticatedUserException("이전 비밀번호가 일치하지 않습니다.");
+        }
+
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UnauthenticatedUserException("Unauthenticated user"));
+
+        user.updatePassword(passwordAfter);
     }
 }

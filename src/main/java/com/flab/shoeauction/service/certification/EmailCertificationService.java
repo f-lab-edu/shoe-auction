@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-@ConfigurationProperties("certification-related constants")
+@ConfigurationProperties("certification-related-constants")
 public class EmailCertificationService {
     private final JavaMailSender mailSender;
     private final EmailCertificationDao emailCertificationDao;
