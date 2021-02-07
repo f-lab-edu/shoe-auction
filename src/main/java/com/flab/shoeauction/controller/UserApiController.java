@@ -2,11 +2,7 @@ package com.flab.shoeauction.controller;
 
 import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.common.annotation.LoginCheck;
-import com.flab.shoeauction.controller.dto.UserDto;
-import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
-import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
-import com.flab.shoeauction.controller.dto.UserDto.SmsCertificationRequest;
-import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
+import com.flab.shoeauction.controller.dto.UserDto.*;
 import com.flab.shoeauction.service.LoginService;
 import com.flab.shoeauction.service.SmsCertificationService;
 import com.flab.shoeauction.service.UserService;
@@ -82,8 +78,7 @@ public class UserApiController {
 
     @LoginCheck
     @DeleteMapping
-    public ResponseEntity<Void> UserWithdrawal(@RequestBody UserDto.PasswordRequest requestDto) {
-        String email = loginService.getLoginUser();
+    public ResponseEntity<Void> UserWithdrawal(@RequestBody PasswordRequest requestDto, @CurrentUser String email) {
         String password = requestDto.getPassword();
         userService.delete(email, password);
         loginService.logout();

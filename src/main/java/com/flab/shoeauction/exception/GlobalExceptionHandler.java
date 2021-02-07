@@ -19,14 +19,16 @@ import static com.flab.shoeauction.common.util.response.ResponseConstants.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateEmailException.class)
-    public ResponseEntity<String> duplicateEmailException(DuplicateEmailException ex) {
-        log.error("중복된 이메일입니다.", ex);
+    public ResponseEntity<String> duplicateEmailException(DuplicateEmailException ex, WebRequest request) {
+        log.debug("Duplicate email ::  {}, detection time={} ", request.getDescription(false),
+                LocalDateTime.now(), ex);
         return ResponseConstants.DUPLICATION_EMAIL;
     }
 
     @ExceptionHandler(DuplicateNicknameException.class)
-    public ResponseEntity<String> duplicateNicknameException(DuplicateNicknameException ex) {
-        log.error("중복된 닉네임입니다.", ex);
+    public ResponseEntity<String> duplicateNicknameException(DuplicateNicknameException ex, WebRequest request) {
+        log.debug("Duplicate nickname ::  {}, detection time={} ", request.getDescription(false),
+                LocalDateTime.now(), ex);
         return ResponseConstants.DUPLICATION_NICKNAME;
     }
 
@@ -53,8 +55,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(WrongPasswordException.class)
-    public final ResponseEntity<String> wrongPasswordException(WrongPasswordException ex){
-        log.error("비밀번호를 확인해주세요", ex);
+    public final ResponseEntity<String> wrongPasswordException(WrongPasswordException ex, WebRequest request){
+        log.debug("Wrong password ::  {}, detection time={} ", request.getDescription(false),
+                LocalDateTime.now(), ex);
         return WRONG_PASSWORD;
     }
 }
