@@ -7,7 +7,6 @@ import com.flab.shoeauction.domain.user.User;
 import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
-import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import lombok.RequiredArgsConstructor;
@@ -55,9 +54,8 @@ public class UserService {
         requestDto.passwordEncryption(encryptionService);
 
         User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new UnauthenticatedUserException("Unauthenticated user"));
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
         user.updatePassword(requestDto.getPassword());
-
     }
 }

@@ -43,7 +43,7 @@ public class EmailCertificationService {
     // 인증 이메일 내용 생성
     public String makeEmailContent(String certificationNumber) {
         EmailContentTemplate content = new EmailContentTemplate();
-        return content.getCertificationContent(certificationNumber);
+        return content.buildCertificationContents(certificationNumber);
     }
 
     // 인증번호 일치 여부 확인

@@ -2,7 +2,6 @@ package com.flab.shoeauction.common.utils.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 
 public class ResponseConstants {
 
