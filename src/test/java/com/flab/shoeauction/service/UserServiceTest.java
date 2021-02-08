@@ -1,5 +1,12 @@
 package com.flab.shoeauction.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
@@ -12,9 +19,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
 
 /**
  * @ExtendWith : Junit5의 확장 어노테이션을 사용할 수 있다.
@@ -34,11 +38,11 @@ class UserServiceTest {
 
     private SaveRequest createUser() {
         SaveRequest saveRequest = SaveRequest.builder()
-                .email("test123@test.com")
-                .password("test1234")
-                .phone("01011112222")
-                .nickname("17171771")
-                .build();
+            .email("test123@test.com")
+            .password("test1234")
+            .phone("01011112222")
+            .nickname("17171771")
+            .build();
         return saveRequest;
     }
 
@@ -86,7 +90,7 @@ class UserServiceTest {
         String password = saveRequest.getPassword();
 
         when(userRepository.existsByEmailAndPassword(email, encryptionService.encrypt(password)))
-                .thenReturn(true);
+            .thenReturn(true);
 
         userService.delete(email, password);
 
@@ -101,7 +105,7 @@ class UserServiceTest {
         String password = saveRequest.getPassword();
 
         when(userRepository.existsByEmailAndPassword(email, encryptionService.encrypt(password)))
-                .thenReturn(false);
+            .thenReturn(false);
 
         assertThrows(WrongPasswordException.class, () -> userService.delete(email, password));
 

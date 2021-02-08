@@ -1,4 +1,5 @@
 package com.flab.shoeauction.exception.user;
 
-public class WrongPasswordException extends RuntimeException{
+public class WrongPasswordException extends RuntimeException {
+
 }

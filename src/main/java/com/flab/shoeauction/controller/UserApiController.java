@@ -1,18 +1,29 @@
 package com.flab.shoeauction.controller;
 
+import static com.flab.shoeauction.common.util.response.ResponseConstants.BAD_REQUEST;
+import static com.flab.shoeauction.common.util.response.ResponseConstants.CREATED;
+import static com.flab.shoeauction.common.util.response.ResponseConstants.OK;
+
 import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.common.annotation.LoginCheck;
-import com.flab.shoeauction.controller.dto.UserDto.*;
+import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
+import com.flab.shoeauction.controller.dto.UserDto.PasswordRequest;
+import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
+import com.flab.shoeauction.controller.dto.UserDto.SmsCertificationRequest;
+import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.service.LoginService;
 import com.flab.shoeauction.service.SmsCertificationService;
 import com.flab.shoeauction.service.UserService;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-
-import static com.flab.shoeauction.common.util.response.ResponseConstants.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -78,7 +89,8 @@ public class UserApiController {
 
     @LoginCheck
     @DeleteMapping
-    public ResponseEntity<Void> UserWithdrawal(@RequestBody PasswordRequest requestDto, @CurrentUser String email) {
+    public ResponseEntity<Void> UserWithdrawal(@RequestBody PasswordRequest requestDto,
+        @CurrentUser String email) {
         String password = requestDto.getPassword();
         userService.delete(email, password);
         loginService.logout();

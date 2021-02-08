@@ -53,17 +53,18 @@ public class UserDto {
 
         public User toEntity() {
             return User.builder()
-                    .nickname(this.nickname)
-                    .email(this.email)
-                    .password(this.password)
-                    .phone(this.phone)
-                    .build();
+                .nickname(this.nickname)
+                .email(this.email)
+                .password(this.password)
+                .phone(this.phone)
+                .build();
         }
     }
 
     @Getter
     @NoArgsConstructor
     public static class SmsCertificationRequest {
+
         private String phone;
         private String certificationNumber;
     }
@@ -95,14 +96,16 @@ public class UserDto {
         private Address address;
         private Account account;
 
-        public static UserInfoDto of(String email, String nickname, String phone, Address address, Account account){
-            return new UserInfoDto(email,nickname,phone,address,account);
+        public static UserInfoDto of(String email, String nickname, String phone, Address address,
+            Account account) {
+            return new UserInfoDto(email, nickname, phone, address, account);
         }
     }
 
     @Getter
     @NoArgsConstructor
     public static class PasswordRequest {
+
         private String password;
     }
 }

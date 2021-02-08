@@ -29,10 +29,12 @@ public class UserService {
     }
 
     public void save(SaveRequest requestDto) {
-        if (checkEmailDuplicate(requestDto.getEmail()))
+        if (checkEmailDuplicate(requestDto.getEmail())) {
             throw new DuplicateEmailException();
-        if (checkNicknameDuplicate(requestDto.getNickname()))
+        }
+        if (checkNicknameDuplicate(requestDto.getNickname())) {
             throw new DuplicateNicknameException();
+        }
         requestDto.passwordEncryption(encryptionService);
 
         userRepository.save(requestDto.toEntity());
@@ -40,8 +42,9 @@ public class UserService {
 
     @Transactional
     public void delete(String email, String password) {
-        if (!userRepository.existsByEmailAndPassword(email, encryptionService.encrypt(password)))
+        if (!userRepository.existsByEmailAndPassword(email, encryptionService.encrypt(password))) {
             throw new WrongPasswordException();
+        }
         userRepository.deleteByEmail(email);
     }
 }
