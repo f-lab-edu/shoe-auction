@@ -5,7 +5,7 @@ import static com.flab.shoeauction.common.utils.response.ResponseConstants.OK;
 
 import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.common.annotation.LoginCheck;
-import com.flab.shoeauction.controller.dto.UserDto.ChangeAccountRequest;
+import com.flab.shoeauction.controller.dto.UserDto.ChangeAddressRequest;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.EmailCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
@@ -13,10 +13,14 @@ import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.UserDto.SmsCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
-import com.flab.shoeauction.service.certification.EmailCertificationService;
+import com.flab.shoeauction.domain.AddressBook.Address;
+import com.flab.shoeauction.domain.AddressBook.AddressBook;
+import com.flab.shoeauction.domain.user.Account;
 import com.flab.shoeauction.service.LoginService;
-import com.flab.shoeauction.service.certification.SmsCertificationService;
 import com.flab.shoeauction.service.UserService;
+import com.flab.shoeauction.service.certification.EmailCertificationService;
+import com.flab.shoeauction.service.certification.SmsCertificationService;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -133,10 +137,44 @@ public class UserApiController {
     @LoginCheck
     @PatchMapping("/account")
     public ResponseEntity changeAccount(@CurrentUser String email, @RequestBody
-        ChangeAccountRequest requestDto) {
-        userService.updateAccount(email, requestDto);
+        Account account) {
+        userService.updateAccount(email, account);
         return OK;
     }
 
+    @LoginCheck
+    @GetMapping("/account")
+    public ResponseEntity<Account> getAccountResource(@CurrentUser String email) {
+        Account account = userService.getAccount(email);
+        return ResponseEntity.ok(account);
+    }
 
+
+    @LoginCheck
+    @PostMapping("/addressBook")
+    public ResponseEntity addAddressBook(@CurrentUser String email, @RequestBody Address address) {
+        userService.addAddressBook(email,address);
+        return OK;
+    }
+
+    @LoginCheck
+    @GetMapping("/addressBook")
+    public ResponseEntity<List<AddressBook>> getAddressBookResource(@CurrentUser String email) {
+        List<AddressBook> addressBooks = userService.getAddressBooks(email);
+        return ResponseEntity.ok(addressBooks);
+    }
+
+    @LoginCheck
+    @DeleteMapping("/addressBook")
+    public ResponseEntity deleteAddressBook(@RequestBody ChangeAddressRequest requestDto) {
+        userService.deleteAddressBook(requestDto);
+        return OK;
+    }
+
+    @LoginCheck
+    @PatchMapping("/addressBook")
+    public ResponseEntity updateAddressBook(@RequestBody ChangeAddressRequest requestDto) {
+        userService.updateAddressBook(requestDto);
+        return OK;
+    }
 }

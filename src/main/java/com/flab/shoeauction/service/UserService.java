@@ -1,9 +1,13 @@
 package com.flab.shoeauction.service;
 
-import com.flab.shoeauction.controller.dto.UserDto.ChangeAccountRequest;
+import com.flab.shoeauction.controller.dto.UserDto.ChangeAddressRequest;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
+import com.flab.shoeauction.domain.AddressBook.Address;
+import com.flab.shoeauction.domain.AddressBook.AddressBook;
+import com.flab.shoeauction.domain.AddressBook.AddressBookRepository;
+import com.flab.shoeauction.domain.user.Account;
 import com.flab.shoeauction.domain.user.User;
 import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
@@ -11,6 +15,7 @@ import com.flab.shoeauction.exception.user.DuplicateNicknameException;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,8 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final EncryptionService encryptionService;
+    private final AddressBookRepository addressBookRepository;
 
     public boolean checkEmailDuplicate(String email) {
         return userRepository.existsByEmail(email);
@@ -72,18 +77,52 @@ public class UserService {
         }
 
         User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new UnauthenticatedUserException("Unauthenticated user"));
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
         user.updatePassword(passwordAfter);
     }
 
     @Transactional
-    public void updateAccount(String email, ChangeAccountRequest requestDto) {
+    public void updateAccount(String email, Account account) {
         User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new UnauthenticatedUserException("Unauthenticated user"));
-        String bankName = requestDto.getBankName();
-        String accountNumber = requestDto.getAccountNumber();
-        String depositor = requestDto.getDepositor();
-        user.updateAccount(bankName, accountNumber, depositor);
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+        user.updateAccount(account);
+    }
+
+    public Account getAccount(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+
+        return user.getAccount();
+
+    }
+
+    public List<AddressBook> getAddressBooks(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+
+        return user.getAddressesBook();
+
+    }
+
+    @Transactional
+    public void addAddressBook(String email, Address address) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+
+        user.updateAddressBook(address);
+    }
+
+    @Transactional
+    public void deleteAddressBook(ChangeAddressRequest requestDto) {
+        Long addressBookId = requestDto.getId();
+        addressBookRepository.deleteById(addressBookId);
+    }
+
+    @Transactional
+    public void updateAddressBook(ChangeAddressRequest requestDto) {
+        Long addressBookId = requestDto.getId();
+        AddressBook addressBook = addressBookRepository.findById(addressBookId).orElseThrow();
+        addressBook.updateAddressBook(requestDto);
     }
 }

@@ -1,7 +1,8 @@
 package com.flab.shoeauction.domain.AddressBook;
 
+import com.flab.shoeauction.controller.dto.UserDto.ChangeAddressRequest;
 import javax.persistence.Embeddable;
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +11,8 @@ import lombok.NoArgsConstructor;
  */
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 @Embeddable
 public class Address {
 
@@ -18,4 +20,11 @@ public class Address {
     private String roadNameAddress;
     private String detailedAddress;
     private String postalCode;
+
+    public void updateAddress(ChangeAddressRequest requestDto) {
+        this.addressName = requestDto.getAddressName();
+        this.roadNameAddress = requestDto.getRoadNameAddress();
+        this.detailedAddress = requestDto.getDetailedAddress();
+        this.postalCode = requestDto.getPostalCode();
+    }
 }

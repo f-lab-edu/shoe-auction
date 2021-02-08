@@ -42,9 +42,6 @@ public class User extends BaseTimeEntity {
     private String phone;
 
     @Embedded
-    private Address address;
-
-    @Embedded
     private Account account;
 
 
@@ -57,7 +54,6 @@ public class User extends BaseTimeEntity {
             .email(this.getEmail())
             .nickname(this.getNickname())
             .phone(this.getPhone())
-            .address(this.getAddress())
             .account(this.getAccount())
             .build();
     }
@@ -69,13 +65,15 @@ public class User extends BaseTimeEntity {
             .build();
     }
 
-
     public void updatePassword(String password) {
         this.password = password;
     }
 
-    public void updateAccount(String bankName, String accountNumber, String depositor) {
-        Account account = new Account(bankName, accountNumber, depositor);
+    public void updateAccount(Account account) {
         this.account = account;
+    }
+
+    public void updateAddressBook(Address address) {
+        this.addressesBook.add(new AddressBook(address));
     }
 }

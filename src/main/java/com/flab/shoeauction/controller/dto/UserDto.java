@@ -130,8 +130,6 @@ public class UserDto {
 
         private String passwordBefore;
 
-
-
         public void passwordEncryption(EncryptionService encryptionService) {
             this.passwordAfter = encryptionService.encrypt(passwordAfter);
             this.passwordBefore = encryptionService.encrypt(passwordBefore);
@@ -143,18 +141,12 @@ public class UserDto {
     }
 
     @Getter
-    @AllArgsConstructor
-    public static class ChangeAccountRequest {
-        private String bankName;
-        private String accountNumber;
-        private String depositor;
-
-        public static ChangeAccountRequest of(String bankName, String accountNumber, String depositor) {
-            return new ChangeAccountRequest(bankName, accountNumber, depositor);
-        }
-
-
+    public static class ChangeAddressRequest {
+        private Long id;
+        private String addressName;
+        private String roadNameAddress;
+        private String detailedAddress;
+        private String postalCode;
     }
-
 
 }
