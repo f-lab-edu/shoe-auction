@@ -71,7 +71,6 @@ public class UserService {
         requestDto.passwordEncryption(encryptionService);
         String passwordBefore = requestDto.getPasswordBefore();
         String passwordAfter = requestDto.getPasswordAfter();
-        System.out.println(email);
         if (!userRepository.existsByEmailAndPassword(email, passwordBefore)) {
             throw new UnauthenticatedUserException("이전 비밀번호가 일치하지 않습니다.");
         }
@@ -110,7 +109,7 @@ public class UserService {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
-        user.updateAddressBook(address);
+        user.addAddressBook(address);
     }
 
     @Transactional

@@ -2,6 +2,7 @@ package com.flab.shoeauction.domain.AddressBook;
 
 import com.flab.shoeauction.controller.dto.UserDto.ChangeAddressRequest;
 import javax.persistence.Embeddable;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
  */
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Embeddable
 public class Address {

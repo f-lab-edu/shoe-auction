@@ -78,7 +78,7 @@ public class User extends BaseTimeEntity {
         this.account = account;
     }
 
-    public void updateAddressBook(Address address) {
+    public void addAddressBook(Address address) {
         this.addressesBook.add(new AddressBook(address));
     }
 

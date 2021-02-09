@@ -137,18 +137,25 @@ public class UserDto {
             this.passwordBefore = encryptionService.encrypt(passwordBefore);
         }
 
-        public static ChangePasswordRequest of(String email, String newPassword, String existingPassword) {
-            return new ChangePasswordRequest(email, newPassword,existingPassword);
+        public static ChangePasswordRequest of(String email, String passwordAfter, String passwordBefore) {
+            return new ChangePasswordRequest(email, passwordAfter,passwordBefore);
         }
     }
 
     @Getter
+    @AllArgsConstructor
     public static class ChangeAddressRequest {
         private Long id;
         private String addressName;
         private String roadNameAddress;
         private String detailedAddress;
         private String postalCode;
+
+
+        public static ChangeAddressRequest of(Long id, String addressName, String roadNameAddress, String detailedAddress, String postalCode) {
+            return new ChangeAddressRequest(id,addressName,roadNameAddress,detailedAddress,postalCode);
+        }
+
     }
 
 }
