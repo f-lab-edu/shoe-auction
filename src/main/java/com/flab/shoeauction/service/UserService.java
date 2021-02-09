@@ -125,4 +125,15 @@ public class UserService {
         AddressBook addressBook = addressBookRepository.findById(addressBookId).orElseThrow();
         addressBook.updateAddressBook(requestDto);
     }
+
+    @Transactional
+    public void updateNickname(String email,SaveRequest requestDto) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+
+        if (checkNicknameDuplicate(requestDto.getNickname())) {
+            throw new DuplicateNicknameException();
+        }
+        user.updateNickname(requestDto);
+    }
 }

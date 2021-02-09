@@ -4,6 +4,7 @@ import com.flab.shoeauction.domain.user.User;
 import com.flab.shoeauction.domain.user.Account;
 import com.flab.shoeauction.domain.AddressBook.Address;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
+import java.time.LocalDateTime;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -56,6 +57,7 @@ public class UserDto {
                 .nickname(this.nickname)
                 .email(this.email)
                 .password(this.password)
+                .nicknameModifiedDate(LocalDateTime.now())
                 .phone(this.phone)
                 .build();
         }

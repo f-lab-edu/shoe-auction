@@ -9,6 +9,7 @@ import static com.flab.shoeauction.common.utils.response.ResponseConstants.USER_
 import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
+import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ import org.springframework.web.context.request.WebRequest;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(DuplicateEmailException.class)
     public final ResponseEntity<String> duplicateEmailException(DuplicateEmailException exception) {
         log.error("중복된 이메일입니다.", exception);
@@ -31,21 +33,24 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DuplicateNicknameException.class)
-    public final ResponseEntity<String> duplicateNicknameException(DuplicateNicknameException exception) {
+    public final ResponseEntity<String> duplicateNicknameException(
+        DuplicateNicknameException exception) {
         log.error("중복된 닉네임입니다.", exception);
         return DUPLICATION_NICKNAME;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public final ResponseEntity<String> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
+    public final ResponseEntity<String> methodArgumentNotValidException(
+        MethodArgumentNotValidException exception) {
         log.error(exception.getFieldError().getDefaultMessage(), exception);
-        return new ResponseEntity<>(exception.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exception.getFieldError().getDefaultMessage(),
+            HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public final ResponseEntity<String> handleUserNotFoundException(
         UserNotFoundException ex) {
-        log.debug("로그인 실패 : 존재하지 않는 ID 또는 패스워드 불일치",ex);
+        log.debug("로그인 실패 : 존재하지 않는 ID 또는 패스워드 불일치", ex);
         return USER_NOT_FOUND;
     }
 
@@ -64,4 +69,10 @@ public class GlobalExceptionHandler {
         return BAD_REQUEST;
     }
 
+    @ExceptionHandler(UnableToChangeNicknameException.class)
+    public final ResponseEntity handleUnableToChangeNicknameException(
+        UnableToChangeNicknameException ex) {
+        log.error("닉네임은 7일에 한번만 변경 가능합니다.", ex);
+        return new ResponseEntity<>("닉네임은 7일에 한번만 변경이 가능합니다.", HttpStatus.BAD_REQUEST);
+    }
 }

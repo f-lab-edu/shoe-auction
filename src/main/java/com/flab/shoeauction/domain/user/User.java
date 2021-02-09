@@ -1,10 +1,13 @@
 package com.flab.shoeauction.domain.user;
 
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
+import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.AddressBook.Address;
 import com.flab.shoeauction.domain.AddressBook.AddressBook;
 import com.flab.shoeauction.domain.BaseTimeEntity;
+import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -30,7 +33,7 @@ public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
-    @Column(name ="USER_ID")
+    @Column(name = "USER_ID")
     private Long id;
 
     private String nickname;
@@ -44,9 +47,10 @@ public class User extends BaseTimeEntity {
     @Embedded
     private Account account;
 
+    private LocalDateTime nicknameModifiedDate;
 
-    @OneToMany(cascade= CascadeType.ALL , orphanRemoval = true)
-    @JoinColumn(name ="USER_ID")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "USER_ID")
     private List<AddressBook> addressesBook = new ArrayList<>();
 
     public UserInfoDto toUserInfoDto() {
@@ -67,6 +71,7 @@ public class User extends BaseTimeEntity {
 
     public void updatePassword(String password) {
         this.password = password;
+
     }
 
     public void updateAccount(Account account) {
@@ -76,4 +81,19 @@ public class User extends BaseTimeEntity {
     public void updateAddressBook(Address address) {
         this.addressesBook.add(new AddressBook(address));
     }
+
+    public void updateNickname(SaveRequest requestDto) {
+        if (canModifiedNickname()) {
+            throw new UnableToChangeNicknameException("닉네임은 7일에 한번만 변경할 수 있습니다.");
+        }
+        String nickname = requestDto.getNickname();
+        this.nickname = nickname;
+        this.nicknameModifiedDate = LocalDateTime.now();
+    }
+
+    private boolean canModifiedNickname() {
+        return !(this.nicknameModifiedDate.isBefore(LocalDateTime.now().minusDays(7)));
+    }
+
+
 }

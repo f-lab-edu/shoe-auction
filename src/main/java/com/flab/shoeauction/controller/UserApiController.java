@@ -177,4 +177,11 @@ public class UserApiController {
         userService.updateAddressBook(requestDto);
         return OK;
     }
+
+    @LoginCheck
+    @PatchMapping("/nickname")
+    public ResponseEntity updateNickname(@CurrentUser String email,@RequestBody SaveRequest requestDto) {
+        userService.updateNickname(email,requestDto);
+        return OK;
+    }
 }
