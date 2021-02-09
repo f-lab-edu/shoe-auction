@@ -26,6 +26,7 @@ import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -244,6 +245,31 @@ class UserServiceTest {
         userService.addAddressBook(email, address3);
 
         assertThat(user.getAddressesBook().size()).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("주소록 조회 - 해당 USER의 주소록을 불러온다.")
+    public void getAddressBooks() {
+        ArrayList<AddressBook> addressBooks = new ArrayList<>();
+        User user = User.builder()
+            .email("test123@test.com")
+            .password("test1234")
+            .nickname("17171771")
+            .phone("01020180103")
+            .addressesBook(addressBooks).build();
+        String email = "test123@test.com";
+        Address address = new Address("우리집", "땡땡땡로 123", "111동 111호", "12345");
+        Address address2 = new Address("친구집", "친구집로 123", "222동 222호", "67890");
+        Address address3 = new Address("별장", "해변로 123", "333동 333호", "11111");
+        user.addAddressBook(address);
+        user.addAddressBook(address2);
+        user.addAddressBook(address3);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+
+        List<AddressBook> addressBookList = userService.getAddressBooks(email);
+
+        assertThat(addressBookList.size()).isEqualTo(3);
+        verify(userRepository, atLeastOnce()).findByEmail(email);
     }
 
     @Test
