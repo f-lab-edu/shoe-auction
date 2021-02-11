@@ -28,4 +28,7 @@ public class ResponseConstants {
         new ResponseEntity<>(
             "Unauthenticated user", HttpStatus.UNAUTHORIZED
         );
+
+    public static final ResponseEntity<String> WRONG_PASSWORD =
+        new ResponseEntity<>("비밀번호를 확인해주세요.", HttpStatus.UNAUTHORIZED);
 }

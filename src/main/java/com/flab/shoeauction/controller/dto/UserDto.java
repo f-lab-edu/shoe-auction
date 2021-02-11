@@ -1,8 +1,8 @@
 package com.flab.shoeauction.controller.dto;
 
-import com.flab.shoeauction.domain.user.User;
 import com.flab.shoeauction.domain.user.Account;
 import com.flab.shoeauction.domain.user.Address;
+import com.flab.shoeauction.domain.user.User;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -39,8 +39,7 @@ public class UserDto {
         private String phone;
 
         @Builder
-        public SaveRequest(String nickname, String email, String password, String confirmPassword,
-            String phone) {
+        public SaveRequest(String nickname, String email, String password, String phone) {
             this.nickname = nickname;
             this.email = email;
             this.password = password;
@@ -138,4 +137,10 @@ public class UserDto {
     }
 
 
+    @Getter
+    @NoArgsConstructor
+    public static class PasswordRequest {
+
+        private String password;
+    }
 }

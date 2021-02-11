@@ -9,13 +9,14 @@ import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.EmailCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
+import com.flab.shoeauction.controller.dto.UserDto.PasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.UserDto.SmsCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
-import com.flab.shoeauction.service.certification.EmailCertificationService;
 import com.flab.shoeauction.service.LoginService;
-import com.flab.shoeauction.service.certification.SmsCertificationService;
 import com.flab.shoeauction.service.UserService;
+import com.flab.shoeauction.service.certification.EmailCertificationService;
+import com.flab.shoeauction.service.certification.SmsCertificationService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -117,6 +118,16 @@ public class UserApiController {
     @PatchMapping("password-nonLogin")
     public ResponseEntity changePassword_nonLogin(@Valid @RequestBody ChangePasswordRequest requestDto) {
         userService.updatePasswordByForget(requestDto);
+        return OK;
+    }
+
+    @LoginCheck
+    @DeleteMapping
+    public ResponseEntity<Void> UserWithdrawal(@RequestBody PasswordRequest requestDto,
+        @CurrentUser String email) {
+        String password = requestDto.getPassword();
+        userService.delete(email, password);
+        loginService.logout();
         return OK;
     }
 }

@@ -8,6 +8,7 @@ import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
+import com.flab.shoeauction.exception.user.WrongPasswordException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,12 +33,10 @@ public class UserService {
     }
 
     public void save(SaveRequest requestDto) {
-        if (checkEmailDuplicate(requestDto.getEmail())) {
+        if (checkEmailDuplicate(requestDto.getEmail()))
             throw new DuplicateEmailException();
-        }
-        if (checkNicknameDuplicate(requestDto.getNickname())) {
+        if (checkNicknameDuplicate(requestDto.getNickname()))
             throw new DuplicateNicknameException();
-        }
         requestDto.passwordEncryption(encryptionService);
 
         userRepository.save(requestDto.toEntity());
@@ -57,5 +56,13 @@ public class UserService {
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
         user.updatePassword(requestDto.getPasswordAfter());
+    }
+
+    @Transactional
+    public void delete(String email, String password) {
+        if (!userRepository.existsByEmailAndPassword(email, encryptionService.encrypt(password))) {
+            throw new WrongPasswordException();
+        }
+        userRepository.deleteByEmail(email);
     }
 }

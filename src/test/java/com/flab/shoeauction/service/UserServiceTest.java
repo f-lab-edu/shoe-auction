@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -16,6 +17,7 @@ import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
+import com.flab.shoeauction.exception.user.WrongPasswordException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -131,5 +133,33 @@ class UserServiceTest {
     }
 
 
+    @DisplayName("비밀번호가 일치하여 회원 탈퇴 성공한다.")
+    @Test
+    public void deleteSuccess() {
+        SaveRequest saveRequest = createUser();
+        String email = saveRequest.getEmail();
+        String password = saveRequest.getPassword();
 
+        when(userRepository.existsByEmailAndPassword(email, encryptionService.encrypt(password)))
+            .thenReturn(true);
+
+        userService.delete(email, password);
+
+        verify(userRepository, atLeastOnce()).deleteByEmail(email);
+    }
+
+    @DisplayName("비밀번호가 일치하지 않아 회원 탈퇴 실패한다.")
+    @Test
+    public void deleteFailure() {
+        SaveRequest saveRequest = createUser();
+        String email = saveRequest.getEmail();
+        String password = saveRequest.getPassword();
+
+        when(userRepository.existsByEmailAndPassword(email, encryptionService.encrypt(password)))
+            .thenReturn(false);
+
+        assertThrows(WrongPasswordException.class, () -> userService.delete(email, password));
+
+        verify(userRepository, never()).deleteByEmail(email);
+    }
 }
