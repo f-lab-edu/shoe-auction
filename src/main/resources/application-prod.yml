@@ -1,2 +1,0 @@
-# prod profile에 적용되는 properties
-# 운영 서버에서는 ddl-auto 옵션을 사용하지 않는다.
