@@ -116,7 +116,7 @@ public class UserApiController {
     // TODO: 2021-02-03 : URI 네이밍 고민
     @PatchMapping("password-nonLogin")
     public ResponseEntity changePassword_nonLogin(@Valid @RequestBody ChangePasswordRequest requestDto) {
-        userService.updatePassword(requestDto);
+        userService.updatePasswordByForget(requestDto);
         return OK;
     }
 }

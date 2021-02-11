@@ -126,14 +126,14 @@ public class UserDto {
 
         @NotBlank(message = "비밀번호를 입력해주세요.")
         @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 입력해주세요.")
-        private String password;
+        private String passwordAfter;
 
         public void passwordEncryption(EncryptionService encryptionService) {
-            this.password = encryptionService.encrypt(password);
+            this.passwordAfter = encryptionService.encrypt(passwordAfter);
         }
 
-        public static ChangePasswordRequest of(String email, String password) {
-            return new ChangePasswordRequest(email, password);
+        public static ChangePasswordRequest of(String email, String passwordAfter) {
+            return new ChangePasswordRequest(email, passwordAfter);
         }
     }
 

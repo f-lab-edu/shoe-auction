@@ -49,13 +49,13 @@ public class UserService {
     }
 
     @Transactional
-    public void updatePassword(ChangePasswordRequest requestDto) {
+    public void updatePasswordByForget(ChangePasswordRequest requestDto) {
         String email = requestDto.getEmail();
         requestDto.passwordEncryption(encryptionService);
 
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
-        user.updatePassword(requestDto.getPassword());
+        user.updatePassword(requestDto.getPasswordAfter());
     }
 }

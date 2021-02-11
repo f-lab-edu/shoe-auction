@@ -90,7 +90,7 @@ class UserServiceTest {
     @Test
     @DisplayName("비밀번호 찾기 성공 - 전달받은 객체(이메일)가 회원이라면 비밀번호 변경에 성공한다.")
     public void updatePassword() {
-        ChangePasswordRequest changePasswordRequest = of("test123.test.com", "test12345","test123456");
+        ChangePasswordRequest changePasswordRequest = of("test123.test.com", "test12345");
         User user = createUser().toEntity();
 
         when(userRepository.findByEmail(changePasswordRequest.getEmail())).thenReturn(Optional.of(user));
