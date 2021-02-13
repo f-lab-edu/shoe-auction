@@ -1,6 +1,6 @@
 package com.flab.shoeauction.service;
 
-import com.flab.shoeauction.controller.dto.UserDto.ChangeAddressRequest;
+import com.flab.shoeauction.controller.dto.AddressBookDto;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
@@ -113,13 +113,13 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteAddressBook(ChangeAddressRequest requestDto) {
+    public void deleteAddressBook(AddressBookDto requestDto) {
         Long addressBookId = requestDto.getId();
         addressBookRepository.deleteById(addressBookId);
     }
 
     @Transactional
-    public void updateAddressBook(ChangeAddressRequest requestDto) {
+    public void updateAddressBook(AddressBookDto requestDto) {
         Long addressBookId = requestDto.getId();
         AddressBook addressBook = addressBookRepository.findById(addressBookId).orElseThrow();
         addressBook.updateAddressBook(requestDto);

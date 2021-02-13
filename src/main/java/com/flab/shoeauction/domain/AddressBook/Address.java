@@ -1,6 +1,6 @@
 package com.flab.shoeauction.domain.AddressBook;
 
-import com.flab.shoeauction.controller.dto.UserDto.ChangeAddressRequest;
+import com.flab.shoeauction.controller.dto.AddressBookDto;
 import javax.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class Address {
     private String detailedAddress;
     private String postalCode;
 
-    public void updateAddress(ChangeAddressRequest requestDto) {
+    public void updateAddress(AddressBookDto requestDto) {
         this.addressName = requestDto.getAddressName();
         this.roadNameAddress = requestDto.getRoadNameAddress();
         this.detailedAddress = requestDto.getDetailedAddress();

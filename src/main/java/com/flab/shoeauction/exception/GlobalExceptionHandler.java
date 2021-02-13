@@ -3,6 +3,7 @@ package com.flab.shoeauction.exception;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.BAD_REQUEST;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_EMAIL;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_NICKNAME;
+import static com.flab.shoeauction.common.utils.response.ResponseConstants.FAIL_TO_CHANGE_NICKNAME;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.UNAUTHORIZED_USER;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.USER_NOT_FOUND;
 
@@ -73,6 +74,6 @@ public class GlobalExceptionHandler {
     public final ResponseEntity handleUnableToChangeNicknameException(
         UnableToChangeNicknameException ex) {
         log.error("닉네임은 7일에 한번만 변경 가능합니다.", ex);
-        return new ResponseEntity<>("닉네임은 7일에 한번만 변경이 가능합니다.", HttpStatus.BAD_REQUEST);
+        return FAIL_TO_CHANGE_NICKNAME;
     }
 }

@@ -1,12 +1,11 @@
 package com.flab.shoeauction.domain.AddressBook;
 
-import com.flab.shoeauction.controller.dto.UserDto.ChangeAddressRequest;
+import com.flab.shoeauction.controller.dto.AddressBookDto;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +27,7 @@ public class AddressBook {
         this.address = address;
     }
 
-    public void updateAddressBook(ChangeAddressRequest requestDto){
+    public void updateAddressBook(AddressBookDto requestDto){
         address.updateAddress(requestDto);
     }
 

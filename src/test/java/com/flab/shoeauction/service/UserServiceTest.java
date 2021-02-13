@@ -8,7 +8,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.flab.shoeauction.controller.dto.UserDto.ChangeAddressRequest;
+import com.flab.shoeauction.controller.dto.AddressBookDto;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
@@ -205,21 +205,20 @@ class UserServiceTest {
     public void updateAddressBook() {
         Address address = new Address("우리집", "땡땡땡로 123", "123동 456호", "12345");
         AddressBook addressBook = new AddressBook(address);
-        ChangeAddressRequest changeAddressRequest = ChangeAddressRequest
-            .of(2L, "친구집", "사랑로 123", "123-1", "11111");
-        when(addressBookRepository.findById(changeAddressRequest.getId()))
+        AddressBookDto addressBookDto =new AddressBookDto(2L, "친구집", "사랑로 123", "123-1", "11111");
+        when(addressBookRepository.findById(addressBookDto.getId()))
             .thenReturn(Optional.of(addressBook));
 
-        userService.updateAddressBook(changeAddressRequest);
+        userService.updateAddressBook(addressBookDto);
 
         assertThat(addressBook.getAddress().getAddressName())
-            .isEqualTo(changeAddressRequest.getAddressName());
+            .isEqualTo(addressBookDto.getAddressName());
         assertThat(addressBook.getAddress().getDetailedAddress())
-            .isEqualTo(changeAddressRequest.getDetailedAddress());
+            .isEqualTo(addressBookDto.getDetailedAddress());
         assertThat(addressBook.getAddress().getPostalCode())
-            .isEqualTo(changeAddressRequest.getPostalCode());
+            .isEqualTo(addressBookDto.getPostalCode());
         assertThat(addressBook.getAddress().getRoadNameAddress())
-            .isEqualTo(changeAddressRequest.getRoadNameAddress());
+            .isEqualTo(addressBookDto.getRoadNameAddress());
 
         verify(addressBookRepository, atLeastOnce()).findById(any());
     }

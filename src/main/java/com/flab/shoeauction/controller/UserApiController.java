@@ -5,7 +5,7 @@ import static com.flab.shoeauction.common.utils.response.ResponseConstants.OK;
 
 import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.common.annotation.LoginCheck;
-import com.flab.shoeauction.controller.dto.UserDto.ChangeAddressRequest;
+import com.flab.shoeauction.controller.dto.AddressBookDto;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.EmailCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
@@ -75,17 +75,15 @@ public class UserApiController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequest loginRequest) {
+    public void login(@RequestBody LoginRequest loginRequest) {
         loginService.existByEmailAndPassword(loginRequest);
         loginService.login(loginRequest.getEmail());
-        return OK;
     }
 
     @LoginCheck
     @DeleteMapping("/logout")
-    public ResponseEntity logout() {
+    public void logout() {
         loginService.logout();
-        return OK;
     }
 
     @LoginCheck
@@ -112,34 +110,28 @@ public class UserApiController {
     }
 
     @PostMapping("/email-certification/confirms")
-    public ResponseEntity emailVerification(@RequestBody EmailCertificationRequest requestDto) {
+    public void emailVerification(@RequestBody EmailCertificationRequest requestDto) {
         emailCertificationService.verifyEmail(requestDto);
-        return OK;
-
     }
 
-    // TODO: 2021-02-03 : URI 네이밍 고민
-    @PatchMapping("/password-nonLogin")
-    public ResponseEntity changePassword_nonLogin(
+    @PatchMapping("/forget/password")
+    public void changePasswordByForget(
         @Valid @RequestBody ChangePasswordRequest requestDto) {
         userService.updatePasswordByForget(requestDto);
-        return OK;
     }
 
     @LoginCheck
     @PatchMapping("/password")
-    public ResponseEntity changePassword(@CurrentUser String email,
+    public void changePassword(@CurrentUser String email,
         @Valid @RequestBody ChangePasswordRequest requestDto) {
         userService.updatePassword(email, requestDto);
-        return OK;
     }
 
     @LoginCheck
     @PatchMapping("/account")
-    public ResponseEntity changeAccount(@CurrentUser String email, @RequestBody
+    public void changeAccount(@CurrentUser String email, @RequestBody
         Account account) {
         userService.updateAccount(email, account);
-        return OK;
     }
 
     @LoginCheck
@@ -152,9 +144,8 @@ public class UserApiController {
 
     @LoginCheck
     @PostMapping("/addressBook")
-    public ResponseEntity addAddressBook(@CurrentUser String email, @RequestBody Address address) {
+    public void addAddressBook(@CurrentUser String email, @RequestBody Address address) {
         userService.addAddressBook(email,address);
-        return OK;
     }
 
     @LoginCheck
@@ -166,22 +157,19 @@ public class UserApiController {
 
     @LoginCheck
     @DeleteMapping("/addressBook")
-    public ResponseEntity deleteAddressBook(@RequestBody ChangeAddressRequest requestDto) {
+    public void deleteAddressBook(@RequestBody AddressBookDto requestDto) {
         userService.deleteAddressBook(requestDto);
-        return OK;
     }
 
     @LoginCheck
     @PatchMapping("/addressBook")
-    public ResponseEntity updateAddressBook(@RequestBody ChangeAddressRequest requestDto) {
+    public void updateAddressBook(@RequestBody AddressBookDto requestDto) {
         userService.updateAddressBook(requestDto);
-        return OK;
     }
 
     @LoginCheck
     @PatchMapping("/nickname")
-    public ResponseEntity updateNickname(@CurrentUser String email,@RequestBody SaveRequest requestDto) {
+    public void updateNickname(@CurrentUser String email,@RequestBody SaveRequest requestDto) {
         userService.updateNickname(email,requestDto);
-        return OK;
     }
 }
