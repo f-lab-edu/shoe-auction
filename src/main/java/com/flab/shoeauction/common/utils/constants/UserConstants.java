@@ -1,4 +1,4 @@
-package com.flab.shoeauction.common.utils.user;
+package com.flab.shoeauction.common.utils.constants;
 
 public class UserConstants {
     public static final String USER_ID = "email";
