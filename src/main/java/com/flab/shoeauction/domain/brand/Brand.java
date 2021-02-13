@@ -1,5 +1,7 @@
 package com.flab.shoeauction.domain.brand;
 
+import com.flab.shoeauction.controller.dto.BrandDto.BrandInfoResponse;
+import com.flab.shoeauction.controller.dto.BrandDto.SaveRequest;
 import com.flab.shoeauction.domain.BaseTimeEntity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,10 +28,26 @@ public class Brand extends BaseTimeEntity {
     @GeneratedValue
     private Long id;
 
-    private String name;
+    private String nameKor;
+
+    private String nameEng;
 
     @Builder
-    public Brand(String name) {
-        this.name = name;
+    public Brand(String nameKor, String nameEng) {
+        this.nameKor = nameKor;
+        this.nameEng = nameEng;
+    }
+
+    public BrandInfoResponse toBrandInfoResponse() {
+        return BrandInfoResponse.builder()
+            .id(this.id)
+            .nameKor(this.nameKor)
+            .nameEng(this.nameEng)
+            .build();
+    }
+
+    public void update(SaveRequest updatedBrand) {
+        this.nameKor = updatedBrand.getNameKor();
+        this.nameEng = updatedBrand.getNameEng();
     }
 }

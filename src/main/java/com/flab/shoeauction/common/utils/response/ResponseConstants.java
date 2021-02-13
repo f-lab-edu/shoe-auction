@@ -31,4 +31,10 @@ public class ResponseConstants {
 
     public static final ResponseEntity<String> WRONG_PASSWORD =
         new ResponseEntity<>("비밀번호를 확인해주세요.", HttpStatus.UNAUTHORIZED);
+
+    public static final ResponseEntity<String> DUPLICATION_BRAND_NAME =
+        new ResponseEntity<>("이미 존재하는 브랜드명입니다.", HttpStatus.CONFLICT);
+
+    public static final ResponseEntity<String> BRAND_NOT_FOUND =
+        new ResponseEntity<>("존재하지 않는 브랜드입니다.", HttpStatus.BAD_REQUEST);
 }

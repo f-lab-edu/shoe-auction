@@ -92,9 +92,8 @@ public class UserApiController {
     }
 
     /**
-     비밀번호 찾기 : 이메일 입력시, 존재하는 이메일이면 휴대폰인증과 이메일인증 중 택1 하도록 구현
-     휴대폰 인증 선택시 : sendSms / SmsVerification 핸들러
-     이메일 인증 선택시 : sendEmail / emailVerification 핸들러
+     * 비밀번호 찾기 : 이메일 입력시, 존재하는 이메일이면 휴대폰인증과 이메일인증 중 택1 하도록 구현 휴대폰 인증 선택시 : sendSms / SmsVerification
+     * 핸들러 이메일 인증 선택시 : sendEmail / emailVerification 핸들러
      */
     @GetMapping("/find/{email}")
     public ResponseEntity<FindUserResponse> findUser(@PathVariable String email) {
@@ -112,11 +111,12 @@ public class UserApiController {
     public ResponseEntity emailVerification(@RequestBody EmailCertificationRequest requestDto) {
         emailCertificationService.verifyEmail(requestDto);
         return OK;
-
     }
+
     // TODO: 2021-02-03 : URI 네이밍 고민
     @PatchMapping("password-nonLogin")
-    public ResponseEntity changePassword_nonLogin(@Valid @RequestBody ChangePasswordRequest requestDto) {
+    public ResponseEntity changePassword_nonLogin(
+        @Valid @RequestBody ChangePasswordRequest requestDto) {
         userService.updatePasswordByForget(requestDto);
         return OK;
     }

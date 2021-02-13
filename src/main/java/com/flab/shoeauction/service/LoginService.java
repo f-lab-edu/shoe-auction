@@ -1,6 +1,6 @@
 package com.flab.shoeauction.service;
 
-import static com.flab.shoeauction.common.utils.user.UserConstants.USER_ID;
+import static com.flab.shoeauction.common.utils.constants.UserConstants.USER_ID;
 
 import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
