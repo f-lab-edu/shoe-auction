@@ -12,4 +12,13 @@ public class EmailContentTemplate {
         return builder.toString();
     }
 
+    public String buildEmailCheckContent(String token, String email) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("http://localhost:8080/users/email-check-token?token=");
+        builder.append(token);
+        builder.append("&email=");
+        builder.append(email);
+        return builder.toString();
+    }
+
 }

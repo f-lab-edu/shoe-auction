@@ -60,6 +60,7 @@ public class UserApiController {
     @PostMapping
     public ResponseEntity<Void> createUser(@Valid @RequestBody SaveRequest requestDto) {
         userService.save(requestDto);
+        emailCertificationService.sendEmailForEmailCheck(requestDto.getEmail());
         return CREATED;
     }
 
@@ -69,6 +70,12 @@ public class UserApiController {
         return CREATED;
     }
 
+    @GetMapping("/email-check-token")
+    public void emailCheck(String token, String email) {
+        userService.validToken(token,email);
+    }
+
+
     @PostMapping("/sms-certification/confirms")
     public ResponseEntity<Void> SmsVerification(@RequestBody SmsCertificationRequest requestDto) {
         smsCertificationService.verifySms(requestDto);
@@ -77,8 +84,7 @@ public class UserApiController {
 
     @PostMapping("/login")
     public void login(@RequestBody LoginRequest loginRequest) {
-        loginService.existByEmailAndPassword(loginRequest);
-        loginService.login(loginRequest.getEmail());
+        loginService.login(loginRequest);
     }
 
     @LoginCheck
@@ -106,7 +112,7 @@ public class UserApiController {
 
     @PostMapping("/email-certification/sends")
     public ResponseEntity sendEmail(@RequestBody EmailCertificationRequest requestDto) {
-        emailCertificationService.sendEmail(requestDto.getEmail());
+        emailCertificationService.sendEmailForCertification(requestDto.getEmail());
         return CREATED;
     }
 

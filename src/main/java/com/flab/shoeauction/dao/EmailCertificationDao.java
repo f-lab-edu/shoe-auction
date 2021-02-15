@@ -19,6 +19,13 @@ public class EmailCertificationDao {
             .set(PREFIX + email, certificationNumber, Duration.ofSeconds(LIMIT_TIME));
     }
 
+    public void createEmailToken(String email, String token) {
+        stringRedisTemplate.opsForValue()
+            .set(PREFIX + email, token);
+
+    }
+
+
     public String getEmailCertification(String email) {
         return stringRedisTemplate.opsForValue().get(PREFIX + email);
     }

@@ -4,7 +4,9 @@ import static com.flab.shoeauction.common.utils.user.UserConstants.USER_ID;
 
 import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
+import com.flab.shoeauction.domain.user.User;
 import com.flab.shoeauction.domain.user.UserRepository;
+import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import javax.servlet.http.HttpSession;
@@ -28,7 +30,14 @@ public class LoginService {
         }
     }
 
-    public void login(String email) {
+    public void login(LoginRequest loginRequest) {
+        existByEmailAndPassword(loginRequest);
+        String email = loginRequest.getEmail();
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+        if(user.getEmailVerified()) {
+            throw new UnauthenticatedUserException("이메일 인증이 완료되지 않은 사용자 입니다.");
+        }
         session.setAttribute(USER_ID, email);
     }
 
