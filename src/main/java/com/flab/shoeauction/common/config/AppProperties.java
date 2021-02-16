@@ -1,18 +1,19 @@
 package com.flab.shoeauction.common.config;
 
 import lombok.Getter;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
 @Getter
-@Setter
-@Component
+@RequiredArgsConstructor
+@ConstructorBinding
 @ConfigurationProperties("certification-related-constants")
 public class AppProperties {
-    private String emailFromAddress;
-    private String coolSmsKey;
-    private String coolSmsSecret;
-    private String coolSmsFromPhoneNumber;
+    private final String emailFromAddress;
+    private final String coolSmsKey;
+    private final String coolSmsSecret;
+    private final String coolSmsFromPhoneNumber;
+    private final String domain;
 }
 

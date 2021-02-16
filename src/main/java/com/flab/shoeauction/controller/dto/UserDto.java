@@ -104,10 +104,11 @@ public class UserDto {
         private String phone;
         private Address address;
         private Account account;
+        private boolean emailVerified;
 
         public static UserInfoDto of(String email, String nickname, String phone, Address address,
-            Account account) {
-            return new UserInfoDto(email, nickname, phone, address, account);
+            Account account, boolean emailVerified) {
+            return new UserInfoDto(email, nickname, phone, address, account, emailVerified);
         }
     }
 

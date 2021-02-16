@@ -53,9 +53,6 @@ public class UserService {
         userRepository.save(requestDto.toEntity());
     }
 
-
-
-
     public FindUserResponse getUserResource(String email) {
         return userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 email 입니다.")).toFindUserDto();
@@ -150,8 +147,9 @@ public class UserService {
 
     @Transactional
     public void validToken(String token, String email) {
-        emailCertificationService.verifyEmail(token,email);
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+        emailCertificationService.verifyEmail(token, email);
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
         user.updateEmailVerified();
     }
 }

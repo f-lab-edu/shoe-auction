@@ -1,41 +1,12 @@
 package com.flab.shoeauction.dao;
 
-import java.time.Duration;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Repository;
+public interface EmailCertificationDao {
 
-@RequiredArgsConstructor
-@Repository
-public class EmailCertificationDao {
+    void createEmail(String email, String certificationNumber);
 
-    private final String PREFIX = "email:";
-    private final int LIMIT_TIME = 10 * 60;
+    String getEmailCertification(String email);
 
-    private final StringRedisTemplate stringRedisTemplate;
+    void removeEmailCertification(String email);
 
-    public void createEmailCertification(String email, String certificationNumber) {
-        stringRedisTemplate.opsForValue()
-            .set(PREFIX + email, certificationNumber, Duration.ofSeconds(LIMIT_TIME));
-    }
-
-    public void createEmailToken(String email, String token) {
-        stringRedisTemplate.opsForValue()
-            .set(PREFIX + email, token);
-
-    }
-
-
-    public String getEmailCertification(String email) {
-        return stringRedisTemplate.opsForValue().get(PREFIX + email);
-    }
-
-    public void removeEmailCertification(String email) {
-        stringRedisTemplate.delete(PREFIX + email);
-    }
-
-    public boolean hasKey(String email) {
-        return stringRedisTemplate.hasKey(PREFIX + email);
-    }
+    boolean hasKey(String email);
 }
-

@@ -61,6 +61,7 @@ public class User extends BaseTimeEntity {
             .nickname(this.getNickname())
             .phone(this.getPhone())
             .account(this.getAccount())
+            .emailVerified(this.getEmailVerified())
             .build();
     }
 
@@ -102,7 +103,7 @@ public class User extends BaseTimeEntity {
     }
 
     public boolean getEmailVerified(){
-        return !(this.emailVerified);
+        return this.emailVerified;
     }
 
 

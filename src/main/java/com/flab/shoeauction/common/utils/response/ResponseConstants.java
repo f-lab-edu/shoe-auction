@@ -37,4 +37,8 @@ public class ResponseConstants {
 
     public static final ResponseEntity<String> WRONG_PASSWORD =
         new ResponseEntity<>("비밀번호를 확인해주세요.", HttpStatus.UNAUTHORIZED);
+
+    public static final ResponseEntity<String> TOKEN_EXPIRED =
+        new ResponseEntity<>("인증 토큰이 만료되었습니다. 마이페이지에서 인증 토큰 재전송 버튼을 클릭해 주세요!",
+            HttpStatus.UNAUTHORIZED);
 }

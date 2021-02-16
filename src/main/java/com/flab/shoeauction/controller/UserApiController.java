@@ -72,7 +72,12 @@ public class UserApiController {
 
     @GetMapping("/email-check-token")
     public void emailCheck(String token, String email) {
-        userService.validToken(token,email);
+        userService.validToken(token, email);
+    }
+
+    @PostMapping("/resend-email-token")
+    public void resendEmailCheck(@CurrentUser String email) {
+        emailCertificationService.sendEmailForEmailCheck(email);
     }
 
 

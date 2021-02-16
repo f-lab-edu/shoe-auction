@@ -1,6 +1,8 @@
 package com.flab.shoeauction.common.interceptor;
 
-import com.flab.shoeauction.common.annotation.LoginCheck;
+import com.flab.shoeauction.common.annotation.EmailAuthCheck;
+import com.flab.shoeauction.domain.user.User;
+import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.service.LoginService;
 import javax.servlet.http.HttpServletRequest;
@@ -16,8 +18,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 @RequiredArgsConstructor
-public class LoginCheckInterceptor implements HandlerInterceptor {
+public class EmailAuthCheckInterceptor implements HandlerInterceptor {
 
+    private final UserRepository userRepository;
     private final LoginService loginService;
 
     @Override
@@ -27,14 +30,18 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
-            LoginCheck loginCheck = handlerMethod.getMethodAnnotation(LoginCheck.class);
+            EmailAuthCheck emailAuthCheck = handlerMethod.getMethodAnnotation(EmailAuthCheck.class);
 
-            if (loginCheck == null) {
+            if (emailAuthCheck == null) {
                 return true;
             }
 
-            if (loginService.getLoginUser() == null) {
-                throw new UnauthenticatedUserException("로그인 후 이용 가능합니다.");
+            String loginUser = loginService.getLoginUser();
+            User user = userRepository.findByEmail(loginUser)
+                .orElseThrow(() -> new UnauthenticatedUserException("로그인 후 이용 가능합니다."));
+
+            if(!user.getEmailVerified()) {
+                throw new UnauthenticatedUserException("해당 서비스는 이메일 인증 후 이용 가능합니다.");
             }
         }
         return true;
