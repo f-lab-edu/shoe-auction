@@ -3,10 +3,9 @@ package com.flab.shoeauction.controller;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.CREATED;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.OK;
 
-import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
-import com.flab.shoeauction.controller.dto.BrandDto.SaveRequest;
-import com.flab.shoeauction.service.BrandService;
-import java.util.List;
+import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
+import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
+import com.flab.shoeauction.service.ProductService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,40 +19,34 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
-@RequestMapping("/brands")
+@RequestMapping("/products")
 @Controller
-public class BrandApiController {
+public class ProductApiController {
 
-    private final BrandService brandService;
+    private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Void> createBrand(@Valid @RequestBody SaveRequest requestDto) {
-        brandService.saveBrand(requestDto);
+    public ResponseEntity<Void> createProduct(@Valid @RequestBody SaveRequest requestDto) {
+        productService.saveProduct(requestDto);
         return CREATED;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BrandInfo> getBrandInfo(@PathVariable Long id) {
-        BrandInfo brandInfoResponse = brandService.getBrandInfo(id);
-        return ResponseEntity.ok(brandInfoResponse);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<BrandInfo>> getBrandInfos() {
-        List<BrandInfo> brandInfoResponses = brandService.getBrandInfos();
-        return ResponseEntity.ok(brandInfoResponses);
+    public ResponseEntity<ProductInfoResponse> getProductInfo(@PathVariable Long id) {
+        ProductInfoResponse productInfoResponse = productService.getProductInfo(id);
+        return ResponseEntity.ok(productInfoResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBrand(@PathVariable Long id) {
-        brandService.deleteBrand(id);
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
         return OK;
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateBrand(@PathVariable Long id,
+    public ResponseEntity<Void> updateProduct(@PathVariable Long id,
         @Valid @RequestBody SaveRequest requestDto) {
-        brandService.updateBrand(id, requestDto);
+        productService.updateProduct(id, requestDto);
         return OK;
     }
 }

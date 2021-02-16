@@ -4,13 +4,17 @@ import static com.flab.shoeauction.common.utils.response.ResponseConstants.BAD_R
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.BRAND_NOT_FOUND;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_BRAND_NAME;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_EMAIL;
+import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_MODEL_NUMBER;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_NICKNAME;
+import static com.flab.shoeauction.common.utils.response.ResponseConstants.PRODUCT_NOT_FOUND;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.UNAUTHORIZED_USER;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.USER_NOT_FOUND;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.WRONG_PASSWORD;
 
 import com.flab.shoeauction.exception.brand.BrandNotFoundException;
 import com.flab.shoeauction.exception.brand.DuplicateBrandNameException;
+import com.flab.shoeauction.exception.product.DuplicateModelNumberException;
+import com.flab.shoeauction.exception.product.ProductNotFoundException;
 import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
@@ -94,5 +98,19 @@ public class GlobalExceptionHandler {
         BrandNotFoundException ex) {
         log.debug("존재하지 않는 브랜드입니다.", ex);
         return BRAND_NOT_FOUND;
+    }
+
+    @ExceptionHandler(DuplicateModelNumberException.class)
+    public final ResponseEntity<String> duplicateModelNumberException(
+        DuplicateModelNumberException ex) {
+        log.debug("이미 존재하는 모델 넘버입니다.", ex);
+        return DUPLICATION_MODEL_NUMBER;
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public final ResponseEntity<String> productNotFoundException(
+        ProductNotFoundException ex) {
+        log.debug("존재하지 않는 상품입니다.", ex);
+        return PRODUCT_NOT_FOUND;
     }
 }

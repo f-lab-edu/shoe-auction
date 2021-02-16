@@ -26,13 +26,21 @@ public class BrandDto {
         }
     }
 
-    @Builder
     @Getter
     @AllArgsConstructor
-    public static class BrandInfoResponse {
+    @Builder
+    public static class BrandInfo {
 
         private Long id;
         private String nameKor;
         private String nameEng;
+
+        public Brand toEntity() {
+            return Brand.builder()
+                .id(this.id)
+                .nameKor(this.nameKor)
+                .nameEng(this.nameEng)
+                .build();
+        }
     }
 }

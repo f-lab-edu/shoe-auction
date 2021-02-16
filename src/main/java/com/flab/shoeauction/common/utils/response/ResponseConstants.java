@@ -37,4 +37,10 @@ public class ResponseConstants {
 
     public static final ResponseEntity<String> BRAND_NOT_FOUND =
         new ResponseEntity<>("존재하지 않는 브랜드입니다.", HttpStatus.BAD_REQUEST);
+
+    public static final ResponseEntity<String> DUPLICATION_MODEL_NUMBER =
+        new ResponseEntity<>("이미 존재하는 모델 넘버입니다.", HttpStatus.CONFLICT);
+
+    public static final ResponseEntity<String> PRODUCT_NOT_FOUND =
+        new ResponseEntity<>("존재하지 않는 상품입니다.", HttpStatus.BAD_REQUEST);
 }

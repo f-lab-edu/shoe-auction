@@ -1,12 +1,14 @@
 package com.flab.shoeauction.domain.brand;
 
-import com.flab.shoeauction.controller.dto.BrandDto.BrandInfoResponse;
+import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
 import com.flab.shoeauction.controller.dto.BrandDto.SaveRequest;
 import com.flab.shoeauction.domain.BaseTimeEntity;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +22,8 @@ import lombok.NoArgsConstructor;
  */
 
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Brand extends BaseTimeEntity {
@@ -28,18 +32,19 @@ public class Brand extends BaseTimeEntity {
     @GeneratedValue
     private Long id;
 
+    @Column(unique = true)
     private String nameKor;
 
+    @Column(unique = true)
     private String nameEng;
 
-    @Builder
     public Brand(String nameKor, String nameEng) {
         this.nameKor = nameKor;
         this.nameEng = nameEng;
     }
 
-    public BrandInfoResponse toBrandInfoResponse() {
-        return BrandInfoResponse.builder()
+    public BrandInfo toBrandInfo() {
+        return BrandInfo.builder()
             .id(this.id)
             .nameKor(this.nameKor)
             .nameEng(this.nameEng)

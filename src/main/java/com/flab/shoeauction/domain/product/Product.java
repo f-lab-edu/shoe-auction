@@ -1,8 +1,11 @@
 package com.flab.shoeauction.domain.product;
 
+import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
+import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
 import com.flab.shoeauction.domain.BaseTimeEntity;
 import com.flab.shoeauction.domain.brand.Brand;
 import java.time.LocalDate;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -23,6 +26,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
+
 public class Product extends BaseTimeEntity {
 
     @Id
@@ -33,6 +37,7 @@ public class Product extends BaseTimeEntity {
 
     private String nameEng;
 
+    @Column(unique = true)
     private String modelNumber;
 
     private String color;
@@ -78,5 +83,40 @@ public class Product extends BaseTimeEntity {
         this.maxSize = maxSize;
         this.sizeGap = sizeGap;
         this.brand = brand;
+    }
+
+    public ProductInfoResponse toProductInfoResponse() {
+        return ProductInfoResponse.builder()
+            .id(this.id)
+            .nameKor(this.nameKor)
+            .nameEng(this.nameEng)
+            .modelNumber(this.modelNumber)
+            .color(this.color)
+            .releaseDate(this.releaseDate)
+            .releasePrice(this.releasePrice)
+            .currency(this.currency)
+            .sizeClassification(this.sizeClassification)
+            .sizeUnit(this.sizeUnit)
+            .minSize(this.minSize)
+            .maxSize(this.maxSize)
+            .sizeGap(this.sizeGap)
+            .brand(brand.toBrandInfo())
+            .build();
+    }
+
+    public void update(SaveRequest updatedProduct) {
+        this.nameKor = updatedProduct.getNameKor();
+        this.nameEng = updatedProduct.getNameEng();
+        this.modelNumber = updatedProduct.getModelNumber();
+        this.color = updatedProduct.getColor();
+        this.releaseDate = updatedProduct.getReleaseDate();
+        this.releasePrice = updatedProduct.getReleasePrice();
+        this.currency = updatedProduct.getCurrency();
+        this.sizeClassification = updatedProduct.getSizeClassification();
+        this.sizeUnit = updatedProduct.getSizeUnit();
+        this.minSize = updatedProduct.getMinSize();
+        this.maxSize = updatedProduct.getMaxSize();
+        this.sizeGap = updatedProduct.getSizeGap();
+        this.brand = updatedProduct.getBrand().toEntity();
     }
 }

@@ -1,6 +1,6 @@
 package com.flab.shoeauction.service;
 
-import com.flab.shoeauction.controller.dto.BrandDto.BrandInfoResponse;
+import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
 import com.flab.shoeauction.controller.dto.BrandDto.SaveRequest;
 import com.flab.shoeauction.domain.brand.Brand;
 import com.flab.shoeauction.domain.brand.BrandRepository;
@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -34,14 +33,14 @@ public class BrandService {
         return false;
     }
 
-    public BrandInfoResponse getBrandInfo(Long id) {
+    public BrandInfo getBrandInfo(Long id) {
         return brandRepository.findById(id).orElseThrow(() -> new BrandNotFoundException())
-            .toBrandInfoResponse();
+            .toBrandInfo();
     }
 
-    public List<BrandInfoResponse> getBrandInfos() {
+    public List<BrandInfo> getBrandInfos() {
         return brandRepository.findAll().stream()
-            .map(Brand::toBrandInfoResponse)
+            .map(Brand::toBrandInfo)
             .collect(Collectors.toList());
     }
 
@@ -52,14 +51,13 @@ public class BrandService {
         brandRepository.deleteById(id);
     }
 
-    @Transactional
-    public void updateBrand(Long id, SaveRequest requestDto) {
-        Brand brand = brandRepository.findById(id).orElseThrow(() -> new BrandNotFoundException());
+    public void updateBrand(Long id, SaveRequest updatedBrand) {
+        Brand savedBrand = brandRepository.findById(id).orElseThrow(() -> new BrandNotFoundException());
 
-        checkDuplicateUpdatedNameKor(brand.getNameKor(), requestDto.getNameKor());
-        checkDuplicateUpdatedNameEng(brand.getNameEng(), requestDto.getNameEng());
+        checkDuplicateUpdatedNameKor(savedBrand.getNameKor(), updatedBrand.getNameKor());
+        checkDuplicateUpdatedNameEng(savedBrand.getNameEng(), updatedBrand.getNameEng());
 
-        brand.update(requestDto);
+        savedBrand.update(updatedBrand);
     }
 
     private void checkDuplicateUpdatedNameKor(String nameKor, String updatedNameKor) {
