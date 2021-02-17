@@ -13,19 +13,6 @@
 - 이유와 타당한 근거에 따른 기술 사용
 
 
-
-## 사용 기술
-
-- intellij IDEA
-- Spring boot
-- Java 11
-- MySQL
-- gradle
-- Spring data JPA
-- String rest docs
-- .....추가예정
-
-
 ******************
 
 ## Git-Flow 브랜치 전략
