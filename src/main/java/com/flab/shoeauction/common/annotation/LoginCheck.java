@@ -16,4 +16,11 @@ import java.lang.annotation.Target;
 @Target(METHOD)
 public @interface LoginCheck {
 
+    enum EmailAuthStatus {
+        FREE, AUTH
+    }
+
+    EmailAuthStatus authority() default EmailAuthStatus.FREE;
+
+
 }

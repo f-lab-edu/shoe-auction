@@ -23,7 +23,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
 @ExtendWith(MockitoExtension.class)
 class LoginServiceTest {
 
@@ -34,7 +33,7 @@ class LoginServiceTest {
     EncryptionService encryptionService;
 
     @InjectMocks
-    LoginService loginService;
+    SessionLoginService loginService;
 
     private User user;
 
@@ -51,8 +50,6 @@ class LoginServiceTest {
             .build();
 
         user = userDto.toEntity();
-
-
     }
 
     public LoginRequest createLoginDto() {

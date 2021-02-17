@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LoginService {
+public class SessionLoginService {
 
     private final HttpSession session;
     private final UserRepository userRepository;

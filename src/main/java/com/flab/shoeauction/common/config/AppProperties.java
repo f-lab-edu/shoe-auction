@@ -8,12 +8,11 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @Getter
 @RequiredArgsConstructor
 @ConstructorBinding
-@ConfigurationProperties("certification-related-constants")
+@ConfigurationProperties("external-certification")
 public class AppProperties {
     private final String emailFromAddress;
     private final String coolSmsKey;
     private final String coolSmsSecret;
     private final String coolSmsFromPhoneNumber;
-    private final String domain;
 }
 

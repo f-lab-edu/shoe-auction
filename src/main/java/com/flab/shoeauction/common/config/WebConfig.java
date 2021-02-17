@@ -1,6 +1,5 @@
 package com.flab.shoeauction.common.config;
 
-import com.flab.shoeauction.common.interceptor.EmailAuthCheckInterceptor;
 import com.flab.shoeauction.common.interceptor.LoginCheckInterceptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +18,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final LoginCheckInterceptor loginCheckInterceptor;
     private final LoginUserArgumentResolver loginUserArgumentResolver;
-    private final EmailAuthCheckInterceptor emailAuthCheckInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginCheckInterceptor);
-        registry.addInterceptor(emailAuthCheckInterceptor);
     }
 
     @Override
