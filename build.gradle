@@ -39,10 +39,13 @@ dependencies {
     // SMS API
     compile group: 'net.nurigo', name: 'javaSDK', version: '2.2'
 
-    /* Redis 사용을 위한 의존성 추가 */
+    // Redis 사용을 위한 의존성 추가
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-json'
     implementation group: 'org.msgpack', name: 'jackson-dataformat-msgpack', version: '0.8.18'
+
+    // spring session data redis
+    compile group: 'org.springframework.session', name: 'spring-session-data-redis', version: '2.4.2'
 
     //이메일 발송
     implementation 'org.springframework.boot:spring-boot-starter-mail'
