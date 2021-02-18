@@ -1,9 +1,10 @@
 package com.flab.shoeauction.controller.dto;
 
-import com.flab.shoeauction.domain.user.Account;
-import com.flab.shoeauction.domain.user.Address;
 import com.flab.shoeauction.domain.user.User;
+import com.flab.shoeauction.domain.user.Account;
+import com.flab.shoeauction.domain.AddressBook.Address;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
+import java.time.LocalDateTime;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -55,6 +56,7 @@ public class UserDto {
                 .nickname(this.nickname)
                 .email(this.email)
                 .password(this.password)
+                .nicknameModifiedDate(LocalDateTime.now())
                 .phone(this.phone)
                 .build();
         }
@@ -127,15 +129,17 @@ public class UserDto {
         @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 입력해주세요.")
         private String passwordAfter;
 
+        private String passwordBefore;
+
         public void passwordEncryption(EncryptionService encryptionService) {
             this.passwordAfter = encryptionService.encrypt(passwordAfter);
+            this.passwordBefore = encryptionService.encrypt(passwordBefore);
         }
 
-        public static ChangePasswordRequest of(String email, String passwordAfter) {
-            return new ChangePasswordRequest(email, passwordAfter);
+        public static ChangePasswordRequest of(String email, String passwordAfter, String passwordBefore) {
+            return new ChangePasswordRequest(email, passwordAfter,passwordBefore);
         }
     }
-
 
     @Getter
     @NoArgsConstructor

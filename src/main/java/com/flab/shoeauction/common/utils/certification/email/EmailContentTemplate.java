@@ -1,7 +1,8 @@
 package com.flab.shoeauction.common.utils.certification.email;
 
 public class EmailContentTemplate {
-    public String buildCertificationContents(String certificationNumber) {
+
+    public String buildCertificationContent(String certificationNumber) {
 
         StringBuilder builder = new StringBuilder();
         builder.append("[Shoe-Auction] 인증번호는 ");
@@ -10,6 +11,5 @@ public class EmailContentTemplate {
 
         return builder.toString();
     }
-
 
 }
