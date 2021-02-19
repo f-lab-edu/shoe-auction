@@ -21,6 +21,4 @@ public @interface LoginCheck {
     }
 
     EmailAuthStatus authority() default EmailAuthStatus.FREE;
-
-
 }

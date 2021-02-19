@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class SmsCertificationService {
+
     private final SmsCertificationDao smsCertificationDao;
     private final AppProperties appProperties;
 
@@ -43,7 +44,8 @@ public class SmsCertificationService {
 
     // sms로 인증번호 발송하고, 발송 정보를 세션에 저장
     public void sendSms(String phone) {
-        Message coolsms = new Message(appProperties.getCoolSmsKey(), appProperties.getCoolSmsSecret());
+        Message coolsms = new Message(appProperties.getCoolSmsKey(),
+            appProperties.getCoolSmsSecret());
         String randomNumber = makeRandomNumber();
         String content = makeSmsContent(randomNumber);
         HashMap<String, String> params = makeParams(phone, content);

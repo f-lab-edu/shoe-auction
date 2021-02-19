@@ -102,7 +102,7 @@ public class User extends BaseTimeEntity {
         this.emailVerified = true;
     }
 
-    public boolean getEmailVerified(){
+    public boolean getEmailVerified() {
         return this.emailVerified;
     }
 

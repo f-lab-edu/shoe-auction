@@ -48,10 +48,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
                 if (!user.getEmailVerified()) {
                     throw new UnauthenticatedUserException("이메일 인증 후 이용 가능합니다.");
                 }
-
             }
-
-
         }
         return true;
     }

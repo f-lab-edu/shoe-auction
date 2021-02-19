@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConstructorBinding
 @ConfigurationProperties("external-certification")
 public class AppProperties {
+
     private final String emailFromAddress;
     private final String coolSmsKey;
     private final String coolSmsSecret;

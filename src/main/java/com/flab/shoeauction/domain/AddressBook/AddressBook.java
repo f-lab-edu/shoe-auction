@@ -27,7 +27,7 @@ public class AddressBook {
         this.address = address;
     }
 
-    public void updateAddressBook(AddressBookDto requestDto){
+    public void updateAddressBook(AddressBookDto requestDto) {
         address.updateAddress(requestDto);
     }
 
