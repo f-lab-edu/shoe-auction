@@ -5,6 +5,7 @@ import static com.flab.shoeauction.common.utils.response.ResponseConstants.OK;
 
 import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.common.annotation.LoginCheck;
+import com.flab.shoeauction.common.annotation.LoginCheck.EmailAuthStatus;
 import com.flab.shoeauction.controller.dto.AddressBookDto;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.EmailCertificationRequest;
@@ -72,14 +73,13 @@ public class UserApiController {
 
     @GetMapping("/email-check-token")
     public void emailCheck(String token, String email) {
-        userService.validToken(token, email);
+        userService.updateEmailVerified(token, email);
     }
 
     @PostMapping("/resend-email-token")
     public void resendEmailCheck(@CurrentUser String email) {
         emailCertificationService.sendEmailForEmailCheck(email);
     }
-
 
     @PostMapping("/sms-certification/confirms")
     public ResponseEntity<Void> SmsVerification(@RequestBody SmsCertificationRequest requestDto) {

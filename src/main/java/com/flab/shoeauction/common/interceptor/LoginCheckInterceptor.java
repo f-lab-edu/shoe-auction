@@ -2,8 +2,6 @@ package com.flab.shoeauction.common.interceptor;
 
 import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.common.annotation.LoginCheck.EmailAuthStatus;
-import com.flab.shoeauction.domain.user.User;
-import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.service.SessionLoginService;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +20,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class LoginCheckInterceptor implements HandlerInterceptor {
 
     private final SessionLoginService sessionLoginService;
-    private final UserRepository userRepository;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
@@ -43,11 +40,10 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
             EmailAuthStatus authStatus = loginCheck.authority();
             if (authStatus == EmailAuthStatus.AUTH) {
-                String email = sessionLoginService.getLoginUser();
-                User user = userRepository.findByEmail(email).orElseThrow();
-                if (!user.getEmailVerified()) {
+                if (!sessionLoginService.getEmailAuth()) {
                     throw new UnauthenticatedUserException("이메일 인증 후 이용 가능합니다.");
                 }
+
             }
         }
         return true;

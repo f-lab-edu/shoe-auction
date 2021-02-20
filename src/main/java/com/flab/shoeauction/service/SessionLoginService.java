@@ -1,9 +1,11 @@
 package com.flab.shoeauction.service;
 
+import static com.flab.shoeauction.common.utils.user.UserConstants.AUTH;
 import static com.flab.shoeauction.common.utils.user.UserConstants.USER_ID;
 
 import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
+import com.flab.shoeauction.domain.user.User;
 import com.flab.shoeauction.domain.user.UserRepository;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
@@ -32,18 +34,31 @@ public class SessionLoginService {
         existByEmailAndPassword(loginRequest);
         String email = loginRequest.getEmail();
         session.setAttribute(USER_ID, email);
+        setAuthSession(email);
+    }
+
+    public void setAuthSession(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+        session.setAttribute(AUTH, user.getEmailVerified());
     }
 
     public void logout() {
         session.removeAttribute(USER_ID);
+        session.removeAttribute(AUTH);
     }
 
     public String getLoginUser() {
         return (String) session.getAttribute(USER_ID);
     }
 
+    public boolean getEmailAuth() {
+        return (Boolean) session.getAttribute(AUTH);
+    }
+
     public UserInfoDto getCurrentUser(String email) {
         return userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.")).toUserInfoDto();
     }
+
 }

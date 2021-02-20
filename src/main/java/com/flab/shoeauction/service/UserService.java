@@ -145,9 +145,14 @@ public class UserService {
         userRepository.deleteByEmail(email);
     }
 
-    @Transactional
-    public void validToken(String token, String email) {
+    private void validToken(String token, String email) {
         emailCertificationService.verifyEmail(token, email);
+    }
+
+    @Transactional
+    public void updateEmailVerified(String token, String email) {
+        validToken(token,email);
+
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
         user.updateEmailVerified();
