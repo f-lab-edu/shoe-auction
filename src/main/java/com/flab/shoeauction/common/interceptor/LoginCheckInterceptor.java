@@ -40,7 +40,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
             EmailAuthStatus authStatus = loginCheck.authority();
             if (authStatus == EmailAuthStatus.AUTH) {
-                if (!sessionLoginService.getEmailAuth()) {
+                if (!sessionLoginService.isEmailAuth()) {
                     throw new UnauthenticatedUserException("이메일 인증 후 이용 가능합니다.");
                 }
 

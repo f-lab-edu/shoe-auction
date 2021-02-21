@@ -52,7 +52,7 @@ public class SessionLoginService {
         return (String) session.getAttribute(USER_ID);
     }
 
-    public boolean getEmailAuth() {
+    public boolean isEmailAuth() {
         return (Boolean) session.getAttribute(AUTH);
     }
 
