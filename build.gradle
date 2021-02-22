@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.4.1'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-    id 'org.asciidoctor.convert' version '1.5.8'
+    id 'org.asciidoctor.convert' version '1.5.8' // AsciiDoc 파일을 컨버팅하고 Build 폴더에 복사하기 위한 플러그인
     id 'java'
 }
 
@@ -31,6 +31,7 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     // springboot 2.3 버전부터 Valid 가 Web-starter 에서 제외됨으로 추가
@@ -60,4 +61,11 @@ test {
 asciidoctor {
     inputs.dir snippetsDir
     dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor // (3)
+    from ("${asciidoctor.outputDir}/html5") { // (4)
+        into 'static/docs'
+    }
 }

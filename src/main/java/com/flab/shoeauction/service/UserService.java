@@ -151,7 +151,7 @@ public class UserService {
 
     @Transactional
     public void updateEmailVerified(String token, String email) {
-        validToken(token,email);
+        validToken(token, email);
 
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
