@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 /**
  * 도로명 주소,상세주소
  */
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor

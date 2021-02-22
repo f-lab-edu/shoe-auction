@@ -44,6 +44,8 @@ public class User extends BaseTimeEntity {
 
     private String phone;
 
+    private boolean emailVerified;
+
     @Embedded
     private Account account;
 
@@ -59,6 +61,7 @@ public class User extends BaseTimeEntity {
             .nickname(this.getNickname())
             .phone(this.getPhone())
             .account(this.getAccount())
+            .emailVerified(this.getEmailVerified())
             .build();
     }
 
@@ -93,6 +96,14 @@ public class User extends BaseTimeEntity {
 
     private boolean canModifiedNickname() {
         return !(this.nicknameModifiedDate.isBefore(LocalDateTime.now().minusDays(7)));
+    }
+
+    public void updateEmailVerified() {
+        this.emailVerified = true;
+    }
+
+    public boolean getEmailVerified() {
+        return this.emailVerified;
     }
 
 

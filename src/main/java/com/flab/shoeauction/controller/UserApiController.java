@@ -5,6 +5,7 @@ import static com.flab.shoeauction.common.utils.response.ResponseConstants.OK;
 
 import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.common.annotation.LoginCheck;
+import com.flab.shoeauction.common.annotation.LoginCheck.EmailAuthStatus;
 import com.flab.shoeauction.controller.dto.AddressBookDto;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.EmailCertificationRequest;
@@ -17,7 +18,7 @@ import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.AddressBook.Address;
 import com.flab.shoeauction.domain.AddressBook.AddressBook;
 import com.flab.shoeauction.domain.user.Account;
-import com.flab.shoeauction.service.LoginService;
+import com.flab.shoeauction.service.SessionLoginService;
 import com.flab.shoeauction.service.UserService;
 import com.flab.shoeauction.service.certification.EmailCertificationService;
 import com.flab.shoeauction.service.certification.SmsCertificationService;
@@ -39,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserApiController {
 
-    private final LoginService loginService;
+    private final SessionLoginService sessionLoginService;
 
     private final UserService userService;
 
@@ -60,6 +61,7 @@ public class UserApiController {
     @PostMapping
     public ResponseEntity<Void> createUser(@Valid @RequestBody SaveRequest requestDto) {
         userService.save(requestDto);
+        emailCertificationService.sendEmailForEmailCheck(requestDto.getEmail());
         return CREATED;
     }
 
@@ -67,6 +69,16 @@ public class UserApiController {
     public ResponseEntity<Void> sendSms(@RequestBody SmsCertificationRequest requestDto) {
         smsCertificationService.sendSms(requestDto.getPhone());
         return CREATED;
+    }
+
+    @GetMapping("/email-check-token")
+    public void emailCheck(String token, String email) {
+        userService.updateEmailVerified(token, email);
+    }
+
+    @PostMapping("/resend-email-token")
+    public void resendEmailCheck(@CurrentUser String email) {
+        emailCertificationService.sendEmailForEmailCheck(email);
     }
 
     @PostMapping("/sms-certification/confirms")
@@ -77,20 +89,19 @@ public class UserApiController {
 
     @PostMapping("/login")
     public void login(@RequestBody LoginRequest loginRequest) {
-        loginService.existByEmailAndPassword(loginRequest);
-        loginService.login(loginRequest.getEmail());
+        sessionLoginService.login(loginRequest);
     }
 
     @LoginCheck
     @DeleteMapping("/logout")
     public void logout() {
-        loginService.logout();
+        sessionLoginService.logout();
     }
 
     @LoginCheck
     @GetMapping("/my-infos")
     public ResponseEntity<UserInfoDto> myPage(@CurrentUser String email) {
-        UserInfoDto loginUser = loginService.getCurrentUser(email);
+        UserInfoDto loginUser = sessionLoginService.getCurrentUser(email);
         return ResponseEntity.ok(loginUser);
     }
 
@@ -106,7 +117,7 @@ public class UserApiController {
 
     @PostMapping("/email-certification/sends")
     public ResponseEntity sendEmail(@RequestBody EmailCertificationRequest requestDto) {
-        emailCertificationService.sendEmail(requestDto.getEmail());
+        emailCertificationService.sendEmailForCertification(requestDto.getEmail());
         return CREATED;
     }
 
@@ -127,7 +138,7 @@ public class UserApiController {
         @CurrentUser String email) {
         String password = requestDto.getPassword();
         userService.delete(email, password);
-        loginService.logout();
+        sessionLoginService.logout();
         return OK;
     }
 
