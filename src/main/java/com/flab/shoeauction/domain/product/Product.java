@@ -9,7 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -26,7 +25,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-
 public class Product extends BaseTimeEntity {
 
     @Id
@@ -61,7 +59,13 @@ public class Product extends BaseTimeEntity {
 
     private double sizeGap;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    /*
+     * 상품 조회 등의 Product를 사용 하는 비즈니스 로직은 대부분 Brand를 함께 사용한다.
+     * 그렇기에 어차피 함께 사용할 Brand에 지연로딩을 설정하는 것은 조회 효율만 낮출 뿐이다.
+     * 따라서 FetchType의 디폴트인 EAGER(즉시로딩)을 사용하여 조인쿼리로 조회하는 편이 좋다.
+     */
+    @ManyToOne
     @JoinColumn(name = "BRAND_ID")
     private Brand brand;
 
