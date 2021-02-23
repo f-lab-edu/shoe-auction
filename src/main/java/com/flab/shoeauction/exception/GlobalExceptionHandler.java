@@ -8,6 +8,7 @@ import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLI
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_NICKNAME;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.PRODUCT_NOT_FOUND;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.FAIL_TO_CHANGE_NICKNAME;
+import static com.flab.shoeauction.common.utils.response.ResponseConstants.TOKEN_EXPIRED;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.UNAUTHORIZED_USER;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.USER_NOT_FOUND;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.WRONG_PASSWORD;
@@ -19,6 +20,7 @@ import com.flab.shoeauction.exception.product.ProductNotFoundException;
 import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
+import com.flab.shoeauction.exception.user.TokenExpiredException;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
@@ -36,6 +38,7 @@ import org.springframework.web.context.request.WebRequest;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(DuplicateEmailException.class)
     public final ResponseEntity<String> duplicateEmailException(DuplicateEmailException exception) {
         log.debug("중복된 이메일입니다.", exception);
@@ -85,6 +88,7 @@ public class GlobalExceptionHandler {
         log.error("닉네임은 7일에 한번만 변경 가능합니다.", ex);
         return FAIL_TO_CHANGE_NICKNAME;
     }
+
     @ExceptionHandler(WrongPasswordException.class)
     public final ResponseEntity<String> wrongPasswordException(WrongPasswordException ex,
         WebRequest request) {
@@ -119,5 +123,13 @@ public class GlobalExceptionHandler {
         ProductNotFoundException ex) {
         log.debug("존재하지 않는 상품입니다.", ex);
         return PRODUCT_NOT_FOUND;
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public final ResponseEntity handleTokenExpiredException(TokenExpiredException ex,
+        WebRequest request) {
+        log.debug("Token Expired :: {} , detection time={}", request.getDescription(false),
+            LocalDateTime.now(), ex);
+        return TOKEN_EXPIRED;
     }
 }

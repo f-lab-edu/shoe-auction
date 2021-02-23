@@ -49,4 +49,8 @@ public class ResponseConstants {
 
     public static final ResponseEntity<String> PRODUCT_NOT_FOUND =
         new ResponseEntity<>("존재하지 않는 상품입니다.", HttpStatus.BAD_REQUEST);
+
+    public static final ResponseEntity<String> TOKEN_EXPIRED =
+        new ResponseEntity<>("인증 토큰이 만료되었습니다. 마이페이지에서 인증 토큰 재전송 버튼을 클릭해 주세요!",
+            HttpStatus.UNAUTHORIZED);
 }

@@ -15,6 +15,7 @@ import com.flab.shoeauction.exception.user.DuplicateNicknameException;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.exception.user.WrongPasswordException;
+import com.flab.shoeauction.service.certification.EmailCertificationService;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final EncryptionService encryptionService;
     private final AddressBookRepository addressBookRepository;
+    private final EmailCertificationService emailCertificationService;
 
     public boolean checkEmailDuplicate(String email) {
         return userRepository.existsByEmail(email);
@@ -141,5 +143,18 @@ public class UserService {
             throw new WrongPasswordException();
         }
         userRepository.deleteByEmail(email);
+    }
+
+    private void validToken(String token, String email) {
+        emailCertificationService.verifyEmail(token, email);
+    }
+
+    @Transactional
+    public void updateEmailVerified(String token, String email) {
+        validToken(token,email);
+
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+        user.updateEmailVerified();
     }
 }

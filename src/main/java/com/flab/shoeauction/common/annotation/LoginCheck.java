@@ -16,4 +16,9 @@ import java.lang.annotation.Target;
 @Target(METHOD)
 public @interface LoginCheck {
 
+    enum EmailAuthStatus {
+        UNAUTH, AUTH
+    }
+
+    EmailAuthStatus authority() default EmailAuthStatus.UNAUTH;
 }

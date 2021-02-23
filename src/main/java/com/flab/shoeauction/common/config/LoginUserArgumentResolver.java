@@ -1,7 +1,7 @@
 package com.flab.shoeauction.common.config;
 
 import com.flab.shoeauction.common.annotation.CurrentUser;
-import com.flab.shoeauction.service.LoginService;
+import com.flab.shoeauction.service.SessionLoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final LoginService loginService;
+    private final SessionLoginService loginService;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
