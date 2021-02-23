@@ -1,6 +1,7 @@
 package com.flab.shoeauction.domain.user;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,8 +14,10 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Account {
 
+    private String bankName;
     private String accountNumber;
     private String depositor;
 }

@@ -7,6 +7,7 @@ import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLI
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_MODEL_NUMBER;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_NICKNAME;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.PRODUCT_NOT_FOUND;
+import static com.flab.shoeauction.common.utils.response.ResponseConstants.FAIL_TO_CHANGE_NICKNAME;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.UNAUTHORIZED_USER;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.USER_NOT_FOUND;
 import static com.flab.shoeauction.common.utils.response.ResponseConstants.WRONG_PASSWORD;
@@ -18,6 +19,7 @@ import com.flab.shoeauction.exception.product.ProductNotFoundException;
 import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
+import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.exception.user.WrongPasswordException;
@@ -34,7 +36,6 @@ import org.springframework.web.context.request.WebRequest;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
     @ExceptionHandler(DuplicateEmailException.class)
     public final ResponseEntity<String> duplicateEmailException(DuplicateEmailException exception) {
         log.debug("중복된 이메일입니다.", exception);
@@ -78,6 +79,12 @@ public class GlobalExceptionHandler {
         return BAD_REQUEST;
     }
 
+    @ExceptionHandler(UnableToChangeNicknameException.class)
+    public final ResponseEntity handleUnableToChangeNicknameException(
+        UnableToChangeNicknameException ex) {
+        log.error("닉네임은 7일에 한번만 변경 가능합니다.", ex);
+        return FAIL_TO_CHANGE_NICKNAME;
+    }
     @ExceptionHandler(WrongPasswordException.class)
     public final ResponseEntity<String> wrongPasswordException(WrongPasswordException ex,
         WebRequest request) {

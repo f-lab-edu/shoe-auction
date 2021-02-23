@@ -14,25 +14,3 @@
 
 
 
-## 사용 기술
-
-- intellij IDEA
-- Spring boot
-- Java 11
-- MySQL
-- gradle
-- Spring data JPA
-- String rest docs
-- .....추가예정
-
-
-******************
-
-## Git-Flow 브랜치 전략
-
-delvelop의 변경사항을 feature로 가져와서 작업후 Pull Request 를 통한 리뷰 완료 후 merge 
-
-![git-flow_overall_graph](https://user-images.githubusercontent.com/39195377/104150331-f28bd580-541c-11eb-8608-b7ff806d4e7b.png)
-
-Reference : [우아한 형제들 기술블로그 : Git-flow](https://woowabros.github.io/experience/2017/10/30/baemin-mobile-git-branch-strategy.html)
-
