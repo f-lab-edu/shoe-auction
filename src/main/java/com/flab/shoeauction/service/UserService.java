@@ -4,12 +4,12 @@ import com.flab.shoeauction.controller.dto.AddressBookDto;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
-import com.flab.shoeauction.domain.AddressBook.Address;
-import com.flab.shoeauction.domain.AddressBook.AddressBook;
-import com.flab.shoeauction.domain.AddressBook.AddressBookRepository;
-import com.flab.shoeauction.domain.user.Account;
-import com.flab.shoeauction.domain.user.User;
-import com.flab.shoeauction.domain.user.UserRepository;
+import com.flab.shoeauction.domain.addressBook.Address;
+import com.flab.shoeauction.domain.addressBook.AddressBook;
+import com.flab.shoeauction.domain.addressBook.AddressBookRepository;
+import com.flab.shoeauction.domain.users.common.Account;
+import com.flab.shoeauction.domain.users.user.User;
+import com.flab.shoeauction.domain.users.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
@@ -151,7 +151,7 @@ public class UserService {
 
     @Transactional
     public void updateEmailVerified(String token, String email) {
-        validToken(token,email);
+        validToken(token, email);
 
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));

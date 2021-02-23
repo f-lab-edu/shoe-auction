@@ -1,4 +1,4 @@
-package com.flab.shoeauction.domain.AddressBook;
+package com.flab.shoeauction.domain.addressBook;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

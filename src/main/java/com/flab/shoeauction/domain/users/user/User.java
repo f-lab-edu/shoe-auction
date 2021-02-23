@@ -1,21 +1,20 @@
-package com.flab.shoeauction.domain.user;
+package com.flab.shoeauction.domain.users.user;
 
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
-import com.flab.shoeauction.domain.AddressBook.Address;
-import com.flab.shoeauction.domain.AddressBook.AddressBook;
-import com.flab.shoeauction.domain.BaseTimeEntity;
+import com.flab.shoeauction.domain.addressBook.Address;
+import com.flab.shoeauction.domain.addressBook.AddressBook;
+import com.flab.shoeauction.domain.users.common.Account;
+import com.flab.shoeauction.domain.users.common.UserBase;
+import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import lombok.AccessLevel;
@@ -25,22 +24,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Builder
-@AllArgsConstructor
-public class User extends BaseTimeEntity {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "USER_ID")
-    private Long id;
+public class User extends UserBase {
 
     private String nickname;
-
-    private String email;
-
-    private String password;
 
     private String phone;
 
@@ -106,5 +95,13 @@ public class User extends BaseTimeEntity {
         return this.emailVerified;
     }
 
-
+    @Builder
+    public User(String email, String password, UserLevel userLevel, String nickname, String phone,
+        LocalDateTime nicknameModifiedDate) {
+        super(email, password, userLevel);
+        this.nickname = nickname;
+        this.phone = phone;
+        this.userLevel = userLevel;
+        this.nicknameModifiedDate = nicknameModifiedDate;
+    }
 }

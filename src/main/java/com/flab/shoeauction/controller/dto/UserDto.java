@@ -1,8 +1,9 @@
 package com.flab.shoeauction.controller.dto;
 
-import com.flab.shoeauction.domain.user.User;
-import com.flab.shoeauction.domain.user.Account;
-import com.flab.shoeauction.domain.AddressBook.Address;
+import com.flab.shoeauction.domain.addressBook.Address;
+import com.flab.shoeauction.domain.users.common.Account;
+import com.flab.shoeauction.domain.users.user.User;
+import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Email;
@@ -52,12 +53,14 @@ public class UserDto {
         }
 
         public User toEntity() {
+
             return User.builder()
                 .nickname(this.nickname)
                 .email(this.email)
                 .password(this.password)
                 .nicknameModifiedDate(LocalDateTime.now())
                 .phone(this.phone)
+                .userLevel(UserLevel.USER)
                 .build();
         }
     }

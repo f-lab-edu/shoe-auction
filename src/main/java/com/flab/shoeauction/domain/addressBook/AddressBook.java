@@ -1,4 +1,4 @@
-package com.flab.shoeauction.domain.AddressBook;
+package com.flab.shoeauction.domain.addressBook;
 
 import com.flab.shoeauction.controller.dto.AddressBookDto;
 import javax.persistence.Embedded;
