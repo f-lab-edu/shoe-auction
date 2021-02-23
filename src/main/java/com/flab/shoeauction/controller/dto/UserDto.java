@@ -1,9 +1,9 @@
 package com.flab.shoeauction.controller.dto;
 
 import com.flab.shoeauction.domain.addressBook.Address;
-import com.flab.shoeauction.domain.user.Account;
-import com.flab.shoeauction.domain.user.User;
-import com.flab.shoeauction.domain.user.UserLevel;
+import com.flab.shoeauction.domain.users.common.Account;
+import com.flab.shoeauction.domain.users.user.User;
+import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Email;

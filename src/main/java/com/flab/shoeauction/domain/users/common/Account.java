@@ -1,4 +1,4 @@
-package com.flab.shoeauction.domain.user;
+package com.flab.shoeauction.domain.users.common;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

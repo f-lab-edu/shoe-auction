@@ -1,10 +1,13 @@
-package com.flab.shoeauction.domain.user;
+package com.flab.shoeauction.domain.users.user;
 
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
+import com.flab.shoeauction.domain.users.common.Account;
+import com.flab.shoeauction.domain.users.common.UserBase;
+import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

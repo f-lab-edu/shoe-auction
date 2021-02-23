@@ -16,7 +16,7 @@ import com.flab.shoeauction.controller.dto.UserDto.SmsCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
-import com.flab.shoeauction.domain.user.Account;
+import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.service.SessionLoginService;
 import com.flab.shoeauction.service.UserService;
 import com.flab.shoeauction.service.certification.EmailCertificationService;

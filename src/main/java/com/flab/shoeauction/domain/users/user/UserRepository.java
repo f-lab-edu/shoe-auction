@@ -1,6 +1,5 @@
-package com.flab.shoeauction.domain.user.repository;
+package com.flab.shoeauction.domain.users.user;
 
-import com.flab.shoeauction.domain.user.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

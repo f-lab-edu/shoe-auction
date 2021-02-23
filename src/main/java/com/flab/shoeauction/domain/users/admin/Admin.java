@@ -1,5 +1,7 @@
-package com.flab.shoeauction.domain.user;
+package com.flab.shoeauction.domain.users.admin;
 
+import com.flab.shoeauction.domain.users.common.UserBase;
+import com.flab.shoeauction.domain.users.common.UserLevel;
 import javax.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.flab.shoeauction.domain.user;
+package com.flab.shoeauction.domain.users.common;
 
 import com.flab.shoeauction.domain.BaseTimeEntity;
 import javax.persistence.Column;
