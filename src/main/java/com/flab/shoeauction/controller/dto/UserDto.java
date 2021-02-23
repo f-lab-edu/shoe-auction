@@ -1,6 +1,6 @@
 package com.flab.shoeauction.controller.dto;
 
-import com.flab.shoeauction.domain.AddressBook.Address;
+import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.user.Account;
 import com.flab.shoeauction.domain.user.User;
 import com.flab.shoeauction.domain.user.UserLevel;

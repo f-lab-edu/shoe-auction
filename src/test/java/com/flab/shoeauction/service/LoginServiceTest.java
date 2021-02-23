@@ -9,7 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.flab.shoeauction.domain.user.User;
-import com.flab.shoeauction.domain.user.UserRepository;
+import com.flab.shoeauction.domain.user.repository.UserRepository;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;

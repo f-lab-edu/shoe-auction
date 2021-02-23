@@ -5,7 +5,6 @@ import static com.flab.shoeauction.common.utils.response.ResponseConstants.OK;
 
 import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.common.annotation.LoginCheck;
-import com.flab.shoeauction.common.annotation.LoginCheck.EmailAuthStatus;
 import com.flab.shoeauction.controller.dto.AddressBookDto;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.EmailCertificationRequest;
@@ -15,8 +14,8 @@ import com.flab.shoeauction.controller.dto.UserDto.PasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.UserDto.SmsCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
-import com.flab.shoeauction.domain.AddressBook.Address;
-import com.flab.shoeauction.domain.AddressBook.AddressBook;
+import com.flab.shoeauction.domain.addressBook.Address;
+import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.user.Account;
 import com.flab.shoeauction.service.SessionLoginService;
 import com.flab.shoeauction.service.UserService;

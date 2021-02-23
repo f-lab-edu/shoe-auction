@@ -6,7 +6,7 @@ import static com.flab.shoeauction.common.utils.user.UserConstants.USER_ID;
 import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.user.User;
-import com.flab.shoeauction.domain.user.UserRepository;
+import com.flab.shoeauction.domain.user.repository.UserRepository;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import javax.servlet.http.HttpSession;

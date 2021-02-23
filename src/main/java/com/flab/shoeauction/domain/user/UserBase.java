@@ -2,6 +2,7 @@ package com.flab.shoeauction.domain.user;
 
 import com.flab.shoeauction.domain.BaseTimeEntity;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor
 @AllArgsConstructor
+@DiscriminatorColumn
 public abstract class UserBase extends BaseTimeEntity {
 
     @Id
