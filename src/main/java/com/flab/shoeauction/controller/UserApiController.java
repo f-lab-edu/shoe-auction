@@ -75,6 +75,7 @@ public class UserApiController {
         userService.updateEmailVerified(token, email);
     }
 
+    @LoginCheck
     @PostMapping("/resend-email-token")
     public void resendEmailCheck(@CurrentUser String email) {
         emailCertificationService.sendEmailForEmailCheck(email);

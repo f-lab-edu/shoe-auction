@@ -234,7 +234,7 @@ class UserServiceTest {
             .password("test1234")
             .nickname("17171771")
             .phone("01020180103")
-            .addressesBook(addressBooks).build();
+            .addressBooks(addressBooks).build();
         String email = "test123@test.com";
         Address address = new Address("우리집", "땡땡땡로 123", "111동 111호", "12345");
         Address address2 = new Address("친구집", "친구집로 123", "222동 222호", "67890");
@@ -257,7 +257,7 @@ class UserServiceTest {
             .password("test1234")
             .nickname("17171771")
             .phone("01020180103")
-            .addressesBook(addressBooks).build();
+            .addressBooks(addressBooks).build();
         String email = "test123@test.com";
         Address address = new Address("우리집", "땡땡땡로 123", "111동 111호", "12345");
         Address address2 = new Address("친구집", "친구집로 123", "222동 222호", "67890");

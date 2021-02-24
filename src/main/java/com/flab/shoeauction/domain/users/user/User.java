@@ -97,11 +97,12 @@ public class User extends UserBase {
 
     @Builder
     public User(String email, String password, UserLevel userLevel, String nickname, String phone,
-        LocalDateTime nicknameModifiedDate) {
+        LocalDateTime nicknameModifiedDate, List<AddressBook> addressBooks) {
         super(email, password, userLevel);
         this.nickname = nickname;
         this.phone = phone;
         this.userLevel = userLevel;
         this.nicknameModifiedDate = nicknameModifiedDate;
+        this.addressesBook = addressBooks;
     }
 }

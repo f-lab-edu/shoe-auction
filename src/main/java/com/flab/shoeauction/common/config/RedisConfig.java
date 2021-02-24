@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /*
@@ -45,10 +46,12 @@ public class RedisConfig {
      * 문자열 저장의 특화된 RedisTemplate의 서브 클래스 StringRedisTemplate를 사용했다.
      * StringRedisTemplate의 default Serializer는 StringSerializer이다.
      */
+
     @Bean
     public StringRedisTemplate stringRedisTemplate() {
         StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
         stringRedisTemplate.setConnectionFactory(redisConnectionFactory());
+        stringRedisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         return stringRedisTemplate;
     }
 }

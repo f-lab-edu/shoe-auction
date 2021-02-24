@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.4.1'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-    id 'org.asciidoctor.convert' version '1.5.8'
+    id 'org.asciidoctor.convert' version "1.5.9.2"
     id 'java'
 }
 
@@ -32,22 +32,16 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
-    // springboot 2.3 버전부터 Valid 가 Web-starter 에서 제외됨으로 추가
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    // SMS API
     compile group: 'net.nurigo', name: 'javaSDK', version: '2.2'
-
-    // Redis 사용을 위한 의존성 추가
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-json'
     implementation group: 'org.msgpack', name: 'jackson-dataformat-msgpack', version: '0.8.18'
 
-    // spring session data redis
     compile group: 'org.springframework.session', name: 'spring-session-data-redis', version: '2.4.2'
 
-    //이메일 발송
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 }
@@ -62,9 +56,9 @@ asciidoctor {
     dependsOn test
 }
 
-bootJar {
-    dependsOn asciidoctor // (3)
-    from ("${asciidoctor.outputDir}/html5") { // (4)
+bootJar { // SpringBoot 1.5 이하일 경우 jar
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}/html5") {
         into 'static/docs'
     }
 }
