@@ -82,9 +82,8 @@ public class UserApiController {
     }
 
     @PostMapping("/sms-certification/confirms")
-    public ResponseEntity<Void> SmsVerification(@RequestBody SmsCertificationRequest requestDto) {
+    public void SmsVerification(@RequestBody SmsCertificationRequest requestDto) {
         smsCertificationService.verifySms(requestDto);
-        return OK;
     }
 
     @PostMapping("/login")

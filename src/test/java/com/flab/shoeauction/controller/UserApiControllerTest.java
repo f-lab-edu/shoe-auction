@@ -20,13 +20,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer.sharedHttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
+import com.flab.shoeauction.controller.dto.UserDto.SmsCertificationRequest;
+import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
+import com.flab.shoeauction.domain.addressBook.Address;
+import com.flab.shoeauction.domain.addressBook.AddressBook;
+import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.TokenExpiredException;
+import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.SessionLoginService;
 import com.flab.shoeauction.service.UserService;
 import com.flab.shoeauction.service.certification.EmailCertificationService;
 import com.flab.shoeauction.service.certification.SmsCertificationService;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -244,8 +253,127 @@ class UserApiControllerTest {
         mockMvc.perform(post("/users/resend-email-token")
             .session(session))
             .andDo(print())
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andDo(document("users/emailAuth/resend"));
+    }
+
+    @Test
+    @DisplayName("사용자가 입력한 번호로 인증 문자를 전송한다.")
+    void sendSMS() throws Exception {
+        SmsCertificationRequest requestDto = SmsCertificationRequest.builder()
+            .phone("01012345678")
+            .certificationNumber(null)
+            .build();
+
+        String phone = requestDto.getPhone();
+
+        doNothing().when(smsCertificationService).sendSms(phone);
+
+        mockMvc.perform(post("/users/sms-certification/sends")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(requestDto)))
+            .andDo(print())
+            .andExpect(status().isCreated())
+            .andDo(document("users/certification/sms", requestFields(
+                fieldWithPath("phone").type(JsonFieldType.STRING).description("인증번호를 받을 휴대폰 번호"),
+                fieldWithPath("certificationNumber").type(null)
+                    .description("null : 인증 번호 발송시 사용하지 않는 값")
+            )));
+    }
+
+    @Test
+    @DisplayName("휴대폰 인증 - 인증번호가 일치하면 휴대폰 인증에 성공한다.")
+    void smsCertification_successful() throws Exception {
+        SmsCertificationRequest requestDto = SmsCertificationRequest.builder()
+            .phone("01012345678")
+            .certificationNumber("123456")
+            .build();
+
+        doNothing().when(smsCertificationService).verifySms(requestDto);
+
+        mockMvc.perform(post("/users/sms-certification/confirms")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(requestDto)))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("users/certification/sms/successful", requestFields(
+                fieldWithPath("phone").type(JsonFieldType.STRING).description("인증번호를 받은 휴대폰 번호"),
+                fieldWithPath("certificationNumber").type(JsonFieldType.STRING)
+                    .description("사용자가 입력한 인증번호")
+            )));
+    }
+
+    @Test
+    @DisplayName("로그인 - 등록된 ID와 일치하는 PW 입력시 로그인에 성공한다.")
+    void login_successful() throws Exception {
+        LoginRequest requestDto = LoginRequest.builder()
+            .email("test@test.com")
+            .password("test1234")
+            .build();
+
+        doNothing().when(sessionLoginService).login(requestDto);
+
+        mockMvc.perform(post("/users/login")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(requestDto)))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("users/login/successful", requestFields(
+                fieldWithPath("email").type(JsonFieldType.STRING).description("login ID (email)"),
+                fieldWithPath("password").type(JsonFieldType.STRING).description("password")
+            )));
+    }
+
+    @Test
+    @DisplayName("로그인 - 존재하지 않는 id 또는 비밀번호 불일치시 로그인에 실패한다.")
+    void login_failure() throws Exception {
+        LoginRequest requestDto = LoginRequest.builder()
+            .email("test@test.com")
+            .password("test1234")
+            .build();
+
+        doThrow(new UserNotFoundException("아이디 또는 비밀번호가 일치하지 않습니다.")).when(sessionLoginService)
+            .login(any());
+
+        mockMvc.perform(post("/users/login")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(requestDto)))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andDo(document("users/login/failure", requestFields(
+                fieldWithPath("email").type(JsonFieldType.STRING).description("login ID (email)"),
+                fieldWithPath("password").type(JsonFieldType.STRING).description("password")
+            )));
+    }
+
+    @Test
+    @DisplayName("회원 정보 - 마이페이지(회원 정보)를 리턴한다.")
+    void myPage() throws Exception {
+        List<AddressBook> addressBooks = new ArrayList<>();
+        Address address = new Address
+            ("우리집", "행복로19", "700동 100호", "12345");
+        AddressBook addressBook = new AddressBook(address);
+        addressBooks.add(addressBook);
+
+        UserInfoDto userInfoDto = UserInfoDto.builder()
+            .email("jungkh405@naver.com")
+            .nickname("17171771")
+            .phone("01012345678")
+            .account(new Account("카카오뱅크", "123456789", "정기혁"))
+            .addressBooks(addressBooks)
+            .emailVerified(true).build();
+
+
+
+
+
+
     }
 
 
+    @Test
+    @DisplayName("이메일 인증(비밀번호 찾기 전용) - 비밀번호 찾기에서 이메일 인증을 선택하면 이메일로 인증번호가 발송된다.")
+    void sendEMail() throws Exception {
+
+    }
 }

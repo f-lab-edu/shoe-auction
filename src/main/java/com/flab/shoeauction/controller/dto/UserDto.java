@@ -1,11 +1,12 @@
 package com.flab.shoeauction.controller.dto;
 
-import com.flab.shoeauction.domain.addressBook.Address;
+import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.users.common.Account;
-import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.common.UserLevel;
+import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -71,6 +72,13 @@ public class UserDto {
 
         private String phone;
         private String certificationNumber;
+
+        @Builder
+        public SmsCertificationRequest(String phone, String certificationNumber) {
+            this.phone = phone;
+            this.certificationNumber = certificationNumber;
+        }
+
     }
 
     @Getter
@@ -82,14 +90,16 @@ public class UserDto {
     }
 
     @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor
     public static class LoginRequest {
 
         private String email;
         private String password;
 
-        public static LoginRequest of(String email, String password) {
-            return new LoginRequest(email, password);
+        @Builder
+        public LoginRequest(String email, String password) {
+            this.email = email;
+            this.password = password;
         }
 
         public void passwordEncryption(EncryptionService encryptionService) {
@@ -98,21 +108,27 @@ public class UserDto {
     }
 
     @Getter
-    @AllArgsConstructor
-    @Builder
+    @NoArgsConstructor
     public static class UserInfoDto {
 
         private String email;
         private String nickname;
         private String phone;
-        private Address address;
+        private List<AddressBook> addressBooks;
         private Account account;
         private boolean emailVerified;
 
-        public static UserInfoDto of(String email, String nickname, String phone, Address address,
-            Account account, boolean emailVerified) {
-            return new UserInfoDto(email, nickname, phone, address, account, emailVerified);
+        @Builder
+        public UserInfoDto(String email, String nickname, String phone,
+            List<AddressBook> addressBooks, Account account, Boolean emailVerified) {
+            this.email = email;
+            this.nickname = nickname;
+            this.phone = phone;
+            this.addressBooks = addressBooks;
+            this.account = account;
+            this.emailVerified = emailVerified;
         }
+
     }
 
     @Getter
@@ -140,8 +156,9 @@ public class UserDto {
             this.passwordBefore = encryptionService.encrypt(passwordBefore);
         }
 
-        public static ChangePasswordRequest of(String email, String passwordAfter, String passwordBefore) {
-            return new ChangePasswordRequest(email, passwordAfter,passwordBefore);
+        public static ChangePasswordRequest of(String email, String passwordAfter,
+            String passwordBefore) {
+            return new ChangePasswordRequest(email, passwordAfter, passwordBefore);
         }
     }
 
