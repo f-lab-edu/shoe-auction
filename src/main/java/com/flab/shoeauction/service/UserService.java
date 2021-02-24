@@ -12,7 +12,6 @@ import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
-import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.exception.user.WrongPasswordException;
 import com.flab.shoeauction.service.certification.EmailCertificationService;
@@ -75,7 +74,7 @@ public class UserService {
         String passwordBefore = requestDto.getPasswordBefore();
         String passwordAfter = requestDto.getPasswordAfter();
         if (!userRepository.existsByEmailAndPassword(email, passwordBefore)) {
-            throw new UnauthenticatedUserException("이전 비밀번호가 일치하지 않습니다.");
+            throw new WrongPasswordException();
         }
 
         User user = userRepository.findByEmail(email)

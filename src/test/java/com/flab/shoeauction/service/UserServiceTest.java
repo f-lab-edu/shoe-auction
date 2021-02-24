@@ -1,6 +1,5 @@
 package com.flab.shoeauction.service;
 
-import static com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
@@ -105,7 +104,10 @@ class UserServiceTest {
     @Test
     @DisplayName("비밀번호 찾기 성공 - 전달받은 객체(이메일)가 회원이라면 비밀번호 변경에 성공한다.")
     public void updatePasswordByForget() {
-        ChangePasswordRequest changePasswordRequest = of("test123.test.com", "test12345", null);
+        ChangePasswordRequest changePasswordRequest = ChangePasswordRequest.builder()
+            .email("test123@test.com")
+            .passwordAfter("test12345")
+            .build();
         User user = createUserDto().toEntity();
 
         when(userRepository.findByEmail(changePasswordRequest.getEmail()))
@@ -152,7 +154,12 @@ class UserServiceTest {
     public void updatePassword() {
         User user = createUserDto().toEntity();
         ChangePasswordRequest changePasswordRequest = ChangePasswordRequest
-            .of(null, "test12345", "test1234");
+            .builder()
+            .email(null)
+            .passwordBefore("test1234")
+            .passwordAfter("test12345")
+            .build();
+
         String email = "test123@test.com";
         String passwordBefore = encryptionService
             .encrypt(changePasswordRequest.getPasswordBefore());
@@ -173,7 +180,11 @@ class UserServiceTest {
     @DisplayName("비밀번호 변경 - 이전 비밀번호가 일치하지 않으면 비밀번호 변경에 실패한다.")
     public void failToUpdatePassword() {
         ChangePasswordRequest changePasswordRequest = ChangePasswordRequest
-            .of(null, "test12345", "test1234");
+            .builder()
+            .email(null)
+            .passwordBefore("test1234")
+            .passwordAfter("test12345")
+            .build();
         String email = "test123@test.com";
         String passwordBefore = encryptionService
             .encrypt(changePasswordRequest.getPasswordBefore());

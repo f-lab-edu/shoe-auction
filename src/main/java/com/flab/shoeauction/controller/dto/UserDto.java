@@ -87,6 +87,13 @@ public class UserDto {
 
         private String email;
         private String certificationNumber;
+
+        @Builder
+        public EmailCertificationRequest(String email, String certificationNumber) {
+            this.email = email;
+            this.certificationNumber = certificationNumber;
+        }
+
     }
 
     @Getter
@@ -132,15 +139,20 @@ public class UserDto {
     }
 
     @Getter
-    @Builder
     public static class FindUserResponse {
 
         private String email;
         private String phone;
+
+        @Builder
+        public FindUserResponse(String email, String phone) {
+            this.email = email;
+            this.phone = phone;
+        }
     }
 
     @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor
     public static class ChangePasswordRequest {
 
         private String email;
@@ -156,16 +168,25 @@ public class UserDto {
             this.passwordBefore = encryptionService.encrypt(passwordBefore);
         }
 
-        public static ChangePasswordRequest of(String email, String passwordAfter,
+        @Builder
+
+        public ChangePasswordRequest(String email,
+            @NotBlank(message = "비밀번호를 입력해주세요.") @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 입력해주세요.") String passwordAfter,
             String passwordBefore) {
-            return new ChangePasswordRequest(email, passwordAfter, passwordBefore);
+            this.email = email;
+            this.passwordAfter = passwordAfter;
+            this.passwordBefore = passwordBefore;
         }
     }
 
     @Getter
     @NoArgsConstructor
     public static class PasswordRequest {
-
         private String password;
+
+        @Builder
+        public PasswordRequest(String password) {
+            this.password = password;
+        }
     }
 }
