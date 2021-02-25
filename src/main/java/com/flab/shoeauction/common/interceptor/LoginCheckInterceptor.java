@@ -1,12 +1,15 @@
+
 package com.flab.shoeauction.common.interceptor;
 
 import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.common.annotation.LoginCheck.EmailAuthStatus;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.service.SessionLoginService;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -21,10 +24,21 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
     private final SessionLoginService sessionLoginService;
 
+    @Inject
+    private Environment environment;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler)
         throws Exception {
+
+        String[] activeProfiles = environment.getActiveProfiles();
+
+        for(String profile : activeProfiles) {
+            if(profile.equals("test")) {
+                return true;
+            }
+        }
 
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;

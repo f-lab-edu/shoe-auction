@@ -1,0 +1,572 @@
+= Shoe-auction API guide
+Andy Wilkinson;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:operation-curl-request-title: Example request
+:operation-http-response-title: Example response
+
+
+
+[[overview_http_verbs]]
+== HTTP Methods
+
+RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its
+use of HTTP verbs.
+
+|===
+| Verb | Usage
+
+| `GET`
+| Used to retrieve a resource
+
+| `POST`
+| Used to create a new resource
+
+| `PATCH`
+| Used to update an existing resource, including partial updates
+
+| `DELETE`
+| Used to delete an existing resource
+|===
+
+[[overview_http_status_codes]]
+== HTTP status codes
+
+RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its
+use of HTTP status codes.
+
+|===
+| Status code | Usage
+
+| `200 OK`
+| The request completed successfully
+
+| `201 Created`
+| A new resource has been created successfully. The resource's URI is available from the response's
+`Location` header
+
+| `204 No Content`
+| An update to an existing resource has been applied successfully
+
+| `400 Bad Request`
+| The request was malformed. The response body will include an error providing further information
+
+| `401 Unauthorized`
+| The request has not been applied because it lacks valid authentication credentials for the target resource.
+
+| `403 Forbidden`
+| The server understood the request but refuses to authorize it.
+
+| `404 Not Found`
+| The requested resource did not exist
+
+| `409 Conflict`
+| The request could not be completed due to a conflict with the current state of the target resource. This code is used in situations where the user might be able to resolve the conflict and resubmit the request.
+|===
+
+== USER
+
+=== 1. CREATE USER
+
+==== 회원가입
+
+`*_1. Success_*`
+
+**request-fields**
+
+include::{snippets}/users/create/successful/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/create/successful/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/users/create/successful/http-response.adoc[]
+
+
+---
+
+
+`*_2. Fail_*`
+
+
+**request-fields**
+include::{snippets}/users/create/failure/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/create/failure/http-request.adoc[]
+
+
+**Example response**
+include::{snippets}/users/create/failure/http-response.adoc[]
+
+NOTE: 이메일/닉네임 중복검사 후 회원가입 버튼 클릭시 중복 검사를 한번 더 진행합니다. +
+이메일 또는 닉네임 중복시 에러메시지와 함께 회원가입에 실패합니다.
+
+---
+
+==== 이메일 중복 검사
+
+`*_1. Success_*`
+
+include::{snippets}/users/duplicateEmail/successful/path-parameters.adoc[]
+
+
+**Example request**
+
+include::{snippets}/users/duplicateEmail/successful/http-request.adoc[]
+
+
+**Example response**
+include::{snippets}/users/duplicateEmail/successful/http-response.adoc[]
+
+
+---
+
+
+`*_2. Fail_*`
+
+include::{snippets}/users/duplicateEmail/failure/path-parameters.adoc[]
+
+
+
+**Example request**
+
+include::{snippets}/users/duplicateEmail/failure/http-request.adoc[]
+
+
+**Example response**
+include::{snippets}/users/duplicateEmail/failure/http-response.adoc[]
+
+NOTE: 중복 검사 통과시 false , 중복 검사 실패시 true가 리턴됩니다.
+
+
+---
+
+==== 닉네임 중복 검사
+
+`*_1. Success_*`
+
+include::{snippets}/users/duplicateNickname/successful/path-parameters.adoc[]
+
+
+**Example request**
+
+include::{snippets}/users/duplicateNickname/successful/http-request.adoc[]
+
+
+**Example response**
+include::{snippets}/users/duplicateNickname/successful/http-response.adoc[]
+
+
+:hardbreaks:
+
+---
+
+`*_2. Fail_*`
+
+include::{snippets}/users/duplicateNickname/failure/path-parameters.adoc[]
+
+
+**Example request**
+
+include::{snippets}/users/duplicateNickname/failure/http-request.adoc[]
+
+
+**Example response**
+include::{snippets}/users/duplicateNickname/failure/http-response.adoc[]
+
+NOTE: 중복 검사 통과시 false , 중복 검사 실패시 true가 리턴됩니다.
+
+---
+
+==== 휴대폰 인증
+
+`*_1. Send SMS_*`
+
+**request-fields**
+include::{snippets}/users/certification/sms/send/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/certification/sms/send/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/certification/sms/send/http-response.adoc[]
+
+---
+
+`*_2. Success : Authentication Successful_*`
+**request-fields**
+include::{snippets}/users/certification/sms/successful/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/certification/sms/successful/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/certification/sms/successful/http-response.adoc[]
+
+---
+
+
+`*_3. Fail : Authentication failed_*`
+**request-fields**
+include::{snippets}/users/certification/sms/failure/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/certification/sms/failure/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/certification/sms/failure/http-response.adoc[]
+
+---
+
+==== 이메일 인증(토큰)
+`*_1. Success : Authentication Successful_*`
+
+**request-parameters**
+include::{snippets}/users/emailAuth/successful/request-parameters.adoc[]
+
+**Example request**
+include::{snippets}/users/emailAuth/successful/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/emailAuth/successful/http-response.adoc[]
+
+---
+
+`*_2. Fail : Authentication failed_*`
+
+**request-parameters**
+include::{snippets}/users/emailAuth/failure/request-parameters.adoc[]
+
+**Example request**
+include::{snippets}/users/emailAuth/failure/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/emailAuth/failure/http-response.adoc[]
+
+---
+
+`*_3. resend_*`
+
+
+**Example request**
+include::{snippets}/users/emailAuth/resend/http-request.adoc[]
+
+
+**Example response**
+include::{snippets}/users/emailAuth/resend/http-response.adoc[]
+
+NOTE: 회원가입시 입력한 이메일로 인증 토큰이 전송됩니다. 해당 토큰은 24시간동안 유효하며, 24시간이 경과되었을 경우 토큰 재전송 요청을 진행해야 합니다.
+
+
+---
+
+=== 2. login / logout
+
+==== 로그인
+`*_1. Success_*`
+
+**request-fields**
+include::{snippets}/users/login/successful/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/login/successful/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/login/successful/http-response.adoc[]
+
+---
+
+`*_2. Failed_*`
+
+**request-fields**
+include::{snippets}/users/login/failure/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/login/failure/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/login/failure/http-response.adoc[]
+
+---
+
+
+==== 로그아웃
+`*_1. Success_*`
+
+**Example request**
+include::{snippets}/users/logout/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/logout/http-response.adoc[]
+
+
+---
+
+=== 3. 비밀번호 찾기
+
+==== 회원 리소스
+`*_1. successful get resource_*`
+
+include::{snippets}/users/forgetPassword/resource/successful/path-parameters.adoc[]
+
+**Example request**
+include::{snippets}/users/forgetPassword/resource/successful/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/forgetPassword/resource/successful/http-response.adoc[]
+
+---
+
+`*_2. Failed to get resources_*`
+
+
+include::{snippets}/users/forgetPassword/resource/failure/path-parameters.adoc[]
+
+**Example request**
+include::{snippets}/users/forgetPassword/resource/failure/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/forgetPassword/resource/failure/http-response.adoc[]
+
+---
+
+==== 휴대폰 인증
+
+`*_1. Send SMS_*`
+
+**request-fields**
+include::{snippets}/users/certification/sms/send/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/certification/sms/send/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/certification/sms/send/http-response.adoc[]
+
+---
+
+`*_2. Success : Authentication Successful_*`
+**request-fields**
+include::{snippets}/users/certification/sms/successful/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/certification/sms/successful/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/certification/sms/successful/http-response.adoc[]
+
+---
+
+`*_3. Fail : Authentication failed_*`
+**request-fields**
+include::{snippets}/users/certification/sms/failure/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/certification/sms/failure/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/certification/sms/failure/http-response.adoc[]
+
+---
+
+==== 이메일 인증
+
+
+`*_1. Send Email_*`
+
+**request-fields**
+include::{snippets}/users/certification/email/send/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/certification/email/send/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/certification/email/send/http-response.adoc[]
+
+---
+
+`*_2. Success : Authentication Successful_*`
+**request-fields**
+include::{snippets}/users/certification/email/successful/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/certification/email/successful/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/certification/email/successful/http-response.adoc[]
+
+---
+
+`*_3. Fail : Authentication failed_*`
+**request-fields**
+include::{snippets}/users/certification/email/failure/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/certification/email/failure/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/certification/email/failure/http-response.adoc[]
+
+
+NOTE: 비밀번호 분실시 이메일 또는 휴대폰중 하나를 선택하여 인증을 진행한 후 비밀번호를 변경할 수 있습니다.
+인증 번호는 10분동안 유효하며, 10분이 경과되면 자동으로 Redis 메모리에서 삭제됩니다.
+
+---
+
+
+=== 4. 회원 정보 수정
+
+==== 닉네임 변경
+
+`*_1. Success_*`
+
+**request-fields**
+include::{snippets}/users/changeUserInfo/nickname/changeSuccessful/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/changeUserInfo/nickname/changeSuccessful/http-request.adoc[]
+
+
+**Example response**
+include::{snippets}/users/changeUserInfo/nickname/changeSuccessful/http-response.adoc[]
+
+---
+
+`*_2. Failed_*`
+
+**request-fields**
+include::{snippets}/users/changeUserInfo/nickname/changeFailure/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/changeUserInfo/nickname/changeFailure/http-request.adoc[]
+
+
+**Example response**
+include::{snippets}/users/changeUserInfo/nickname/changeFailure/http-response.adoc[]
+
+
+NOTE: 닉네임은 7일에 한번만 변경이 가능합니다. 중복 검사를 통과하고 변경한지 7일이 초과되었을 경우에만
+닉네임 변경에 성공합니다.
+
+---
+
+
+==== 비밀번호 변경
+
+`*_1. Success_*`
+
+**request-fields**
+include::{snippets}/users/changeUserInfo/password/successful/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/changeUserInfo/password/successful/http-request.adoc[]
+
+
+**Example response**
+include::{snippets}/users/changeUserInfo/password/successful/http-response.adoc[]
+
+---
+
+`*_2. Failed_*`
+
+**request-fields**
+include::{snippets}/users/changeUserInfo/password/failure/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/changeUserInfo/password/failure/http-request.adoc[]
+
+
+**Example response**
+include::{snippets}/users/changeUserInfo/password/failure/http-response.adoc[]
+
+---
+
+==== 환급 계좌 설정
+
+`*_1. get resource_*`
+
+**Example request**
+include::{snippets}/users/changeUserInfo/account/Resource/http-request.adoc[]
+
+
+**Example response**
+include::{snippets}/users/changeUserInfo/account/Resource/http-response.adoc[]
+
+**response-fields**
+include::{snippets}/users/changeUserInfo/account/Resource/response-fields.adoc[]
+
+---
+`*_2. Successful : Modification_*`
+
+**request-fields**
+include::{snippets}/users/changeUserInfo/account/change/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/changeUserInfo/account/change/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/changeUserInfo/account/change/http-response.adoc[]
+
+---
+
+==== 주소록 설정
+`*_1. Successful : add_*`
+
+**request-fields**
+include::{snippets}/users/changeUserInfo/addressBook/add/successful/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/changeUserInfo/addressBook/add/successful/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/changeUserInfo/addressBook/add/successful/http-response.adoc[]
+
+---
+
+`*_2. Successful : delete_*`
+
+**request-fields**
+include::{snippets}/users/changeUserInfo/addressBook/delete/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/changeUserInfo/addressBook/delete/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/changeUserInfo/addressBook/delete/http-response.adoc[]
+
+---
+
+`*_3. Successful : Modification_*`
+**request-fields**
+include::{snippets}/users/changeUserInfo/addressBook/update/request-fields.adoc[]
+
+**Example request**
+include::{snippets}/users/changeUserInfo/addressBook/update/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/changeUserInfo/addressBook/update/http-response.adoc[]
+
+---
+
+=== 5. 마이페이지
+
+`*_1. Success : get my-infos resource_*`
+
+**Example request**
+include::{snippets}/users/my-infos/http-request.adoc[]
+
+**Example response**
+include::{snippets}/users/my-infos/http-response.adoc[]
+
+**response-fields**
+include::{snippets}/users/my-infos/response-fields.adoc[]
+
+NOTE: 현재 로그인되어있는 사용자의 my-infos 리소스를 가져옵니다.
+
+---
