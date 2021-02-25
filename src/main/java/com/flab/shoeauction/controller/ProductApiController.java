@@ -25,6 +25,7 @@ public class ProductApiController {
 
     private final ProductService productService;
 
+    //@LoginCheck(authority = admin)
     @PostMapping
     public ResponseEntity<Void> createProduct(@Valid @RequestBody SaveRequest requestDto) {
         productService.saveProduct(requestDto);
@@ -37,12 +38,14 @@ public class ProductApiController {
         return ResponseEntity.ok(productInfoResponse);
     }
 
+    //@LoginCheck(authority = admin)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return OK;
     }
 
+    //@LoginCheck(authority = admin)
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateProduct(@PathVariable Long id,
         @Valid @RequestBody SaveRequest requestDto) {
