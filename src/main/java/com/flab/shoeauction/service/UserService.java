@@ -155,6 +155,6 @@ public class UserService {
 
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
-        user.updateEmailVerified();
+        user.updateUserLevel();
     }
 }

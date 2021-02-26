@@ -36,6 +36,7 @@ import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.users.common.Account;
+import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.TokenExpiredException;
@@ -411,7 +412,8 @@ class UserApiControllerTest {
             .phone("01012345678")
             .account(new Account("카카오뱅크", "123456789", "정기혁"))
             .addressBooks(addressBooks)
-            .emailVerified(true).build();
+            .userLevel(UserLevel.UNAUTH)
+            .build();
 
         String email = "jungkh405@naver.com";
 
@@ -430,7 +432,7 @@ class UserApiControllerTest {
                         .description("회원 환급 계좌정보"),
                     subsectionWithPath("addressBooks").type(JsonFieldType.ARRAY)
                         .description("회원 주소록"),
-                    fieldWithPath("emailVerified").type(JsonFieldType.BOOLEAN)
+                    fieldWithPath("userLevel").type(JsonFieldType.STRING)
                         .description("이메일 인증 여부")
                 )));
     }
