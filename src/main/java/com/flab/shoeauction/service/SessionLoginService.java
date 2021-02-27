@@ -49,7 +49,7 @@ public class SessionLoginService {
     }
 
     private void banCheck(User user) {
-        if(user.getUserLevel() == UserLevel.BAN) {
+        if(user.isBan()) {
             throw new NotAuthorizedException("관리자에 의해 이용이 정지된 사용자 입니다.");
         }
     }

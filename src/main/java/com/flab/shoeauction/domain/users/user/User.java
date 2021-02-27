@@ -38,6 +38,8 @@ public class User extends UserBase {
 
     private LocalDateTime nicknameModifiedDate;
 
+    private boolean isBan;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "USER_ID")
     private List<AddressBook> addressesBook = new ArrayList<>();
@@ -49,6 +51,7 @@ public class User extends UserBase {
             .phone(this.getPhone())
             .account(this.getAccount())
             .userLevel(this.userLevel)
+            .isBan(this.isBan)
             .build();
     }
 

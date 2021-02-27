@@ -35,7 +35,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         // test 환경에서는 인터셉트가 동작하지 않도록 설정
         String[] activeProfiles = environment.getActiveProfiles();
-        if (activeProfiles[0].equals("test")) {
+        if ("test".equals(activeProfiles[0])) {
             return true;
         }
 
@@ -52,6 +52,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             }
 
             UserLevel auth = loginCheck.authority();
+
 
             switch (auth) {
                 case ADMIN:

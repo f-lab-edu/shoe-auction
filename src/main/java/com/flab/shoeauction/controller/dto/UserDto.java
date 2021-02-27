@@ -124,16 +124,18 @@ public class UserDto {
         private List<AddressBook> addressBooks;
         private Account account;
         private UserLevel userLevel;
+        private boolean isBan;
 
         @Builder
         public UserInfoDto(String email, String nickname, String phone,
-            List<AddressBook> addressBooks, Account account, UserLevel userLevel) {
+            List<AddressBook> addressBooks, Account account, UserLevel userLevel, boolean isBan) {
             this.email = email;
             this.nickname = nickname;
             this.phone = phone;
             this.addressBooks = addressBooks;
             this.account = account;
             this.userLevel = userLevel;
+            this.isBan = isBan;
         }
 
     }
