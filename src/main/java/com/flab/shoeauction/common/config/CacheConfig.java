@@ -1,5 +1,9 @@
 package com.flab.shoeauction.common.config;
 
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -31,6 +35,32 @@ public class CacheConfig {
     @Autowired
     RedisConnectionFactory redisConnectionFactory;
 
+    @Autowired
+    CacheProperties cacheProperties;
+
+    private RedisCacheConfiguration redisCacheDefaultConfiguration() {
+        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration
+            .defaultCacheConfig()
+            .serializeKeysWith(RedisSerializationContext.SerializationPair
+                .fromSerializer(new StringRedisSerializer()))
+            .serializeValuesWith(RedisSerializationContext.SerializationPair
+                .fromSerializer(new GenericJackson2JsonRedisSerializer()));
+        return redisCacheConfiguration;
+    }
+
+    /*
+     * properties에서 가져온 캐시명과 ttl 값으로 RedisCacheConfiguration을 만들고 Map에 넣어 반환한다.
+     */
+    private Map<String, RedisCacheConfiguration> redisCacheConfigurationMap() {
+        Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
+        for (Entry<String, Long> cacheNameAndTimeout : cacheProperties.getTtl().entrySet()) {
+            cacheConfigurations
+                .put(cacheNameAndTimeout.getKey(), redisCacheDefaultConfiguration().entryTtl(
+                    Duration.ofSeconds(cacheNameAndTimeout.getValue())));
+        }
+        return cacheConfigurations;
+    }
+
     /*
      * 기본적으로 스프링에서 지원하는 캐시 기능의 캐시 저장소는 JDK 의 ConcurrentHashMap 이며,
      * 그 외 캐시 저장소를 사용하기 위해서는 CacheManager Bean 으로 등록하여 사용할 수 있다.
@@ -41,19 +71,16 @@ public class CacheConfig {
      * 글로벌 캐시 전략은 별도의 캐시 서버를 이용하기 때문에 로컬 캐시 전략보다 캐시 조회는 느리지만
      * 캐시에 저장된 데이터가 변경되는 경우 서버마다 변경 사항을 전달하는 작업이 필요 없기 때문에
      * 서비스 확장으로 WAS 인스턴스가 늘어나고 Cache 데이터가 커질 수록 효과적이다.
+     *
+     * properties에서 가져온 캐시명과 ttl 값으로 만든 RedisCacheConfiguration Map을
+     * withInitialCacheConfigurations에 설정하여서 캐시 별로 만료기간을 다르게 설정하였다.
      */
     @Bean
     public CacheManager redisCacheManager() {
-        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration
-            .defaultCacheConfig()
-            .serializeKeysWith(RedisSerializationContext.SerializationPair
-                .fromSerializer(new StringRedisSerializer()))
-            .serializeValuesWith(RedisSerializationContext.SerializationPair
-                .fromSerializer(new GenericJackson2JsonRedisSerializer()));
-
         RedisCacheManager redisCacheManager = RedisCacheManager.RedisCacheManagerBuilder
             .fromConnectionFactory(redisConnectionFactory)
-            .cacheDefaults(redisCacheConfiguration).build();
+            .cacheDefaults(redisCacheDefaultConfiguration())
+            .withInitialCacheConfigurations(redisCacheConfigurationMap()).build();
         return redisCacheManager;
     }
 }
