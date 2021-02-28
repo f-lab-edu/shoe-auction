@@ -1,9 +1,5 @@
 package com.flab.shoeauction.controller.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
 import com.flab.shoeauction.domain.product.Currency;
 import com.flab.shoeauction.domain.product.Product;
@@ -99,8 +95,8 @@ public class ProductDto {
         private String nameEng;
         private String modelNumber;
         private String color;
-        @JsonDeserialize(using = LocalDateDeserializer.class)
-        @JsonSerialize(using = LocalDateSerializer.class)
+        //@JsonDeserialize(using = LocalDateDeserializer.class)
+        //@JsonSerialize(using = LocalDateSerializer.class)
         private LocalDate releaseDate;
         private int releasePrice;
         private Currency currency;

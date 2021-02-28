@@ -20,9 +20,9 @@ public class CacheProperties {
 
     @Getter
     @Setter
-    public static class CacheNameAndTtl {
+    public static class CacheNameAndTimeout {
 
         private String name;
-        private String ttl;
+        private String Timeout;
     }
 }
