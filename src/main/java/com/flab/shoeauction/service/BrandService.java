@@ -7,6 +7,7 @@ import com.flab.shoeauction.domain.brand.BrandRepository;
 import com.flab.shoeauction.exception.brand.BrandNotFoundException;
 import com.flab.shoeauction.exception.brand.DuplicateBrandNameException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -85,5 +86,21 @@ public class BrandService {
             return;
         }
         throw new DuplicateBrandNameException();
+    }
+
+    public void checkBrandExist(BrandInfo productsBrand) {
+        Optional<Brand> savedBrand = brandRepository.findById(productsBrand.getId());
+        if (savedBrand.isEmpty() || !isSameName(savedBrand.get(), productsBrand)) {
+            throw new BrandNotFoundException();
+        }
+    }
+
+    private boolean isSameName(Brand savedBrand, BrandInfo productsBrand) {
+        if (!savedBrand.getNameEng().equals(productsBrand.getNameEng())) {
+            return false;
+        } else if (!savedBrand.getNameKor().equals(productsBrand.getNameKor())) {
+            return false;
+        }
+        return true;
     }
 }

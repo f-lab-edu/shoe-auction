@@ -5,6 +5,7 @@ import static com.flab.shoeauction.common.utils.response.ResponseConstants.OK;
 
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
+import com.flab.shoeauction.service.BrandService;
 import com.flab.shoeauction.service.ProductService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +25,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProductApiController {
 
     private final ProductService productService;
+    private final BrandService brandService;
 
     @PostMapping
     public ResponseEntity<Void> createProduct(@Valid @RequestBody SaveRequest requestDto) {
+        brandService.checkBrandExist(requestDto.getBrand());
         productService.saveProduct(requestDto);
         return CREATED;
     }
