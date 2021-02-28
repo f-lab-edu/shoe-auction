@@ -157,4 +157,8 @@ public class UserService {
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
         user.updateUserLevel();
     }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
 }
