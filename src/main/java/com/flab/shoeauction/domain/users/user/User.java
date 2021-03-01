@@ -33,12 +33,12 @@ public class User extends UserBase {
 
     private String phone;
 
-    private boolean emailVerified;
-
     @Embedded
     private Account account;
 
     private LocalDateTime nicknameModifiedDate;
+
+    private boolean isBan;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "USER_ID")
@@ -50,7 +50,8 @@ public class User extends UserBase {
             .nickname(this.getNickname())
             .phone(this.getPhone())
             .account(this.getAccount())
-            .emailVerified(this.getEmailVerified())
+            .userLevel(this.userLevel)
+            .isBan(this.isBan)
             .build();
     }
 
@@ -87,21 +88,18 @@ public class User extends UserBase {
         return !(this.nicknameModifiedDate.isBefore(LocalDateTime.now().minusDays(7)));
     }
 
-    public void updateEmailVerified() {
-        this.emailVerified = true;
-    }
-
-    public boolean getEmailVerified() {
-        return this.emailVerified;
+    public void updateUserLevel() {
+        this.userLevel = UserLevel.AUTH;
     }
 
     @Builder
     public User(String email, String password, UserLevel userLevel, String nickname, String phone,
-        LocalDateTime nicknameModifiedDate) {
+        LocalDateTime nicknameModifiedDate, List<AddressBook> addressBooks) {
         super(email, password, userLevel);
         this.nickname = nickname;
         this.phone = phone;
         this.userLevel = userLevel;
         this.nicknameModifiedDate = nicknameModifiedDate;
+        this.addressesBook = addressBooks;
     }
 }

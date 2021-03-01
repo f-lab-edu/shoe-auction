@@ -1,4 +1,4 @@
-package com.flab.shoeauction.common.utils.response;
+package com.flab.shoeauction.common.utils.constants;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,4 +53,9 @@ public class ResponseConstants {
     public static final ResponseEntity<String> TOKEN_EXPIRED =
         new ResponseEntity<>("인증 토큰이 만료되었습니다. 마이페이지에서 인증 토큰 재전송 버튼을 클릭해 주세요!",
             HttpStatus.UNAUTHORIZED);
+
+    public static final ResponseEntity<String> NOT_AUTHORIZED =
+        new ResponseEntity<>("해당 리소스에 대한 접근 권한이 없습니다.",
+            HttpStatus.FORBIDDEN);
+
 }

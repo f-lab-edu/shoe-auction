@@ -53,7 +53,10 @@ class LoginServiceTest {
     }
 
     public LoginRequest createLoginDto() {
-        return LoginRequest.of("test@test.com", "test1234");
+        return LoginRequest.builder()
+            .email("test@test.com")
+            .password("test1234")
+            .build();
 
     }
 

@@ -1,7 +1,7 @@
 package com.flab.shoeauction.controller;
 
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.CREATED;
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.OK;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.CREATED;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.OK;
 
 import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.common.annotation.LoginCheck;
@@ -17,6 +17,7 @@ import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.users.common.Account;
+import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.service.SessionLoginService;
 import com.flab.shoeauction.service.UserService;
 import com.flab.shoeauction.service.certification.EmailCertificationService;
@@ -97,7 +98,6 @@ public class UserApiController {
         sessionLoginService.logout();
     }
 
-    @LoginCheck
     @GetMapping("/my-infos")
     public ResponseEntity<UserInfoDto> myPage(@CurrentUser String email) {
         UserInfoDto loginUser = sessionLoginService.getCurrentUser(email);
@@ -108,6 +108,7 @@ public class UserApiController {
      * 비밀번호 찾기 : 이메일 입력시, 존재하는 이메일이면 휴대폰인증과 이메일인증 중 택1 하도록 구현 휴대폰 인증 선택시 : sendSms / SmsVerification
      * 핸들러 이메일 인증 선택시 : sendEmail / emailVerification 핸들러
      */
+
     @GetMapping("/find/{email}")
     public ResponseEntity<FindUserResponse> findUser(@PathVariable String email) {
         FindUserResponse findUserResponse = userService.getUserResource(email);

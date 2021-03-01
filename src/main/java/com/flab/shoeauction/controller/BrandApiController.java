@@ -1,7 +1,7 @@
 package com.flab.shoeauction.controller;
 
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.CREATED;
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.OK;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.CREATED;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.OK;
 
 import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
 import com.flab.shoeauction.controller.dto.BrandDto.SaveRequest;
