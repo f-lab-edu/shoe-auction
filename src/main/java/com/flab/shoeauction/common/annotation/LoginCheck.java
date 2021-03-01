@@ -3,6 +3,7 @@ package com.flab.shoeauction.common.annotation;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import com.flab.shoeauction.domain.users.common.UserLevel;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -16,9 +17,5 @@ import java.lang.annotation.Target;
 @Target(METHOD)
 public @interface LoginCheck {
 
-    enum EmailAuthStatus {
-        UNAUTH, AUTH
-    }
-
-    EmailAuthStatus authority() default EmailAuthStatus.UNAUTH;
+    UserLevel authority() default UserLevel.UNAUTH;
 }

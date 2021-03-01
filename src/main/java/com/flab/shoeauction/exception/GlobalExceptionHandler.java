@@ -1,17 +1,18 @@
 package com.flab.shoeauction.exception;
 
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.BAD_REQUEST;
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.BRAND_NOT_FOUND;
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_BRAND_NAME;
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_EMAIL;
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_MODEL_NUMBER;
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.DUPLICATION_NICKNAME;
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.PRODUCT_NOT_FOUND;
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.FAIL_TO_CHANGE_NICKNAME;
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.TOKEN_EXPIRED;
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.UNAUTHORIZED_USER;
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.USER_NOT_FOUND;
-import static com.flab.shoeauction.common.utils.response.ResponseConstants.WRONG_PASSWORD;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.BAD_REQUEST;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.BRAND_NOT_FOUND;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.DUPLICATION_BRAND_NAME;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.DUPLICATION_EMAIL;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.DUPLICATION_MODEL_NUMBER;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.DUPLICATION_NICKNAME;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.FAIL_TO_CHANGE_NICKNAME;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.NOT_AUTHORIZED;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.PRODUCT_NOT_FOUND;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.TOKEN_EXPIRED;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.UNAUTHORIZED_USER;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.USER_NOT_FOUND;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.WRONG_PASSWORD;
 
 import com.flab.shoeauction.exception.brand.BrandNotFoundException;
 import com.flab.shoeauction.exception.brand.DuplicateBrandNameException;
@@ -20,6 +21,7 @@ import com.flab.shoeauction.exception.product.ProductNotFoundException;
 import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
+import com.flab.shoeauction.exception.user.NotAuthorizedException;
 import com.flab.shoeauction.exception.user.TokenExpiredException;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
@@ -131,5 +133,13 @@ public class GlobalExceptionHandler {
         log.debug("Token Expired :: {} , detection time={}", request.getDescription(false),
             LocalDateTime.now(), ex);
         return TOKEN_EXPIRED;
+    }
+
+    @ExceptionHandler(NotAuthorizedException.class)
+    public final ResponseEntity handleNotAuthorizedException(NotAuthorizedException ex,
+        WebRequest webRequest) {
+        log.debug("Not Authorized :: {}, detection time ={}", webRequest.getDescription(false),
+            LocalDateTime.now(), ex);
+        return NOT_AUTHORIZED;
     }
 }

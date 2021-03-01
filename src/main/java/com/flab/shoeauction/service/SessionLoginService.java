@@ -1,12 +1,14 @@
 package com.flab.shoeauction.service;
 
-import static com.flab.shoeauction.common.utils.constants.UserConstants.AUTH;
+import static com.flab.shoeauction.common.utils.constants.UserConstants.AUTH_STATUS;
 import static com.flab.shoeauction.common.utils.constants.UserConstants.USER_ID;
 
 import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
+import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
+import com.flab.shoeauction.exception.user.NotAuthorizedException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import javax.servlet.http.HttpSession;
@@ -33,28 +35,37 @@ public class SessionLoginService {
     public void login(LoginRequest loginRequest) {
         existByEmailAndPassword(loginRequest);
         String email = loginRequest.getEmail();
+        setUserLevel(email);
         session.setAttribute(USER_ID, email);
-        setAuthSession(email);
     }
 
-    public void setAuthSession(String email) {
+    public void setUserLevel(String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
-        session.setAttribute(AUTH, user.getEmailVerified());
+
+        banCheck(user);
+
+        session.setAttribute(AUTH_STATUS, user.getUserLevel());
+    }
+
+    private void banCheck(User user) {
+        if(user.isBan()) {
+            throw new NotAuthorizedException("관리자에 의해 이용이 정지된 사용자 입니다.");
+        }
+    }
+
+    public UserLevel getUserLevel() {
+        return (UserLevel) session.getAttribute(AUTH_STATUS);
     }
 
     public void logout() {
         session.removeAttribute(USER_ID);
-        session.removeAttribute(AUTH);
     }
 
     public String getLoginUser() {
         return (String) session.getAttribute(USER_ID);
     }
 
-    public boolean isEmailAuth() {
-        return (Boolean) session.getAttribute(AUTH);
-    }
 
     public UserInfoDto getCurrentUser(String email) {
         return userRepository.findByEmail(email)
