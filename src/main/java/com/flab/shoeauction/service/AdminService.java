@@ -1,7 +1,7 @@
 package com.flab.shoeauction.service;
 
-import com.flab.shoeauction.controller.dto.AdminDto.SearchRequest;
-import com.flab.shoeauction.controller.dto.AdminDto.UsersResponse;
+import com.flab.shoeauction.controller.dto.UserDto.UserSearchCondition;
+import com.flab.shoeauction.controller.dto.UserDto.UserListResponse;
 import com.flab.shoeauction.domain.users.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,7 +14,7 @@ public class AdminService {
 
     private final UserRepository userRepository;
 
-    public Page<UsersResponse> findUsers(SearchRequest requestDto, Pageable pageable) {
+    public Page<UserListResponse> findUsers(UserSearchCondition requestDto, Pageable pageable) {
         return userRepository.searchByUsers(requestDto, pageable);
     }
 }

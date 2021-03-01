@@ -3,8 +3,8 @@ package com.flab.shoeauction.domain.users.user;
 import static com.flab.shoeauction.domain.users.user.QUser.user;
 import static org.springframework.util.StringUtils.hasText;
 
-import com.flab.shoeauction.controller.dto.AdminDto.SearchRequest;
-import com.flab.shoeauction.controller.dto.AdminDto.UsersResponse;
+import com.flab.shoeauction.controller.dto.UserDto.UserSearchCondition;
+import com.flab.shoeauction.controller.dto.UserDto.UserListResponse;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
@@ -22,9 +22,9 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<UsersResponse> searchByUsers(SearchRequest searchRequest, Pageable pageable) {
-        QueryResults<UsersResponse> results = jpaQueryFactory
-            .select(Projections.fields(UsersResponse.class,
+    public Page<UserListResponse> searchByUsers(UserSearchCondition searchRequest, Pageable pageable) {
+        QueryResults<UserListResponse> results = jpaQueryFactory
+            .select(Projections.fields(UserListResponse.class,
                 user.id,
                 user.email,
                 user.userLevel))
@@ -38,7 +38,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
             .limit(pageable.getPageSize())
             .fetchResults();
 
-        List<UsersResponse> users = results.getResults();
+        List<UserListResponse> users = results.getResults();
         long total = results.getTotal();
 
         return new PageImpl<>(users, pageable, total);

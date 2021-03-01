@@ -1,11 +1,11 @@
 package com.flab.shoeauction.domain.users.user;
 
-import com.flab.shoeauction.controller.dto.AdminDto.SearchRequest;
-import com.flab.shoeauction.controller.dto.AdminDto.UsersResponse;
+import com.flab.shoeauction.controller.dto.UserDto.UserSearchCondition;
+import com.flab.shoeauction.controller.dto.UserDto.UserListResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface UserRepositoryCustom {
 
-    Page<UsersResponse> searchByUsers(SearchRequest searchRequest, Pageable pageable);
+    Page<UserListResponse> searchByUsers(UserSearchCondition searchRequest, Pageable pageable);
 }
