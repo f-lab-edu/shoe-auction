@@ -5,7 +5,7 @@ import com.flab.shoeauction.controller.dto.UserDto.UserListResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface UserRepositoryCustom {
+public interface UserRepositoryByAdmin {
 
     Page<UserListResponse> searchByUsers(UserSearchCondition searchRequest, Pageable pageable);
 }

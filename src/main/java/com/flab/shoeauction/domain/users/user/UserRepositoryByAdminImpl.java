@@ -17,7 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 @RequiredArgsConstructor
-public class UserRepositoryImpl implements UserRepositoryCustom {
+public class UserRepositoryByAdminImpl implements UserRepositoryByAdmin {
 
     private final JPAQueryFactory jpaQueryFactory;
 
