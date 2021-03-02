@@ -3,8 +3,10 @@ package com.flab.shoeauction.controller;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.CREATED;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.OK;
 
+import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
 import com.flab.shoeauction.controller.dto.BrandDto.SaveRequest;
+import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.service.BrandService;
 import java.util.List;
 import javax.validation.Valid;
@@ -26,12 +28,14 @@ public class BrandApiController {
 
     private final BrandService brandService;
 
+    @LoginCheck(authority = UserLevel.ADMIN)
     @PostMapping
     public ResponseEntity<Void> createBrand(@Valid @RequestBody SaveRequest requestDto) {
         brandService.saveBrand(requestDto);
         return CREATED;
     }
 
+    @LoginCheck(authority = UserLevel.ADMIN)
     @GetMapping("/{id}")
     public ResponseEntity<BrandInfo> getBrandInfo(@PathVariable Long id) {
         BrandInfo brandInfoResponse = brandService.getBrandInfo(id);
@@ -44,12 +48,14 @@ public class BrandApiController {
         return ResponseEntity.ok(brandInfoResponses);
     }
 
+    @LoginCheck(authority = UserLevel.ADMIN)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBrand(@PathVariable Long id) {
         brandService.deleteBrand(id);
         return OK;
     }
 
+    @LoginCheck(authority = UserLevel.ADMIN)
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateBrand(@PathVariable Long id,
         @Valid @RequestBody SaveRequest requestDto) {
