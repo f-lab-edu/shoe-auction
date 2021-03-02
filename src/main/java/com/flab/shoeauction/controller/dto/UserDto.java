@@ -1,5 +1,6 @@
 package com.flab.shoeauction.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserLevel;
@@ -125,18 +126,16 @@ public class UserDto {
         private List<AddressBook> addressBooks;
         private Account account;
         private UserLevel userLevel;
-        private boolean isBan;
 
         @Builder
         public UserInfoDto(String email, String nickname, String phone,
-            List<AddressBook> addressBooks, Account account, UserLevel userLevel, boolean isBan) {
+            List<AddressBook> addressBooks, Account account, UserLevel userLevel) {
             this.email = email;
             this.nickname = nickname;
             this.phone = phone;
             this.addressBooks = addressBooks;
             this.account = account;
             this.userLevel = userLevel;
-            this.isBan = isBan;
         }
 
     }
@@ -223,6 +222,49 @@ public class UserDto {
             this.id = id;
             this.email = email;
             this.userLevel = userLevel;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class UserDetailsResponse {
+
+        private Long id;
+        private String email;
+        private String nickname;
+        private String phone;
+        private Account account;
+        @JsonFormat
+        private LocalDateTime modifiedDate;
+        @JsonFormat
+        private LocalDateTime createDate;
+        private UserLevel userLevel;
+        private boolean isBan;
+
+        @Builder
+        public UserDetailsResponse(Long id, String email, String nickname, String phone,
+            Account account, LocalDateTime modifiedDate, LocalDateTime createDate,
+            UserLevel userLevel, boolean isBan) {
+            this.id = id;
+            this.email = email;
+            this.nickname = nickname;
+            this.phone = phone;
+            this.account = account;
+            this.modifiedDate = modifiedDate;
+            this.createDate = createDate;
+            this.userLevel = userLevel;
+            this.isBan = isBan;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class IdRequest {
+        private Long id;
+
+        @Builder
+        public IdRequest(Long id) {
+            this.id = id;
         }
     }
 

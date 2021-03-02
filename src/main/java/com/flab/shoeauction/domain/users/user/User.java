@@ -2,6 +2,7 @@ package com.flab.shoeauction.domain.users.user;
 
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
+import com.flab.shoeauction.controller.dto.UserDto.UserDetailsResponse;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
@@ -51,7 +52,6 @@ public class User extends UserBase {
             .phone(this.getPhone())
             .account(this.getAccount())
             .userLevel(this.userLevel)
-            .isBan(this.isBan)
             .build();
     }
 
@@ -101,5 +101,23 @@ public class User extends UserBase {
         this.userLevel = userLevel;
         this.nicknameModifiedDate = nicknameModifiedDate;
         this.addressesBook = addressBooks;
+    }
+
+    public UserDetailsResponse toUserDetailsDto() {
+        return UserDetailsResponse.builder()
+            .id(this.getId())
+            .email(this.email)
+            .nickname(this.nickname)
+            .phone(this.phone)
+            .account(this.account)
+            .createDate(this.getCreatedDate())
+            .modifiedDate(this.getModifiedDate())
+            .userLevel(this.userLevel)
+            .isBan(this.isBan)
+            .build();
+    }
+
+    public void updateBan() {
+       isBan = !isBan;
     }
 }
