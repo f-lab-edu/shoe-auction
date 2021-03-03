@@ -37,8 +37,8 @@ public class BrandService {
         brandRepository.save(requestDto.toEntity());
     }
 
-    @CacheEvict(value = "brands", allEntries = true)
     @Transactional
+    @CacheEvict(value = "brands", allEntries = true)
     public void saveBrandWithoutImage(SaveRequest requestDto) {
         if (checkDuplicateName(requestDto)) {
             throw new DuplicateBrandNameException();
