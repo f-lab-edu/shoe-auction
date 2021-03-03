@@ -11,6 +11,7 @@ public class BrandDto {
 
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class SaveRequest {
 
         @NotBlank(message = "브랜드 한글명을 입력해주세요.")
@@ -18,10 +19,17 @@ public class BrandDto {
         @NotBlank(message = "브랜드 영문명을 입력해주세요.")
         private String nameEng;
 
+        private String imagePath;
+
+        public void setImagePath(String imagePath) {
+            this.imagePath = imagePath;
+        }
+
         public Brand toEntity() {
             return Brand.builder()
                 .nameKor(this.nameKor)
                 .nameEng(this.nameEng)
+                .imagePath(this.imagePath)
                 .build();
         }
     }
@@ -35,12 +43,14 @@ public class BrandDto {
         private Long id;
         private String nameKor;
         private String nameEng;
+        private String imagePath;
 
         public Brand toEntity() {
             return Brand.builder()
                 .id(this.id)
                 .nameKor(this.nameKor)
                 .nameEng(this.nameEng)
+                .imagePath(this.imagePath)
                 .build();
         }
     }

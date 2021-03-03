@@ -1,5 +1,7 @@
 package com.flab.shoeauction.service;
 
+import static com.flab.shoeauction.common.utils.constants.FilePathConstants.BRAND_IMAGES_DIR;
+
 import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
 import com.flab.shoeauction.controller.dto.BrandDto.SaveRequest;
 import com.flab.shoeauction.domain.brand.Brand;
@@ -14,6 +16,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
@@ -21,13 +24,28 @@ public class BrandService {
 
     private final BrandRepository brandRepository;
 
+    private final AwsS3Service awsS3Service;
+
+    @Transactional
     @CacheEvict(value = "brands", allEntries = true)
-    public void saveBrand(SaveRequest requestDto) {
+    public void saveBrand(SaveRequest requestDto, MultipartFile brandImage) {
+        if (checkDuplicateName(requestDto)) {
+            throw new DuplicateBrandNameException();
+        }
+        String imagePath = awsS3Service.upload(brandImage, BRAND_IMAGES_DIR);
+        requestDto.setImagePath(imagePath);
+        brandRepository.save(requestDto.toEntity());
+    }
+
+    @CacheEvict(value = "brands", allEntries = true)
+    @Transactional
+    public void saveBrandWithoutImage(SaveRequest requestDto) {
         if (checkDuplicateName(requestDto)) {
             throw new DuplicateBrandNameException();
         }
         brandRepository.save(requestDto.toEntity());
     }
+
 
     private boolean checkDuplicateName(SaveRequest requestDto) {
         if (brandRepository.existsByNameKor(requestDto.getNameKor())) {

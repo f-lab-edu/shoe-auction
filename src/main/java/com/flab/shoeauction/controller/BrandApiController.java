@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RequestMapping("/brands")
@@ -30,8 +32,13 @@ public class BrandApiController {
 
     @LoginCheck(authority = UserLevel.ADMIN)
     @PostMapping
-    public ResponseEntity<Void> createBrand(@Valid @RequestBody SaveRequest requestDto) {
-        brandService.saveBrand(requestDto);
+    public ResponseEntity<Void> createBrand(@Valid @RequestPart SaveRequest requestDto,
+        @RequestPart(required = false) MultipartFile brandImage) {
+        if (brandImage != null) {
+            brandService.saveBrand(requestDto, brandImage);
+        } else {
+            brandService.saveBrandWithoutImage(requestDto);
+        }
         return CREATED;
     }
 

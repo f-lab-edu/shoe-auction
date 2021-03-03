@@ -58,4 +58,7 @@ public class ResponseConstants {
         new ResponseEntity<>("해당 리소스에 대한 접근 권한이 없습니다.",
             HttpStatus.FORBIDDEN);
 
+    public static final ResponseEntity<String> ILLEGAL_MIME_TYPE =
+        new ResponseEntity<>("첨부파일의 확장자가 올바르지 않습니다.",
+            HttpStatus.BAD_REQUEST);
 }
