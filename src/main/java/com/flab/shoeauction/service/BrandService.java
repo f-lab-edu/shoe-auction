@@ -32,20 +32,12 @@ public class BrandService {
         if (checkDuplicateName(requestDto)) {
             throw new DuplicateBrandNameException();
         }
-        String imagePath = awsS3Service.upload(brandImage, BRAND_IMAGES_DIR);
-        requestDto.setImagePath(imagePath);
-        brandRepository.save(requestDto.toEntity());
-    }
-
-    @Transactional
-    @CacheEvict(value = "brands", allEntries = true)
-    public void saveBrandWithoutImage(SaveRequest requestDto) {
-        if (checkDuplicateName(requestDto)) {
-            throw new DuplicateBrandNameException();
+        if (brandImage != null) {
+            String imagePath = awsS3Service.upload(brandImage, BRAND_IMAGES_DIR);
+            requestDto.setImagePath(imagePath);
         }
         brandRepository.save(requestDto.toEntity());
     }
-
 
     private boolean checkDuplicateName(SaveRequest requestDto) {
         if (brandRepository.existsByNameKor(requestDto.getNameKor())) {

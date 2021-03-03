@@ -34,11 +34,7 @@ public class BrandApiController {
     @PostMapping
     public ResponseEntity<Void> createBrand(@Valid @RequestPart SaveRequest requestDto,
         @RequestPart(required = false) MultipartFile brandImage) {
-        if (brandImage != null) {
-            brandService.saveBrand(requestDto, brandImage);
-        } else {
-            brandService.saveBrandWithoutImage(requestDto);
-        }
+        brandService.saveBrand(requestDto, brandImage);
         return CREATED;
     }
 
