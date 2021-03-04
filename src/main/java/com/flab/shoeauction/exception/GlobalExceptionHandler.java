@@ -8,6 +8,7 @@ import static com.flab.shoeauction.common.utils.constants.ResponseConstants.DUPL
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.DUPLICATION_NICKNAME;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.FAIL_TO_CHANGE_NICKNAME;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.ILLEGAL_MIME_TYPE;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.IMAGE_ROAD_FAILED;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.NOT_AUTHORIZED;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.PRODUCT_NOT_FOUND;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.TOKEN_EXPIRED;
@@ -18,6 +19,7 @@ import static com.flab.shoeauction.common.utils.constants.ResponseConstants.WRON
 import com.flab.shoeauction.exception.brand.BrandNotFoundException;
 import com.flab.shoeauction.exception.brand.DuplicateBrandNameException;
 import com.flab.shoeauction.exception.file.IllegalMimeTypeException;
+import com.flab.shoeauction.exception.file.ImageRoadFailedException;
 import com.flab.shoeauction.exception.product.DuplicateModelNumberException;
 import com.flab.shoeauction.exception.product.ProductNotFoundException;
 import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException;
@@ -150,5 +152,12 @@ public class GlobalExceptionHandler {
         IllegalMimeTypeException ex) {
         log.debug("올바르지 않은 확장자입니다.", ex);
         return ILLEGAL_MIME_TYPE;
+    }
+
+    @ExceptionHandler(ImageRoadFailedException.class)
+    public final ResponseEntity<String> imageRoadFailedException(
+        ImageRoadFailedException ex) {
+        log.debug("이미지를 로드에 실패하였습니다.", ex);
+        return IMAGE_ROAD_FAILED;
     }
 }

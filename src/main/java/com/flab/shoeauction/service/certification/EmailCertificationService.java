@@ -4,7 +4,7 @@ import static com.flab.shoeauction.common.utils.certification.RandomNumberGenera
 import static com.flab.shoeauction.common.utils.certification.email.EmailConstants.TITLE_CERTIFICATION;
 import static com.flab.shoeauction.common.utils.certification.email.EmailConstants.TITLE_EMAIL_CHECK;
 
-import com.flab.shoeauction.common.config.AppProperties;
+import com.flab.shoeauction.common.properties.AppProperties;
 import com.flab.shoeauction.common.utils.certification.email.EmailContentTemplate;
 import com.flab.shoeauction.controller.dto.UserDto.EmailCertificationRequest;
 import com.flab.shoeauction.dao.EmailCertificationDao;

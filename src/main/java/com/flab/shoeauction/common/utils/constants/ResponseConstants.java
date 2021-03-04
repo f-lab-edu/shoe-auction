@@ -60,5 +60,9 @@ public class ResponseConstants {
 
     public static final ResponseEntity<String> ILLEGAL_MIME_TYPE =
         new ResponseEntity<>("첨부파일의 확장자가 올바르지 않습니다.",
+            HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+
+    public static final ResponseEntity<String> IMAGE_ROAD_FAILED =
+        new ResponseEntity<>("이미지 로드에 실패하였습니다.",
             HttpStatus.BAD_REQUEST);
 }

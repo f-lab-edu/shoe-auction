@@ -4,7 +4,7 @@ import static com.flab.shoeauction.common.utils.certification.RandomNumberGenera
 import static com.flab.shoeauction.common.utils.certification.coolSms.coolSmsConstants.APP_VERSION;
 import static com.flab.shoeauction.common.utils.certification.coolSms.coolSmsConstants.SMS_TYPE;
 
-import com.flab.shoeauction.common.config.AppProperties;
+import com.flab.shoeauction.common.properties.AppProperties;
 import com.flab.shoeauction.common.utils.certification.coolSms.SmsMessageTemplate;
 import com.flab.shoeauction.controller.dto.UserDto.SmsCertificationRequest;
 import com.flab.shoeauction.dao.SmsCertificationDao;

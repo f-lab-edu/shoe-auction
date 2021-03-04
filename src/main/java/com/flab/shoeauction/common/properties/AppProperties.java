@@ -1,4 +1,4 @@
-package com.flab.shoeauction.common.config;
+package com.flab.shoeauction.common.properties;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

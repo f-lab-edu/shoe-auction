@@ -1,8 +1,5 @@
 package com.flab.shoeauction.controller;
 
-import static com.flab.shoeauction.common.utils.constants.ResponseConstants.CREATED;
-import static com.flab.shoeauction.common.utils.constants.ResponseConstants.OK;
-
 import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
@@ -14,6 +11,7 @@ import com.flab.shoeauction.service.BrandService;
 import com.flab.shoeauction.service.ProductService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RequiredArgsConstructor
 @RequestMapping("/products")
@@ -33,11 +32,11 @@ public class ProductApiController {
     private final BrandService brandService;
 
     @LoginCheck(authority = UserLevel.ADMIN)
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity<Void> createProduct(@Valid @RequestBody SaveRequest requestDto) {
+    public void createProduct(@Valid @RequestBody SaveRequest requestDto) {
         brandService.checkBrandExist(requestDto.getBrand());
         productService.saveProduct(requestDto);
-        return CREATED;
     }
 
     @GetMapping("/{id}")
@@ -47,33 +46,34 @@ public class ProductApiController {
     }
 
     @LoginCheck(authority = UserLevel.ADMIN)
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+    public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return OK;
     }
 
     @LoginCheck(authority = UserLevel.ADMIN)
+    @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateProduct(@PathVariable Long id,
+    public void updateProduct(@PathVariable Long id,
         @Valid @RequestBody SaveRequest requestDto) {
         productService.updateProduct(id, requestDto);
-        return OK;
     }
 
     @GetMapping("/currencies")
-    public ResponseEntity<Currency[]> getCurrencies(){
+    public ResponseEntity<Currency[]> getCurrencies() {
         Currency[] currencies = Currency.values();
         return ResponseEntity.ok(currencies);
     }
 
     @GetMapping("/size-classifications")
-    public ResponseEntity<SizeClassification[]> getSizeClassifications(){
+    public ResponseEntity<SizeClassification[]> getSizeClassifications() {
         SizeClassification[] sizeClassifications = SizeClassification.values();
         return ResponseEntity.ok(sizeClassifications);
     }
+
     @GetMapping("/size-units")
-    public ResponseEntity<SizeUnit[]> getSizeUnits(){
+    public ResponseEntity<SizeUnit[]> getSizeUnits() {
         SizeUnit[] sizeUnits = SizeUnit.values();
         return ResponseEntity.ok(sizeUnits);
     }

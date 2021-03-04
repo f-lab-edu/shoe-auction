@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.flab.shoeauction.common.properties.CacheProperties;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -32,15 +33,15 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * 메소드가 성공적으로 완료되었을 때 캐시를 삭제하지만 beforeInvocation 설정으로 메소드 실행 전 캐시를 삭제할 수도 있다.
  */
 
-@Configuration
+
+@RequiredArgsConstructor
 @EnableCaching
+@Configuration
 public class CacheConfig {
 
-    @Autowired
-    RedisConnectionFactory redisConnectionFactory;
+    private final RedisConnectionFactory redisConnectionFactory;
 
-    @Autowired
-    CacheProperties cacheProperties;
+    private final CacheProperties cacheProperties;
 
     /*
      * Jackson2는 Java8의 LocalDate의 타입을 알지못해서적절하게 직렬화해주지 않는다.
