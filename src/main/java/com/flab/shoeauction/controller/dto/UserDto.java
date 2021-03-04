@@ -239,12 +239,12 @@ public class UserDto {
         @JsonFormat
         private LocalDateTime createDate;
         private UserLevel userLevel;
-        private boolean isBan;
+        private boolean ban;
 
         @Builder
         public UserDetailsResponse(Long id, String email, String nickname, String phone,
             Account account, LocalDateTime modifiedDate, LocalDateTime createDate,
-            UserLevel userLevel, boolean isBan) {
+            UserLevel userLevel, boolean ban) {
             this.id = id;
             this.email = email;
             this.nickname = nickname;
@@ -253,7 +253,7 @@ public class UserDto {
             this.modifiedDate = modifiedDate;
             this.createDate = createDate;
             this.userLevel = userLevel;
-            this.isBan = isBan;
+            this.ban = ban;
         }
     }
 

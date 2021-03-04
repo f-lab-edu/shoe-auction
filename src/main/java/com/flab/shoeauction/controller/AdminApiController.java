@@ -10,7 +10,6 @@ import com.flab.shoeauction.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,9 +32,8 @@ public class AdminApiController {
 
     @LoginCheck(authority = UserLevel.ADMIN)
     @GetMapping("/users/{id}")
-    public ResponseEntity<UserDetailsResponse> getUserDetails(@PathVariable Long id) {
-        UserDetailsResponse userDetailsResponse = adminService.getUser(id);
-        return ResponseEntity.ok(userDetailsResponse);
+    public UserDetailsResponse getUserDetails(@PathVariable Long id) {
+        return adminService.getUser(id);
     }
 
     @LoginCheck(authority = UserLevel.ADMIN)

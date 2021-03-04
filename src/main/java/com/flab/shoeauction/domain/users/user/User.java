@@ -39,7 +39,7 @@ public class User extends UserBase {
 
     private LocalDateTime nicknameModifiedDate;
 
-    private boolean isBan;
+    private boolean ban;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "USER_ID")
@@ -64,7 +64,6 @@ public class User extends UserBase {
 
     public void updatePassword(String password) {
         this.password = password;
-
     }
 
     public void updateAccount(Account account) {
@@ -113,11 +112,15 @@ public class User extends UserBase {
             .createDate(this.getCreatedDate())
             .modifiedDate(this.getModifiedDate())
             .userLevel(this.userLevel)
-            .isBan(this.isBan)
+            .ban(this.ban)
             .build();
     }
 
     public void updateBan() {
-       isBan = !isBan;
+        if (ban) {
+            ban = false;
+        } else {
+            ban = true;
+        }
     }
 }
