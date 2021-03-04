@@ -1,4 +1,4 @@
-package com.flab.shoeauction.domain.users.user;
+package com.flab.shoeauction.domain.users.admin;
 
 import static com.flab.shoeauction.domain.users.user.QUser.user;
 import static org.springframework.util.StringUtils.hasText;
@@ -17,7 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 @RequiredArgsConstructor
-public class UserRepositoryByAdminImpl implements UserRepositoryByAdmin {
+public class AdminRepositoryImpl implements AdminRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 

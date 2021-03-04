@@ -1,7 +1,11 @@
 package com.flab.shoeauction.domain.users.admin;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.flab.shoeauction.controller.dto.UserDto.UserSearchCondition;
+import com.flab.shoeauction.controller.dto.UserDto.UserListResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-public interface AdminRepository extends JpaRepository<Admin, Long> {
+public interface AdminRepository {
 
+    Page<UserListResponse> searchByUsers(UserSearchCondition searchRequest, Pageable pageable);
 }
