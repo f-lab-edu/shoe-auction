@@ -1,7 +1,7 @@
 package com.flab.shoeauction.controller;
 
 import com.flab.shoeauction.common.annotation.LoginCheck;
-import com.flab.shoeauction.controller.dto.UserDto.IdRequest;
+import com.flab.shoeauction.controller.dto.UserDto.UserBanRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserDetailsResponse;
 import com.flab.shoeauction.controller.dto.UserDto.UserListResponse;
 import com.flab.shoeauction.controller.dto.UserDto.UserSearchCondition;
@@ -38,7 +38,7 @@ public class AdminApiController {
 
     @LoginCheck(authority = UserLevel.ADMIN)
     @PostMapping("/users/ban")
-    public void restrictUsers(@RequestBody IdRequest requestDto) {
+    public void restrictUsers(@RequestBody UserBanRequest requestDto) {
         adminService.updateBanUsers(requestDto);
     }
 }

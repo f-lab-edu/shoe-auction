@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserLevel;
+import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import java.time.LocalDateTime;
@@ -64,6 +65,7 @@ public class UserDto {
                 .nicknameModifiedDate(LocalDateTime.now())
                 .phone(this.phone)
                 .userLevel(UserLevel.UNAUTH)
+                .userStatus(UserStatus.NORMAL)
                 .build();
         }
     }
@@ -184,6 +186,7 @@ public class UserDto {
     @Getter
     @NoArgsConstructor
     public static class PasswordRequest {
+
         private String password;
 
         @Builder
@@ -239,12 +242,12 @@ public class UserDto {
         @JsonFormat
         private LocalDateTime createDate;
         private UserLevel userLevel;
-        private boolean ban;
+        private UserStatus userStatus;
 
         @Builder
         public UserDetailsResponse(Long id, String email, String nickname, String phone,
             Account account, LocalDateTime modifiedDate, LocalDateTime createDate,
-            UserLevel userLevel, boolean ban) {
+            UserLevel userLevel, UserStatus userStatus) {
             this.id = id;
             this.email = email;
             this.nickname = nickname;
@@ -253,18 +256,21 @@ public class UserDto {
             this.modifiedDate = modifiedDate;
             this.createDate = createDate;
             this.userLevel = userLevel;
-            this.ban = ban;
+            this.userStatus = userStatus;
         }
     }
 
     @Getter
     @NoArgsConstructor
-    public static class IdRequest {
+    public static class UserBanRequest {
+
         private Long id;
+        private UserStatus userStatus;
 
         @Builder
-        public IdRequest(Long id) {
+        public UserBanRequest(Long id, UserStatus userStatus) {
             this.id = id;
+            this.userStatus = userStatus;
         }
     }
 

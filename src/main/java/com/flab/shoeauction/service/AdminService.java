@@ -1,9 +1,10 @@
 package com.flab.shoeauction.service;
 
-import com.flab.shoeauction.controller.dto.UserDto.IdRequest;
+import com.flab.shoeauction.controller.dto.UserDto.UserBanRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserDetailsResponse;
 import com.flab.shoeauction.controller.dto.UserDto.UserListResponse;
 import com.flab.shoeauction.controller.dto.UserDto.UserSearchCondition;
+import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
@@ -29,9 +30,10 @@ public class AdminService {
     }
 
     @Transactional
-    public void updateBanUsers(IdRequest requestDto) {
+    public void updateBanUsers(UserBanRequest requestDto) {
         Long id = requestDto.getId();
+        UserStatus userStatus = requestDto.getUserStatus();
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("존재하지 않는 회원입니다."));
-        user.updateBan();
+        user.updateUserStatus(userStatus);
     }
 }

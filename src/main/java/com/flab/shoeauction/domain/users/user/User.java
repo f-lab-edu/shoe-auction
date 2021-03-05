@@ -9,6 +9,7 @@ import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserBase;
 import com.flab.shoeauction.domain.users.common.UserLevel;
+import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class User extends UserBase {
 
     private LocalDateTime nicknameModifiedDate;
 
-    private boolean ban;
+    private UserStatus userStatus;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "USER_ID")
@@ -93,13 +94,14 @@ public class User extends UserBase {
 
     @Builder
     public User(String email, String password, UserLevel userLevel, String nickname, String phone,
-        LocalDateTime nicknameModifiedDate, List<AddressBook> addressBooks) {
+        LocalDateTime nicknameModifiedDate, List<AddressBook> addressBooks, UserStatus userStatus) {
         super(email, password, userLevel);
         this.nickname = nickname;
         this.phone = phone;
         this.userLevel = userLevel;
         this.nicknameModifiedDate = nicknameModifiedDate;
         this.addressesBook = addressBooks;
+        this.userStatus = userStatus;
     }
 
     public UserDetailsResponse toUserDetailsDto() {
@@ -112,15 +114,11 @@ public class User extends UserBase {
             .createDate(this.getCreatedDate())
             .modifiedDate(this.getModifiedDate())
             .userLevel(this.userLevel)
-            .ban(this.ban)
+            .userStatus(this.userStatus)
             .build();
     }
 
-    public void updateBan() {
-        if (ban) {
-            ban = false;
-        } else {
-            ban = true;
-        }
+    public void updateUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 }
