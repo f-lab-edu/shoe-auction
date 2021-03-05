@@ -85,14 +85,18 @@ public class ProductDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     public static class ProductInfoResponse {
+
         private Long id;
         private String nameKor;
         private String nameEng;
         private String modelNumber;
         private String color;
+        //@JsonDeserialize(using = LocalDateDeserializer.class)
+        //@JsonSerialize(using = LocalDateSerializer.class)
         private LocalDate releaseDate;
         private int releasePrice;
         private Currency currency;

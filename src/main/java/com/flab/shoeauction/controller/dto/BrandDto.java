@@ -27,6 +27,7 @@ public class BrandDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     public static class BrandInfo {

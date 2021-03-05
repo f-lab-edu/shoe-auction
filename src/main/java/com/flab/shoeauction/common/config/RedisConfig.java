@@ -8,7 +8,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
-/*
+/**
  * @EnableRedisHttpSession
  * 해당 어노테이션은 properties의 spring.session.store-type의 값에 redis를 설정하는 것과 동일하게 작동합니다.
  * 동작 과정은 Filter를 implement하는 SpringSessionRepositoryFilter라는 스프링 빈을 생성합니다.
