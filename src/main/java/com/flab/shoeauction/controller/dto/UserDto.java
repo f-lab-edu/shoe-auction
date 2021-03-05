@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @AllArgsConstructor
@@ -191,4 +192,38 @@ public class UserDto {
             this.password = password;
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class UserListResponse {
+
+        private Long id;
+        private String email;
+        private UserLevel userLevel;
+
+        @Builder
+        public UserListResponse(Long id, String email, UserLevel userLevel) {
+            this.id = id;
+            this.email = email;
+            this.userLevel = userLevel;
+        }
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class UserSearchCondition {
+
+        private Long id;
+        private String email;
+        private UserLevel userLevel;
+
+        @Builder
+        public UserSearchCondition(Long id, String email, UserLevel userLevel) {
+            this.id = id;
+            this.email = email;
+            this.userLevel = userLevel;
+        }
+    }
+
 }
