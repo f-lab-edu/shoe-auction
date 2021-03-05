@@ -6,7 +6,6 @@ import static com.flab.shoeauction.common.utils.constants.UserConstants.USER_ID;
 import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.users.common.UserLevel;
-import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
 import com.flab.shoeauction.exception.user.NotAuthorizedException;
@@ -50,7 +49,7 @@ public class SessionLoginService {
     }
 
     private void banCheck(User user) {
-        if(user.getUserStatus() == UserStatus.BAN) {
+        if(user.isBan()) {
             throw new NotAuthorizedException("관리자에 의해 이용이 정지된 사용자 입니다.");
         }
     }

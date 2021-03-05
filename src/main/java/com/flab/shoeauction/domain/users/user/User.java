@@ -121,4 +121,9 @@ public class User extends UserBase {
     public void updateUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
     }
+
+    public boolean isBan() {
+        return this.userStatus == UserStatus.BAN;
+    }
+
 }
