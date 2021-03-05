@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor
-@AllArgsConstructor
 @DiscriminatorColumn
+@AllArgsConstructor
 public abstract class UserBase extends BaseTimeEntity {
 
     @Id
@@ -34,9 +34,4 @@ public abstract class UserBase extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     protected UserLevel userLevel;
 
-    public UserBase(String email, String password, UserLevel userLevel) {
-        this.email = email;
-        this.password = password;
-        this.userLevel = userLevel;
-    }
 }

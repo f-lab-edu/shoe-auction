@@ -8,13 +8,15 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
+import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
+import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
+import com.flab.shoeauction.exception.user.NotAuthorizedException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
-import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
-import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
-import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +26,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class LoginServiceTest {
+class SessionLoginServiceTest {
+
 
     @Mock
     UserRepository userRepository;
@@ -37,19 +40,15 @@ class LoginServiceTest {
 
     private User user;
 
-    private SaveRequest userDto;
-
-
     @BeforeEach
     void setUp() {
-        userDto = SaveRequest.builder()
+        user = User.builder()
             .email("test@test.com")
             .password("test1234")
             .nickname("17171771")
             .phone("01011112222")
+            .userStatus(UserStatus.BAN)
             .build();
-
-        user = userDto.toEntity();
     }
 
     public LoginRequest createLoginDto() {
@@ -87,12 +86,31 @@ class LoginServiceTest {
 
         assertThrows(UserNotFoundException.class,
             () -> loginService
-                .existByEmailAndPassword(loginRequest));
+                .login(loginRequest));
 
         verify(userRepository, atLeastOnce())
             .existsByEmailAndPassword(loginRequest.getEmail(),
                 encryptionService.encrypt(loginRequest.getPassword()));
     }
+
+    @Test
+    @DisplayName("로그인 실패 - BAN 처리된 사용자는 로그인에 실패하고 NotAuthorizedException이 발생한다.")
+    public void loginFailed_BAN() {
+        LoginRequest loginRequest = createLoginDto();
+        when(userRepository.existsByEmailAndPassword(loginRequest.getEmail(),
+            encryptionService.encrypt(loginRequest.getPassword())))
+            .thenReturn(true);
+        when(userRepository.findByEmail(loginRequest.getEmail())).thenReturn(Optional.of(user));
+
+        assertThrows(NotAuthorizedException.class,
+            () -> loginService.login(loginRequest));
+
+        verify(userRepository, atLeastOnce())
+            .existsByEmailAndPassword(loginRequest.getEmail(),
+                encryptionService.encrypt(loginRequest.getPassword()));
+        verify(userRepository, atLeastOnce()).findByEmail(any());
+    }
+
 
     @Test
     @DisplayName("내 정보 - 로그인 한 상태에서 my-infos를 요청하면 정상적으로 내 정보가 리턴된다.")

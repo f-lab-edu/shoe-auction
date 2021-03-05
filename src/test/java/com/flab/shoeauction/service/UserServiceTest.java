@@ -326,7 +326,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("닉네인 변경 실패 - 닉네임을 변경하고 7일이 지나지 않았다면 닉네임 변경에 실패한다.")
+    @DisplayName("닉네임 변경 실패 - 닉네임을 변경하고 7일이 지나지 않았다면 닉네임 변경에 실패한다.")
     public void failToUpdateNicknameByTerm() {
         User user =createUserDto().toEntity();
         SaveRequest requestDto = SaveRequest.builder()
