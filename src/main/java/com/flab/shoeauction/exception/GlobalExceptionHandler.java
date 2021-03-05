@@ -9,6 +9,7 @@ import static com.flab.shoeauction.common.utils.constants.ResponseConstants.DUPL
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.FAIL_TO_CHANGE_NICKNAME;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.ILLEGAL_MIME_TYPE;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.IMAGE_ROAD_FAILED;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.IMAGE_TOO_LARGE;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.NOT_AUTHORIZED;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.PRODUCT_NOT_FOUND;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.TOKEN_EXPIRED;
@@ -39,6 +40,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 
 @Slf4j
@@ -46,20 +48,21 @@ import org.springframework.web.context.request.WebRequest;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateEmailException.class)
-    public final ResponseEntity<String> duplicateEmailException(DuplicateEmailException exception) {
+    public final ResponseEntity<String> handleDuplicateEmailException(
+        DuplicateEmailException exception) {
         log.debug("중복된 이메일입니다.", exception);
         return DUPLICATION_EMAIL;
     }
 
     @ExceptionHandler(DuplicateNicknameException.class)
-    public final ResponseEntity<String> duplicateNicknameException(
+    public final ResponseEntity<String> handleDuplicateNicknameException(
         DuplicateNicknameException exception) {
         log.debug("중복된 닉네임입니다.", exception);
         return DUPLICATION_NICKNAME;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public final ResponseEntity<String> methodArgumentNotValidException(
+    public final ResponseEntity<String> handleMethodArgumentNotValidException(
         MethodArgumentNotValidException exception) {
         log.debug(exception.getFieldError().getDefaultMessage(), exception);
         return new ResponseEntity<>(exception.getFieldError().getDefaultMessage(),
@@ -96,7 +99,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(WrongPasswordException.class)
-    public final ResponseEntity<String> wrongPasswordException(WrongPasswordException ex,
+    public final ResponseEntity<String> handleWrongPasswordException(WrongPasswordException ex,
         WebRequest request) {
         log.debug("Wrong password ::  {}, detection time={} ", request.getDescription(false),
             LocalDateTime.now(), ex);
@@ -104,28 +107,28 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DuplicateBrandNameException.class)
-    public final ResponseEntity<String> duplicateBrandNameException(
+    public final ResponseEntity<String> handleDuplicateBrandNameException(
         DuplicateBrandNameException ex) {
         log.debug("이미 존재하는 브랜드명입니다.", ex);
         return DUPLICATION_BRAND_NAME;
     }
 
     @ExceptionHandler(BrandNotFoundException.class)
-    public final ResponseEntity<String> brandNotFoundException(
+    public final ResponseEntity<String> handleBrandNotFoundException(
         BrandNotFoundException ex) {
         log.debug("존재하지 않는 브랜드입니다.", ex);
         return BRAND_NOT_FOUND;
     }
 
     @ExceptionHandler(DuplicateModelNumberException.class)
-    public final ResponseEntity<String> duplicateModelNumberException(
+    public final ResponseEntity<String> handleDuplicateModelNumberException(
         DuplicateModelNumberException ex) {
         log.debug("이미 존재하는 모델 넘버입니다.", ex);
         return DUPLICATION_MODEL_NUMBER;
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public final ResponseEntity<String> productNotFoundException(
+    public final ResponseEntity<String> handleProductNotFoundException(
         ProductNotFoundException ex) {
         log.debug("존재하지 않는 상품입니다.", ex);
         return PRODUCT_NOT_FOUND;
@@ -148,16 +151,23 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalMimeTypeException.class)
-    public final ResponseEntity<String> illegalMimeTypeException(
+    public final ResponseEntity<String> handleIllegalMimeTypeException(
         IllegalMimeTypeException ex) {
         log.debug("올바르지 않은 확장자입니다.", ex);
         return ILLEGAL_MIME_TYPE;
     }
 
     @ExceptionHandler(ImageRoadFailedException.class)
-    public final ResponseEntity<String> imageRoadFailedException(
+    public final ResponseEntity<String> handleImageRoadFailedException(
         ImageRoadFailedException ex) {
         log.debug("이미지 로드에 실패하였습니다.", ex);
         return IMAGE_ROAD_FAILED;
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public final ResponseEntity<String> handleMaxUploadSizeExceededException(
+        MaxUploadSizeExceededException ex) {
+        log.debug("허용된 용량을 초과한 이미지입니다.", ex);
+        return IMAGE_TOO_LARGE;
     }
 }
