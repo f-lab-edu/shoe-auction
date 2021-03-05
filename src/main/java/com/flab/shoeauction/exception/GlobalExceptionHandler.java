@@ -157,7 +157,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ImageRoadFailedException.class)
     public final ResponseEntity<String> imageRoadFailedException(
         ImageRoadFailedException ex) {
-        log.debug("이미지를 로드에 실패하였습니다.", ex);
+        log.debug("이미지 로드에 실패하였습니다.", ex);
         return IMAGE_ROAD_FAILED;
     }
 }
