@@ -2,12 +2,14 @@ package com.flab.shoeauction.domain.users.user;
 
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
+import com.flab.shoeauction.controller.dto.UserDto.UserDetailsResponse;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserBase;
 import com.flab.shoeauction.domain.users.common.UserLevel;
+import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class User extends UserBase {
 
     private LocalDateTime nicknameModifiedDate;
 
-    private boolean isBan;
+    private UserStatus userStatus;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "USER_ID")
@@ -51,7 +53,6 @@ public class User extends UserBase {
             .phone(this.getPhone())
             .account(this.getAccount())
             .userLevel(this.userLevel)
-            .isBan(this.isBan)
             .build();
     }
 
@@ -64,7 +65,6 @@ public class User extends UserBase {
 
     public void updatePassword(String password) {
         this.password = password;
-
     }
 
     public void updateAccount(Account account) {
@@ -94,12 +94,36 @@ public class User extends UserBase {
 
     @Builder
     public User(String email, String password, UserLevel userLevel, String nickname, String phone,
-        LocalDateTime nicknameModifiedDate, List<AddressBook> addressBooks) {
+        LocalDateTime nicknameModifiedDate, List<AddressBook> addressBooks, UserStatus userStatus) {
         super(email, password, userLevel);
         this.nickname = nickname;
         this.phone = phone;
         this.userLevel = userLevel;
         this.nicknameModifiedDate = nicknameModifiedDate;
         this.addressesBook = addressBooks;
+        this.userStatus = userStatus;
     }
+
+    public UserDetailsResponse toUserDetailsDto() {
+        return UserDetailsResponse.builder()
+            .id(this.getId())
+            .email(this.email)
+            .nickname(this.nickname)
+            .phone(this.phone)
+            .account(this.account)
+            .createDate(this.getCreatedDate())
+            .modifiedDate(this.getModifiedDate())
+            .userLevel(this.userLevel)
+            .userStatus(this.userStatus)
+            .build();
+    }
+
+    public void updateUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
+
+    public boolean isBan() {
+        return this.userStatus == UserStatus.BAN;
+    }
+
 }
