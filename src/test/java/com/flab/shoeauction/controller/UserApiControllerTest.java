@@ -55,7 +55,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
@@ -377,7 +376,7 @@ class UserApiControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(requestDto)))
             .andDo(print())
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isNotFound())
             .andDo(document("users/login/failure", requestFields(
                 fieldWithPath("email").type(JsonFieldType.STRING)
                     .description("login ID (email)"),
@@ -472,7 +471,7 @@ class UserApiControllerTest {
             .getUserResource(any());
         mockMvc.perform(get("/users/find/{email}", email))
             .andDo(print())
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isNotFound())
             .andDo(document("users/forgetPassword/resource/failure", pathParameters(
                 parameterWithName("email").description("이메일")
             )));
