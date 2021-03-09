@@ -12,14 +12,6 @@ public class FileNameUtils {
         }
     }
 
-    public static String addDirToSave(String fileName, String dir) {
-        StringBuilder builder = new StringBuilder();
-
-        builder.append(dir).append("/").append(fileName);
-
-        return builder.toString();
-    }
-
     public static String fileNameConvert(String fileName) {
         StringBuilder builder = new StringBuilder();
         UUID uuid = UUID.randomUUID();
@@ -34,5 +26,13 @@ public class FileNameUtils {
         int pos = fileName.lastIndexOf(".");
 
         return fileName.substring(pos + 1);
+    }
+
+    public static String getThumbnailPath(String path) {
+        return path.replaceFirst("origin", "thumbnail");
+    }
+
+    public static String getResizedPath(String path) {
+        return path.replaceFirst("origin", "resized");
     }
 }

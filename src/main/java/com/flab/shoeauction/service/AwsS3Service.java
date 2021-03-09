@@ -40,10 +40,17 @@ public class AwsS3Service {
             .build();
     }
 
-    public String upload(MultipartFile file, String dir) {
+    public String uploadBrandImage(MultipartFile file) {
+        return upload(file, awsProperties.getBrnadBucket());
+    }
+
+    public String uploadProductImage(MultipartFile file) {
+        return upload(file, awsProperties.getProductBucket());
+    }
+
+    private String upload(MultipartFile file, String bucket) {
         String fileName = file.getOriginalFilename();
         String convertedFileName = FileNameUtils.fileNameConvert(fileName);
-        String fileNameWithPath = FileNameUtils.addDirToSave(convertedFileName, dir);
 
         try {
             String mimeType = new Tika().detect(file.getInputStream());
@@ -52,13 +59,12 @@ public class AwsS3Service {
             FileNameUtils.checkImageMimeType(mimeType);
             metadata.setContentType(mimeType);
             s3Client.putObject(
-                new PutObjectRequest(awsProperties.getBucket(), fileNameWithPath,
-                    file.getInputStream(), metadata)
+                new PutObjectRequest(bucket, convertedFileName, file.getInputStream(), metadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException exception) {
             throw new ImageRoadFailedException();
         }
 
-        return s3Client.getUrl(awsProperties.getBucket(), fileNameWithPath).toString();
+        return s3Client.getUrl(bucket, convertedFileName).toString();
     }
 }

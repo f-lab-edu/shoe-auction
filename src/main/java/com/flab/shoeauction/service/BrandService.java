@@ -1,7 +1,6 @@
 package com.flab.shoeauction.service;
 
-import static com.flab.shoeauction.common.utils.constants.FilePathConstants.BRAND_IMAGES_DIR;
-
+import com.flab.shoeauction.common.utils.file.FileNameUtils;
 import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
 import com.flab.shoeauction.controller.dto.BrandDto.SaveRequest;
 import com.flab.shoeauction.domain.brand.Brand;
@@ -33,8 +32,9 @@ public class BrandService {
             throw new DuplicateBrandNameException();
         }
         if (brandImage != null) {
-            String imagePath = awsS3Service.upload(brandImage, BRAND_IMAGES_DIR);
-            requestDto.setImagePath(imagePath);
+            String imagePath = awsS3Service.uploadBrandImage(brandImage);
+            String thumbnailImagePath = FileNameUtils.getThumbnailPath(imagePath);
+            requestDto.setImagePath(thumbnailImagePath);
         }
         brandRepository.save(requestDto.toEntity());
     }
