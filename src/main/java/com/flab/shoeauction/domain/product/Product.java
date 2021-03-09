@@ -4,6 +4,7 @@ import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
 import com.flab.shoeauction.domain.BaseTimeEntity;
 import com.flab.shoeauction.domain.brand.Brand;
+import com.flab.shoeauction.domain.cart.Cart;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -68,6 +69,17 @@ public class Product extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "BRAND_ID")
     private Brand brand;
+
+    /**
+     * 일대다 단방향 매핑의 경우 엔티티가 관리하는 외래 키가 다른 테이블에 존재하고, 연관관계 관리를 위해 불필요한 update 쿼리문이 실행된다.
+     * update 쿼리문이 실행된다고 해서 성능에 큰 영향이 있는것은 아니지만, 불필요한 쿼리가 실행됨에 따라 개발자에게 혼란을 줄 수 있기 때문에
+     * 일대다 단방향의 경우 일대다 양방향 매핑을 사용하는 것이 좋다.
+     * insertable과 updatable을 false로 설정하면 읽기 전용 필드로, 마치 양방향 매핑을 한 것과 같은 효과를 낼 수 있다.
+     */
+    @ManyToOne
+    @JoinColumn(name = "CART_ID", insertable = false, updatable = false)
+    private Cart cart;
+
 
     @Builder
     public Product(String nameKor, String nameEng, String modelNumber, String color,
