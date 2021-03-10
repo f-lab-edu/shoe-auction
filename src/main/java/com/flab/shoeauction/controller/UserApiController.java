@@ -196,16 +196,19 @@ public class UserApiController {
         userService.updateNickname(email, requestDto);
     }
 
+    @LoginCheck
     @GetMapping("/cart")
     public Set<WishItemResponse> getWishList(@CurrentUser String email) {
         return userService.getWishList(email);
     }
 
+    @LoginCheck
     @PostMapping("/cart")
     public void addWishList(@CurrentUser String email, @RequestBody IdRequest idRequest) {
         userService.addWishList(email, idRequest);
     }
 
+    @LoginCheck
     @DeleteMapping("/cart")
     public void deleteWishList(@RequestBody IdRequest idRequest) {
         userService.deleteWishList(idRequest);
