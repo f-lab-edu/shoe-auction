@@ -7,6 +7,7 @@ import com.flab.shoeauction.domain.brand.Brand;
 import com.flab.shoeauction.domain.brand.BrandRepository;
 import com.flab.shoeauction.exception.brand.BrandNotFoundException;
 import com.flab.shoeauction.exception.brand.DuplicateBrandNameException;
+import com.flab.shoeauction.service.storage.AwsS3Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,9 +33,9 @@ public class BrandService {
             throw new DuplicateBrandNameException();
         }
         if (brandImage != null) {
-            String imagePath = awsS3Service.uploadBrandImage(brandImage);
-            String thumbnailImagePath = FileNameUtils.getThumbnailPath(imagePath);
-            requestDto.setImagePath(thumbnailImagePath);
+            String originImagePath = awsS3Service.uploadBrandImage(brandImage);
+            String thumbnailImagePath = FileNameUtils.getThumbnailPath(originImagePath);
+            requestDto.setImagePath(originImagePath, thumbnailImagePath);
         }
         brandRepository.save(requestDto.toEntity());
     }

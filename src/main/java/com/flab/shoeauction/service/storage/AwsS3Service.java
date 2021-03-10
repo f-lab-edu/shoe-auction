@@ -1,4 +1,4 @@
-package com.flab.shoeauction.service;
+package com.flab.shoeauction.service.storage;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
-public class AwsS3Service {
+public class AwsS3Service implements StorageService {
 
     private final AwsProperties awsProperties;
 
@@ -48,7 +48,7 @@ public class AwsS3Service {
         return upload(file, awsProperties.getProductBucket());
     }
 
-    private String upload(MultipartFile file, String bucket) {
+    public String upload(MultipartFile file, String bucket) {
         String fileName = file.getOriginalFilename();
         String convertedFileName = FileNameUtils.fileNameConvert(fileName);
 

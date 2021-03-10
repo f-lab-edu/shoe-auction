@@ -38,14 +38,17 @@ public class Brand extends BaseTimeEntity {
     @Column(unique = true)
     private String nameEng;
 
-    private String imagePath;
+    private String originImagePath;
+
+    private String thumbnailImagePath;
 
     public BrandInfo toBrandInfo() {
         return BrandInfo.builder()
             .id(this.id)
             .nameKor(this.nameKor)
             .nameEng(this.nameEng)
-            .imagePath(this.imagePath)
+            .originImagePath(this.originImagePath)
+            .thumbnailImagePath(this.thumbnailImagePath)
             .build();
     }
 

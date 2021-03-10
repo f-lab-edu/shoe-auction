@@ -19,17 +19,21 @@ public class BrandDto {
         @NotBlank(message = "브랜드 영문명을 입력해주세요.")
         private String nameEng;
 
-        private String imagePath;
+        private String originImagePath;
 
-        public void setImagePath(String imagePath) {
-            this.imagePath = imagePath;
+        private String thumbnailImagePath;
+
+        public void setImagePath(String originImagePath, String thumbnailImagePath) {
+            this.originImagePath = originImagePath;
+            this.thumbnailImagePath = thumbnailImagePath;
         }
 
         public Brand toEntity() {
             return Brand.builder()
                 .nameKor(this.nameKor)
                 .nameEng(this.nameEng)
-                .imagePath(this.imagePath)
+                .originImagePath(this.originImagePath)
+                .thumbnailImagePath(this.thumbnailImagePath)
                 .build();
         }
     }
@@ -43,14 +47,16 @@ public class BrandDto {
         private Long id;
         private String nameKor;
         private String nameEng;
-        private String imagePath;
+        private String originImagePath;
+        private String thumbnailImagePath;
 
         public Brand toEntity() {
             return Brand.builder()
                 .id(this.id)
                 .nameKor(this.nameKor)
                 .nameEng(this.nameEng)
-                .imagePath(this.imagePath)
+                .originImagePath(this.originImagePath)
+                .thumbnailImagePath(this.thumbnailImagePath)
                 .build();
         }
     }
