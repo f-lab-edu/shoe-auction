@@ -20,4 +20,9 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart")
     private Set<CartProduct> wishList = new HashSet<>();
+
+    public void addCartProducts(CartProduct cartProduct) {
+        wishList.add(cartProduct);
+    }
+
 }

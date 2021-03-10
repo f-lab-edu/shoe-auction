@@ -6,6 +6,8 @@ import static com.flab.shoeauction.common.utils.constants.ResponseConstants.OK;
 import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.controller.dto.AddressBookDto;
+import com.flab.shoeauction.controller.dto.ProductDto.IdRequest;
+import com.flab.shoeauction.controller.dto.ProductDto.IdRequest.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.EmailCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
@@ -17,12 +19,12 @@ import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.users.common.Account;
-import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.service.SessionLoginService;
 import com.flab.shoeauction.service.UserService;
 import com.flab.shoeauction.service.certification.EmailCertificationService;
 import com.flab.shoeauction.service.certification.SmsCertificationService;
 import java.util.List;
+import java.util.Set;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -193,4 +195,20 @@ public class UserApiController {
     public void updateNickname(@CurrentUser String email, @RequestBody SaveRequest requestDto) {
         userService.updateNickname(email, requestDto);
     }
+
+    @GetMapping("/cart")
+    public Set<WishItemResponse> getWishList(@CurrentUser String email) {
+        return userService.getWishList(email);
+    }
+
+    @PostMapping("/cart")
+    public void addWishList(@CurrentUser String email, @RequestBody IdRequest idRequest) {
+        userService.addWishList(email, idRequest);
+    }
+
+    @DeleteMapping("/cart")
+    public void deleteWishList(@RequestBody IdRequest idRequest) {
+        userService.deleteWishList(idRequest);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.flab.shoeauction.controller.dto;
 
 import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
+import com.flab.shoeauction.domain.brand.Brand;
 import com.flab.shoeauction.domain.product.Currency;
 import com.flab.shoeauction.domain.product.Product;
 import com.flab.shoeauction.domain.product.SizeClassification;
@@ -106,5 +107,38 @@ public class ProductDto {
         private double maxSize;
         private double sizeGap;
         private BrandInfo brand;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class IdRequest {
+
+        private Long id;
+
+        @Builder
+        public IdRequest(Long id) {
+            this.id = id;
+        }
+
+
+        @Getter
+        @NoArgsConstructor
+        public static class WishItemResponse {
+
+            private Long id;
+            private String nameKor;
+            private String nameEng;
+            private Brand brand;
+
+            @Builder
+            public WishItemResponse(Long id, String nameKor, String nameEng, Brand brand) {
+                this.id = id;
+                this.nameKor = nameKor;
+                this.nameEng = nameEng;
+                this.brand = brand;
+            }
+
+        }
+
     }
 }

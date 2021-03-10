@@ -32,7 +32,7 @@ public class BrandApiController {
     @LoginCheck(authority = UserLevel.ADMIN)
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void createBrand(@Valid @RequestPart SaveRequest requestDto,
+    public void createBrand(@Valid @RequestBody SaveRequest requestDto,
         @RequestPart(required = false) MultipartFile brandImage) {
         brandService.saveBrand(requestDto, brandImage);
     }

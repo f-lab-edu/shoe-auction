@@ -64,7 +64,7 @@ public class UserDto {
                 .password(this.password)
                 .nicknameModifiedDate(LocalDateTime.now())
                 .phone(this.phone)
-                .userLevel(UserLevel.UNAUTH)
+                .userLevel(UserLevel.ADMIN)
                 .userStatus(UserStatus.NORMAL)
                 .build();
         }

@@ -1,23 +1,33 @@
 package com.flab.shoeauction.service;
 
 import com.flab.shoeauction.controller.dto.AddressBookDto;
+import com.flab.shoeauction.controller.dto.ProductDto.IdRequest;
+import com.flab.shoeauction.controller.dto.ProductDto.IdRequest.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.addressBook.AddressBookRepository;
+import com.flab.shoeauction.domain.cart.Cart;
+import com.flab.shoeauction.domain.cart.CartProduct;
+import com.flab.shoeauction.domain.cart.CartProductRepository;
+import com.flab.shoeauction.domain.cart.CartRepository;
+import com.flab.shoeauction.domain.product.Product;
+import com.flab.shoeauction.domain.product.ProductRepository;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
+import com.flab.shoeauction.exception.user.EmptyCartException;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.exception.user.WrongPasswordException;
 import com.flab.shoeauction.service.certification.EmailCertificationService;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,6 +42,9 @@ public class UserService {
     private final EncryptionService encryptionService;
     private final AddressBookRepository addressBookRepository;
     private final EmailCertificationService emailCertificationService;
+    private final ProductRepository productRepository;
+    private final CartRepository cartRepository;
+    private final CartProductRepository cartProductRepository;
 
     public boolean checkEmailDuplicate(String email) {
         return userRepository.existsByEmail(email);
@@ -156,5 +169,39 @@ public class UserService {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
         user.updateUserLevel();
+    }
+
+    @Transactional
+    public void addWishList(String email, IdRequest idRequest) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+
+        if(user.getCart() == null) {
+            Cart cart = cartRepository.save(new Cart());
+            user.createCart(cart);
+        }
+
+        Product product = productRepository.findById(idRequest.getId()).orElseThrow();
+        CartProduct cartItem = cartProductRepository.save(new CartProduct(user.getCart(), product));
+
+        user.addCartItem(cartItem);
+
+    }
+
+    public Set<WishItemResponse> getWishList(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+
+        if(user.getCart() == null) {
+            throw new EmptyCartException("위시리스트가 비어있습니다.");
+        }
+
+        return user.getWishList();
+
+    }
+
+    @Transactional
+    public void deleteWishList(IdRequest idRequest) {
+        cartProductRepository.deleteById(idRequest.getId());
     }
 }

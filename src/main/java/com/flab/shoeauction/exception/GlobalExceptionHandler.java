@@ -25,6 +25,7 @@ import com.flab.shoeauction.exception.product.ProductNotFoundException;
 import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
+import com.flab.shoeauction.exception.user.EmptyCartException;
 import com.flab.shoeauction.exception.user.NotAuthorizedException;
 import com.flab.shoeauction.exception.user.TokenExpiredException;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
@@ -160,4 +161,11 @@ public class GlobalExceptionHandler {
         log.debug("이미지 로드에 실패하였습니다.", ex);
         return IMAGE_ROAD_FAILED;
     }
+
+    @ExceptionHandler(EmptyCartException.class)
+    public final ResponseEntity<Void> handleEmptyCartException (EmptyCartException ex) {
+        log.debug("위시리스트가 비어있습니다.", ex);
+        return BAD_REQUEST;
+    }
+
 }
