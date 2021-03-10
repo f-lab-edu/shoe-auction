@@ -1,6 +1,6 @@
 package com.flab.shoeauction.domain.cart;
 
-import com.flab.shoeauction.controller.dto.ProductDto.IdRequest.WishItemResponse;
+import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.domain.product.Product;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -1,6 +1,6 @@
 package com.flab.shoeauction.domain.users.user;
 
-import com.flab.shoeauction.controller.dto.ProductDto.IdRequest.WishItemResponse;
+import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserDetailsResponse;

@@ -2,7 +2,7 @@ package com.flab.shoeauction.service;
 
 import com.flab.shoeauction.controller.dto.AddressBookDto;
 import com.flab.shoeauction.controller.dto.ProductDto.IdRequest;
-import com.flab.shoeauction.controller.dto.ProductDto.IdRequest.WishItemResponse;
+import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
@@ -20,7 +20,6 @@ import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
-import com.flab.shoeauction.exception.user.EmptyCartException;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.exception.user.WrongPasswordException;
@@ -193,7 +192,8 @@ public class UserService {
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
         if(user.getCart() == null) {
-            throw new EmptyCartException("위시리스트가 비어있습니다.");
+            Cart cart = cartRepository.save(new Cart());
+            user.createCart(cart);
         }
 
         return user.getWishList();
