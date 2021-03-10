@@ -107,7 +107,8 @@ public class User extends UserBase {
     }
 
     @Builder
-    public User(Long id, String email, String password, UserLevel userLevel, String nickname, String phone,
+    public User(Long id, String email, String password, UserLevel userLevel, String nickname,
+        String phone,
         LocalDateTime nicknameModifiedDate, List<AddressBook> addressBooks, UserStatus userStatus) {
         super(id, email, password, userLevel);
         this.nickname = nickname;
@@ -145,7 +146,7 @@ public class User extends UserBase {
     }
 
     public void addCartItem(CartProduct cartItem) {
-        cart.getWishList().add(cartItem);
+        cart.addCartProducts(cartItem);
     }
 
     public Set<WishItemResponse> getWishList() {
@@ -153,5 +154,12 @@ public class User extends UserBase {
             .stream()
             .map(CartProduct::toWishItemDto)
             .collect(Collectors.toSet());
+    }
+
+    public boolean checkCartItemDuplicate(CartProduct cartItem) {
+        return cart.getWishList()
+            .stream()
+            .map(CartProduct::getProduct)
+            .anyMatch(v -> v.getId() == cartItem.getProductId());
     }
 }

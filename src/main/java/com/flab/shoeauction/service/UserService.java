@@ -18,6 +18,7 @@ import com.flab.shoeauction.domain.product.ProductRepository;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
+import com.flab.shoeauction.exception.user.DuplicateCartItemException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
@@ -183,8 +184,11 @@ public class UserService {
         Product product = productRepository.findById(idRequest.getId()).orElseThrow();
         CartProduct cartItem = cartProductRepository.save(new CartProduct(user.getCart(), product));
 
-        user.addCartItem(cartItem);
+        if(user.checkCartItemDuplicate(cartItem)) {
+            throw new DuplicateCartItemException("장바구니 중복");
+        }
 
+        user.addCartItem(cartItem);
     }
 
     public Set<WishItemResponse> getWishList(String email) {
@@ -195,9 +199,7 @@ public class UserService {
             Cart cart = cartRepository.save(new Cart());
             user.createCart(cart);
         }
-
         return user.getWishList();
-
     }
 
     @Transactional

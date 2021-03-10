@@ -3,6 +3,7 @@ package com.flab.shoeauction.exception;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.BAD_REQUEST;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.BRAND_NOT_FOUND;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.DUPLICATION_BRAND_NAME;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.DUPLICATION_CART_ITEM;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.DUPLICATION_EMAIL;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.DUPLICATION_MODEL_NUMBER;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.DUPLICATION_NICKNAME;
@@ -23,6 +24,7 @@ import com.flab.shoeauction.exception.file.ImageRoadFailedException;
 import com.flab.shoeauction.exception.product.DuplicateModelNumberException;
 import com.flab.shoeauction.exception.product.ProductNotFoundException;
 import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException;
+import com.flab.shoeauction.exception.user.DuplicateCartItemException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
 import com.flab.shoeauction.exception.user.NotAuthorizedException;
@@ -159,6 +161,12 @@ public class GlobalExceptionHandler {
         ImageRoadFailedException ex) {
         log.debug("이미지 로드에 실패하였습니다.", ex);
         return IMAGE_ROAD_FAILED;
+    }
+
+    @ExceptionHandler(DuplicateCartItemException.class)
+    public final ResponseEntity<String> handleDuplicateCartItemException(DuplicateCartItemException ex) {
+        log.debug("해당 상품은 이미 위시리스트에 등록되어 있는 상품입니다.", ex);
+        return DUPLICATION_CART_ITEM;
     }
 
 }

@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode
 public class CartProduct {
 
     @Id
@@ -40,9 +42,14 @@ public class CartProduct {
         this.product = product;
     }
 
+    public Long getProductId() {
+        return product.getId();
+    }
+
     public WishItemResponse toWishItemDto() {
         return WishItemResponse.builder()
             .id(this.id)
+            .productId(product.getId())
             .nameKor(product.getNameKor())
             .nameEng(product.getNameEng())
             .brand(product.getBrand())

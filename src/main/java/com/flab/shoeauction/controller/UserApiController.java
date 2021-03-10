@@ -7,7 +7,7 @@ import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.controller.dto.AddressBookDto;
 import com.flab.shoeauction.controller.dto.ProductDto.IdRequest;
-import com.flab.shoeauction.controller.dto.ProductDto.IdRequest.WishItemResponse;
+import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.EmailCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
@@ -197,19 +197,19 @@ public class UserApiController {
     }
 
     @LoginCheck
-    @GetMapping("/cart")
+    @GetMapping("/carts")
     public Set<WishItemResponse> getWishList(@CurrentUser String email) {
         return userService.getWishList(email);
     }
 
     @LoginCheck
-    @PostMapping("/cart")
+    @PostMapping("/carts")
     public void addWishList(@CurrentUser String email, @RequestBody IdRequest idRequest) {
         userService.addWishList(email, idRequest);
     }
 
     @LoginCheck
-    @DeleteMapping("/cart")
+    @DeleteMapping("/carts")
     public void deleteWishList(@RequestBody IdRequest idRequest) {
         userService.deleteWishList(idRequest);
     }

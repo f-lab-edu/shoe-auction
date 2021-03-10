@@ -126,13 +126,15 @@ public class ProductDto {
     public static class WishItemResponse {
 
         private Long id;
+        private Long productId;
         private String nameKor;
         private String nameEng;
         private Brand brand;
 
         @Builder
-        public WishItemResponse(Long id, String nameKor, String nameEng, Brand brand) {
+        public WishItemResponse(Long id, Long productId, String nameKor, String nameEng, Brand brand) {
             this.id = id;
+            this.productId = productId;
             this.nameKor = nameKor;
             this.nameEng = nameEng;
             this.brand = brand;

@@ -65,4 +65,9 @@ public class ResponseConstants {
     public static final ResponseEntity<String> IMAGE_ROAD_FAILED =
         new ResponseEntity<>("이미지 로드에 실패하였습니다.",
             HttpStatus.BAD_REQUEST);
+
+    public static final ResponseEntity<String> DUPLICATION_CART_ITEM = new ResponseEntity<>(
+        "해당 상품은 이미 위시리스트에 등록되어 있는 상품입니다.",
+        HttpStatus.CONFLICT);
+
 }
