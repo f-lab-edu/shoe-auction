@@ -119,26 +119,23 @@ public class ProductDto {
         public IdRequest(Long id) {
             this.id = id;
         }
+    }
 
+    @Getter
+    @NoArgsConstructor
+    public static class WishItemResponse {
 
-        @Getter
-        @NoArgsConstructor
-        public static class WishItemResponse {
+        private Long id;
+        private String nameKor;
+        private String nameEng;
+        private Brand brand;
 
-            private Long id;
-            private String nameKor;
-            private String nameEng;
-            private Brand brand;
-
-            @Builder
-            public WishItemResponse(Long id, String nameKor, String nameEng, Brand brand) {
-                this.id = id;
-                this.nameKor = nameKor;
-                this.nameEng = nameEng;
-                this.brand = brand;
-            }
-
+        @Builder
+        public WishItemResponse(Long id, String nameKor, String nameEng, Brand brand) {
+            this.id = id;
+            this.nameKor = nameKor;
+            this.nameEng = nameEng;
+            this.brand = brand;
         }
-
     }
 }
