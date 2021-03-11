@@ -26,29 +26,6 @@ public class BrandService {
 
     private final AwsS3Service awsS3Service;
 
-    @Transactional
-    @CacheEvict(value = "brands", allEntries = true)
-    public void saveBrand(SaveRequest requestDto, MultipartFile brandImage) {
-        if (checkDuplicateName(requestDto)) {
-            throw new DuplicateBrandNameException();
-        }
-        if (brandImage != null) {
-            String originImagePath = awsS3Service.uploadBrandImage(brandImage);
-            String thumbnailImagePath = FileNameUtils.getThumbnailPath(originImagePath);
-            requestDto.setImagePath(originImagePath, thumbnailImagePath);
-        }
-        brandRepository.save(requestDto.toEntity());
-    }
-
-    private boolean checkDuplicateName(SaveRequest requestDto) {
-        if (brandRepository.existsByNameKor(requestDto.getNameKor())) {
-            return true;
-        } else if (brandRepository.existsByNameEng(requestDto.getNameEng())) {
-            return true;
-        }
-        return false;
-    }
-
     public BrandInfo getBrandInfo(Long id) {
         return brandRepository.findById(id).orElseThrow(() -> new BrandNotFoundException())
             .toBrandInfo();
@@ -61,24 +38,78 @@ public class BrandService {
             .collect(Collectors.toList());
     }
 
+    @Transactional
     @CacheEvict(value = "brands", allEntries = true)
-    public void deleteBrand(Long id) {
-        if (!brandRepository.existsById(id)) {
-            throw new BrandNotFoundException();
+    public void saveBrand(SaveRequest requestDto, MultipartFile brandImage) {
+        if (checkDuplicateName(requestDto)) {
+            throw new DuplicateBrandNameException();
         }
-        brandRepository.deleteById(id);
+        if (brandImage != null) {
+            String originImagePath = awsS3Service.uploadBrandImage(brandImage);
+            String thumbnailImagePath = FileNameUtils.toThumbnail(originImagePath);
+            requestDto.setImagePath(originImagePath, thumbnailImagePath);
+        }
+        brandRepository.save(requestDto.toEntity());
     }
 
     @CacheEvict(value = "brands", allEntries = true)
     @Transactional
-    public void updateBrand(Long id, SaveRequest updatedBrand) {
+    public void deleteBrand(Long id) {
+        Brand brand = brandRepository.findById(id)
+            .orElseThrow(BrandNotFoundException::new);
+        String path = brand.getOriginImagePath();
+        String key = FileNameUtils.getFileName(path);
+
+        brandRepository.deleteById(id);
+        awsS3Service.deleteBrandImage(key);
+    }
+
+    @CacheEvict(value = "brands", allEntries = true)
+    @Transactional
+    public void updateBrand(Long id, SaveRequest updatedBrand, MultipartFile brandImage) {
         Brand savedBrand = brandRepository.findById(id)
             .orElseThrow(() -> new BrandNotFoundException());
+        String savedImagePath = savedBrand.getOriginImagePath();
 
         checkDuplicateUpdatedNameKor(savedBrand.getNameKor(), updatedBrand.getNameKor());
         checkDuplicateUpdatedNameEng(savedBrand.getNameEng(), updatedBrand.getNameEng());
 
+        if (isDeleteImage(updatedBrand.isImageDeleteCheck(), brandImage, savedImagePath)) {
+            String key = FileNameUtils.getFileName(savedImagePath);
+            awsS3Service.deleteBrandImage(key);
+            updatedBrand.deleteImagePath();
+        }
+        if ((brandImage != null)) {
+            String originImagePath = awsS3Service.uploadBrandImage(brandImage);
+            String thumbnailImagePath = FileNameUtils.toThumbnail(originImagePath);
+            updatedBrand.setImagePath(originImagePath, thumbnailImagePath);
+        }
+
         savedBrand.update(updatedBrand);
+    }
+
+    private boolean isDeleteImage(boolean imageDeleteCheck, MultipartFile brandImage,
+        String savedImagePath) {
+        if (imageDeleteCheck || ((brandImage != null) && (savedImagePath != null))) {
+            return true;
+        }
+        return false;
+    }
+
+    public void checkBrandExist(BrandInfo productsBrand) {
+        Optional<Brand> savedBrand = brandRepository.findById(productsBrand.getId());
+        if (savedBrand.isEmpty() || !isSameName(savedBrand.get(), productsBrand)) {
+            throw new BrandNotFoundException();
+        }
+    }
+
+    private boolean checkDuplicateName(SaveRequest requestDto) {
+        if (brandRepository.existsByNameKor(requestDto.getNameKor())) {
+            return true;
+        } else if (brandRepository.existsByNameEng(requestDto.getNameEng())) {
+            return true;
+        }
+        return false;
     }
 
     private void checkDuplicateUpdatedNameKor(String nameKor, String updatedNameKor) {
@@ -97,13 +128,6 @@ public class BrandService {
             return;
         }
         throw new DuplicateBrandNameException();
-    }
-
-    public void checkBrandExist(BrandInfo productsBrand) {
-        Optional<Brand> savedBrand = brandRepository.findById(productsBrand.getId());
-        if (savedBrand.isEmpty() || !isSameName(savedBrand.get(), productsBrand)) {
-            throw new BrandNotFoundException();
-        }
     }
 
     private boolean isSameName(Brand savedBrand, BrandInfo productsBrand) {
