@@ -22,7 +22,7 @@ public class ResponseConstants {
 
     public static final ResponseEntity<String> USER_NOT_FOUND =
         new ResponseEntity<>(
-            "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.", HttpStatus.BAD_REQUEST
+            "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.", HttpStatus.NOT_FOUND
         );
 
     public static final ResponseEntity<String> UNAUTHORIZED_USER =
