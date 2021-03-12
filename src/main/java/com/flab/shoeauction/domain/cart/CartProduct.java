@@ -1,5 +1,6 @@
 package com.flab.shoeauction.domain.cart;
 
+import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.domain.product.Product;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,4 +34,23 @@ public class CartProduct {
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 
+    @Builder
+    public CartProduct(Cart cart, Product product) {
+        this.cart = cart;
+        this.product = product;
+    }
+
+    public Long getProductId() {
+        return product.getId();
+    }
+
+    public WishItemResponse toWishItemDto() {
+        return WishItemResponse.builder()
+            .id(this.id)
+            .productId(product.getId())
+            .nameKor(product.getNameKor())
+            .nameEng(product.getNameEng())
+            .brand(product.getBrand())
+            .build();
+    }
 }

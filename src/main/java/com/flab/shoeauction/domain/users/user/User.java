@@ -1,5 +1,6 @@
 package com.flab.shoeauction.domain.users.user;
 
+import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserDetailsResponse;
@@ -7,6 +8,7 @@ import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.cart.Cart;
+import com.flab.shoeauction.domain.cart.CartProduct;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserBase;
 import com.flab.shoeauction.domain.users.common.UserLevel;
@@ -15,6 +17,8 @@ import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -134,6 +138,28 @@ public class User extends UserBase {
 
     public boolean isBan() {
         return this.userStatus == UserStatus.BAN;
+    }
+
+    public void createCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public void addCartItem(CartProduct cartItem) {
+        cart.addCartProducts(cartItem);
+    }
+
+    public Set<WishItemResponse> getWishList() {
+        return cart.getWishList()
+            .stream()
+            .map(CartProduct::toWishItemDto)
+            .collect(Collectors.toSet());
+    }
+
+    public boolean checkCartItemDuplicate(CartProduct cartItem) {
+        return cart.getWishList()
+            .stream()
+            .map(CartProduct::getProduct)
+            .anyMatch(v -> v.getId() == cartItem.getProductId());
     }
 
 }

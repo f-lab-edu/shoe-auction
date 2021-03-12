@@ -21,8 +21,12 @@ public class Cart {
     private Long id;
 
     @OneToOne(mappedBy = "user")
-    private User user;
+    private User user;c
 
     @OneToMany(mappedBy = "cart")
     private Set<CartProduct> wishList = new HashSet<>();
+
+    public void addCartProducts(CartProduct cartItem) {
+        wishList.add(cartItem);
+    }
 }
