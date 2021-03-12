@@ -11,6 +11,7 @@ import com.flab.shoeauction.service.storage.AwsS3Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -64,22 +65,30 @@ public class BrandService {
         awsS3Service.deleteBrandImage(key);
     }
 
+    /*
+     * 기존 이미지 삭제 조건
+     * 1) requestDto의 imagePath가 null이고, 저장된 brand의 imagePath가 null이 아니라면
+     * 2) requestDto의 imagePath가 null이 아니고, 요청에 MultipartFile이 존재한다면
+     * 스토리지에서 기존의 이미지를 delete하고, imagePath를 null로 초기화한다.
+     * (기존 이미지 삭제 조건을 철저히 하여 스토리지 내 유령 파일을 만들지 않도록 한다.)
+     */
     @CacheEvict(value = "brands", allEntries = true)
     @Transactional
-    public void updateBrand(Long id, SaveRequest updatedBrand, MultipartFile brandImage) {
+    public void updateBrand(Long id, SaveRequest updatedBrand, @Nullable MultipartFile brandImage) {
         Brand savedBrand = brandRepository.findById(id)
             .orElseThrow(() -> new BrandNotFoundException());
         String savedImagePath = savedBrand.getOriginImagePath();
+        String updatedImagePath = updatedBrand.getOriginImagePath();
 
         checkDuplicateUpdatedNameKor(savedBrand.getNameKor(), updatedBrand.getNameKor());
         checkDuplicateUpdatedNameEng(savedBrand.getNameEng(), updatedBrand.getNameEng());
 
-        if (isDeleteImage(updatedBrand.isImageDeleteCheck(), brandImage, savedImagePath)) {
+        if (isDeleteSavedImage(savedImagePath, updatedImagePath, brandImage)) {
             String key = FileNameUtils.getFileName(savedImagePath);
             awsS3Service.deleteBrandImage(key);
             updatedBrand.deleteImagePath();
         }
-        if ((brandImage != null)) {
+        if (brandImage != null) {
             String originImagePath = awsS3Service.uploadBrandImage(brandImage);
             String thumbnailImagePath = FileNameUtils.toThumbnail(originImagePath);
             updatedBrand.setImagePath(originImagePath, thumbnailImagePath);
@@ -88,12 +97,10 @@ public class BrandService {
         savedBrand.update(updatedBrand);
     }
 
-    private boolean isDeleteImage(boolean imageDeleteCheck, MultipartFile brandImage,
-        String savedImagePath) {
-        if (imageDeleteCheck || ((brandImage != null) && (savedImagePath != null))) {
-            return true;
-        }
-        return false;
+    private boolean isDeleteSavedImage(String savedImagePath, String updatedImagePath,
+        MultipartFile brandImage) {
+        return ((updatedImagePath == null && savedImagePath != null) ||
+            (updatedImagePath != null && brandImage != null));
     }
 
     public void checkBrandExist(BrandInfo productsBrand) {

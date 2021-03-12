@@ -23,8 +23,6 @@ public class BrandDto {
 
         private String thumbnailImagePath;
 
-        private boolean imageDeleteCheck;
-
         public void setImagePath(String originImagePath, String thumbnailImagePath) {
             this.originImagePath = originImagePath;
             this.thumbnailImagePath = thumbnailImagePath;
