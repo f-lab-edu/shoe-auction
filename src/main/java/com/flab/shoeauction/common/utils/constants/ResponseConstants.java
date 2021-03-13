@@ -22,7 +22,7 @@ public class ResponseConstants {
 
     public static final ResponseEntity<String> USER_NOT_FOUND =
         new ResponseEntity<>(
-            "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.", HttpStatus.BAD_REQUEST
+            "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.", HttpStatus.NOT_FOUND
         );
 
     public static final ResponseEntity<String> UNAUTHORIZED_USER =
@@ -65,6 +65,10 @@ public class ResponseConstants {
     public static final ResponseEntity<String> IMAGE_ROAD_FAILED =
         new ResponseEntity<>("이미지 로드에 실패하였습니다.",
             HttpStatus.BAD_REQUEST);
+
+    public static final ResponseEntity<String> DUPLICATION_CART_ITEM = new ResponseEntity<>(
+        "해당 상품은 이미 위시리스트에 등록되어 있는 상품입니다.",
+        HttpStatus.CONFLICT);
 
     public static final ResponseEntity<String> IMAGE_TOO_LARGE =
         new ResponseEntity<>("허용된 용량을 초과한 이미지입니다.",

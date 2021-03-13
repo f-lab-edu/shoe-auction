@@ -1,22 +1,31 @@
 package com.flab.shoeauction.domain.users.user;
 
+import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
+import com.flab.shoeauction.controller.dto.UserDto.UserDetailsResponse;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
+import com.flab.shoeauction.domain.cart.Cart;
+import com.flab.shoeauction.domain.cart.CartProduct;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserBase;
 import com.flab.shoeauction.domain.users.common.UserLevel;
+import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,11 +47,18 @@ public class User extends UserBase {
 
     private LocalDateTime nicknameModifiedDate;
 
-    private boolean isBan;
+    private UserStatus userStatus;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "USER_ID")
     private List<AddressBook> addressesBook = new ArrayList<>();
+
+    /**
+     * USER는 하나의 CART만 가질 수 있고, CART 또한 여러명의 유저가 함께 사용할 수 없다. 따라서 일대일 매핑으로 처리한다.
+     */
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CART_ID")
+    private Cart cart;
 
     public UserInfoDto toUserInfoDto() {
         return UserInfoDto.builder()
@@ -51,7 +67,6 @@ public class User extends UserBase {
             .phone(this.getPhone())
             .account(this.getAccount())
             .userLevel(this.userLevel)
-            .isBan(this.isBan)
             .build();
     }
 
@@ -64,7 +79,6 @@ public class User extends UserBase {
 
     public void updatePassword(String password) {
         this.password = password;
-
     }
 
     public void updateAccount(Account account) {
@@ -93,13 +107,59 @@ public class User extends UserBase {
     }
 
     @Builder
-    public User(String email, String password, UserLevel userLevel, String nickname, String phone,
-        LocalDateTime nicknameModifiedDate, List<AddressBook> addressBooks) {
-        super(email, password, userLevel);
+    public User(Long id, String email, String password, UserLevel userLevel, String nickname, String phone,
+        LocalDateTime nicknameModifiedDate, List<AddressBook> addressBooks, UserStatus userStatus) {
+        super(id, email, password, userLevel);
         this.nickname = nickname;
         this.phone = phone;
         this.userLevel = userLevel;
         this.nicknameModifiedDate = nicknameModifiedDate;
         this.addressesBook = addressBooks;
+        this.userStatus = userStatus;
     }
+
+    public UserDetailsResponse toUserDetailsDto() {
+        return UserDetailsResponse.builder()
+            .id(this.getId())
+            .email(this.email)
+            .nickname(this.nickname)
+            .phone(this.phone)
+            .account(this.account)
+            .createDate(this.getCreatedDate())
+            .modifiedDate(this.getModifiedDate())
+            .userLevel(this.userLevel)
+            .userStatus(this.userStatus)
+            .build();
+    }
+
+    public void updateUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
+
+    public boolean isBan() {
+        return this.userStatus == UserStatus.BAN;
+    }
+
+    public void createCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public void addCartItem(CartProduct cartItem) {
+        cart.addCartProducts(cartItem);
+    }
+
+    public Set<WishItemResponse> getWishList() {
+        return cart.getWishList()
+            .stream()
+            .map(CartProduct::toWishItemDto)
+            .collect(Collectors.toSet());
+    }
+
+    public boolean checkCartItemDuplicate(CartProduct cartItem) {
+        return cart.getWishList()
+            .stream()
+            .map(CartProduct::getProduct)
+            .anyMatch(v -> v.getId() == cartItem.getProductId());
+    }
+
 }

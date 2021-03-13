@@ -34,9 +34,4 @@ public abstract class UserBase extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     protected UserLevel userLevel;
 
-    public UserBase(String email, String password, UserLevel userLevel) {
-        this.email = email;
-        this.password = password;
-        this.userLevel = userLevel;
-    }
 }
