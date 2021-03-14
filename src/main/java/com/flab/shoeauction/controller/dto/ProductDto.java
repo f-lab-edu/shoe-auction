@@ -96,8 +96,6 @@ public class ProductDto {
         private String nameEng;
         private String modelNumber;
         private String color;
-        //@JsonDeserialize(using = LocalDateDeserializer.class)
-        //@JsonSerialize(using = LocalDateSerializer.class)
         private LocalDate releaseDate;
         private int releasePrice;
         private Currency currency;
@@ -132,7 +130,8 @@ public class ProductDto {
         private Brand brand;
 
         @Builder
-        public WishItemResponse(Long id, Long productId, String nameKor, String nameEng, Brand brand) {
+        public WishItemResponse(Long id, Long productId, String nameKor, String nameEng,
+            Brand brand) {
             this.id = id;
             this.productId = productId;
             this.nameKor = nameKor;
@@ -140,6 +139,4 @@ public class ProductDto {
             this.brand = brand;
         }
     }
-}
-
 }

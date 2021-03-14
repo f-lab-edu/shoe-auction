@@ -59,10 +59,12 @@ public class BrandService {
         Brand brand = brandRepository.findById(id)
             .orElseThrow(BrandNotFoundException::new);
         String path = brand.getOriginImagePath();
-        String key = FileNameUtils.getFileName(path);
 
         brandRepository.deleteById(id);
-        awsS3Service.deleteBrandImage(key);
+        if (path != null) {
+            String key = FileNameUtils.getFileName(path);
+            awsS3Service.deleteBrandImage(key);
+        }
     }
 
     /*
