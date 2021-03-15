@@ -28,11 +28,17 @@ public class FileNameUtils {
         return fileName.substring(pos + 1);
     }
 
-    public static String getThumbnailPath(String path) {
-        return path.replaceFirst("origin", "thumbnail");
+    public static String getFileName(String path) {
+        int idx = path.lastIndexOf("/");
+
+        return path.substring(idx + 1);
     }
 
-    public static String getResizedPath(String path) {
-        return path.replaceFirst("origin", "resized");
+    public static String toThumbnail(String src) {
+        return src.replaceFirst("origin", "thumbnail");
+    }
+
+    public static String toResized(String src) {
+        return src.replaceFirst("origin", "resized");
     }
 }

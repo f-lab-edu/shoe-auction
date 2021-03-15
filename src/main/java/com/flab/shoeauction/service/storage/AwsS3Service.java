@@ -70,4 +70,16 @@ public class AwsS3Service implements StorageService {
 
         return s3Client.getUrl(bucket, convertedFileName).toString();
     }
+
+    public void deleteBrandImage(String key) {
+        delete(awsProperties.getBrnadBucket(), key);
+    }
+
+    public void deleteProductImage(String key) {
+        delete(awsProperties.getProductBucket(), key);
+    }
+
+    public void delete(String bucket, String key) {
+        s3Client.deleteObject(bucket, key);
+    }
 }

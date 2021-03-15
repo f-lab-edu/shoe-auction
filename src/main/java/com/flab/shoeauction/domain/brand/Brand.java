@@ -55,5 +55,7 @@ public class Brand extends BaseTimeEntity {
     public void update(SaveRequest updatedBrand) {
         this.nameKor = updatedBrand.getNameKor();
         this.nameEng = updatedBrand.getNameEng();
+        this.originImagePath = updatedBrand.getOriginImagePath();
+        this.thumbnailImagePath = updatedBrand.getThumbnailImagePath();
     }
 }
