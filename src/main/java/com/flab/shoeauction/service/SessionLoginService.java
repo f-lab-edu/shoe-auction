@@ -44,7 +44,6 @@ public class SessionLoginService {
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
         banCheck(user);
-
         session.setAttribute(AUTH_STATUS, user.getUserLevel());
     }
 
