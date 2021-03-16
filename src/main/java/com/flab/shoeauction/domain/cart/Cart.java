@@ -24,4 +24,6 @@ public class Cart {
     public void addCartProducts(CartProduct cartItem) {
         wishList.add(cartItem);
     }
+
+
 }

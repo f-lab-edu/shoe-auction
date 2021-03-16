@@ -9,15 +9,26 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.flab.shoeauction.controller.dto.AddressBookDto;
+import com.flab.shoeauction.controller.dto.ProductDto.IdRequest;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.addressBook.AddressBookRepository;
+import com.flab.shoeauction.domain.brand.Brand;
+import com.flab.shoeauction.domain.cart.Cart;
+import com.flab.shoeauction.domain.cart.CartProduct;
+import com.flab.shoeauction.domain.cart.CartProductRepository;
+import com.flab.shoeauction.domain.product.Currency;
+import com.flab.shoeauction.domain.product.Product;
+import com.flab.shoeauction.domain.product.ProductRepository;
+import com.flab.shoeauction.domain.product.SizeClassification;
+import com.flab.shoeauction.domain.product.SizeUnit;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
+import com.flab.shoeauction.exception.user.DuplicateCartItemException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
@@ -25,6 +36,7 @@ import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.exception.user.WrongPasswordException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +63,10 @@ class UserServiceTest {
     EncryptionService encryptionService;
     @Mock
     AddressBookRepository addressBookRepository;
+    @Mock
+    ProductRepository productRepository;
+    @Mock
+    CartProductRepository cartProductRepository;
     @InjectMocks
     UserService userService;
 
@@ -62,6 +78,27 @@ class UserServiceTest {
             .nickname("17171771")
             .build();
         return saveRequest;
+    }
+
+    private Product createProduct() {
+        Brand brand = new Brand(3L, "나이키", "nike", "123123213", "234234234");
+        return Product.builder()
+            .nameKor("조던")
+            .nameEng("jordan")
+            .modelNumber("12345")
+            .color("RED")
+            .releaseDate(LocalDate.now())
+            .releasePrice(200000)
+            .currency(Currency.KRW)
+            .sizeClassification(SizeClassification.MENS)
+            .sizeUnit(SizeUnit.MM)
+            .minSize(230)
+            .maxSize(320)
+            .sizeGap(10)
+            .brand(brand)
+            .build();
+
+
     }
 
 
@@ -218,7 +255,7 @@ class UserServiceTest {
     public void updateAddressBook() {
         Address address = new Address("우리집", "땡땡땡로 123", "123동 456호", "12345");
         AddressBook addressBook = new AddressBook(address);
-        AddressBookDto addressBookDto =new AddressBookDto(2L, "친구집", "사랑로 123", "123-1", "11111");
+        AddressBookDto addressBookDto = new AddressBookDto(2L, "친구집", "사랑로 123", "123-1", "11111");
         when(addressBookRepository.findById(addressBookDto.getId()))
             .thenReturn(Optional.of(addressBook));
 
@@ -300,7 +337,7 @@ class UserServiceTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
         when(userRepository.existsByNickname(nicknameAfter)).thenReturn(false);
 
-        userService.updateNickname(email,requestDto);
+        userService.updateNickname(email, requestDto);
 
         assertThat(user.getNickname()).isEqualTo(requestDto.getNickname());
         verify(userRepository, atLeastOnce()).findByEmail(email);
@@ -328,7 +365,7 @@ class UserServiceTest {
     @Test
     @DisplayName("닉네인 변경 실패 - 닉네임을 변경하고 7일이 지나지 않았다면 닉네임 변경에 실패한다.")
     public void failToUpdateNicknameByTerm() {
-        User user =createUserDto().toEntity();
+        User user = createUserDto().toEntity();
         SaveRequest requestDto = SaveRequest.builder()
             .nickname("자우림")
             .build();
@@ -343,8 +380,8 @@ class UserServiceTest {
         verify(userRepository, atLeastOnce()).existsByNickname(nicknameAfter);
     }
 
-    @DisplayName("비밀번호가 일치하여 회원 탈퇴 성공한다.")
     @Test
+    @DisplayName("비밀번호가 일치하여 회원 탈퇴 성공한다.")
     public void deleteSuccess() {
         SaveRequest saveRequest = createUserDto();
         String email = saveRequest.getEmail();
@@ -358,8 +395,8 @@ class UserServiceTest {
         verify(userRepository, atLeastOnce()).deleteByEmail(email);
     }
 
-    @DisplayName("비밀번호가 일치하지 않아 회원 탈퇴 실패한다.")
     @Test
+    @DisplayName("비밀번호가 일치하지 않아 회원 탈퇴 실패한다.")
     public void deleteFailure() {
         SaveRequest saveRequest = createUserDto();
         String email = saveRequest.getEmail();
@@ -371,5 +408,87 @@ class UserServiceTest {
         assertThrows(WrongPasswordException.class, () -> userService.delete(email, password));
 
         verify(userRepository, never()).deleteByEmail(email);
+    }
+
+    @Test
+    @DisplayName("중복된 상품이 아닌경우 위시리스트에 상품을 추가한다.")
+    public void addWishList() {
+        User user = createUserDto().toEntity();
+        Product product = createProduct();
+        Cart cart = new Cart();
+        user.createCart(cart);
+        CartProduct cartProduct = CartProduct.builder()
+            .cart(cart)
+            .product(product)
+            .build();
+        String email = "test123@test.com";
+        IdRequest idRequest = IdRequest
+            .builder()
+            .id(2L)
+            .build();
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        when(productRepository.findById(idRequest.getId())).thenReturn(Optional.of(product));
+        when(cartProductRepository.save(any())).thenReturn(cartProduct);
+
+        userService.addWishList(email, idRequest);
+        assertThat(user.getWishList().size()).isEqualTo(1);
+        verify(userRepository, atLeastOnce()).findByEmail(email);
+        verify(productRepository, atLeastOnce()).findById(idRequest.getId());
+        verify(cartProductRepository, atLeastOnce()).save(any());
+
+    }
+    @Test
+    @DisplayName("장바구니에 이미 동일한 상품이 존재하는 경우  DuplicateCartItemException이 발생한다.")
+    public void failToAddWishList() {
+        User user = createUserDto().toEntity();
+        Product product = createProduct();
+        Cart cart = new Cart();
+        user.createCart(cart);
+        CartProduct cartProduct = CartProduct.builder()
+            .cart(cart)
+            .product(product)
+            .build();
+        String email = "test123@test.com";
+        IdRequest idRequest = IdRequest
+            .builder()
+            .id(2L)
+            .build();
+        user.addCartItem(cartProduct);
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        when(productRepository.findById(idRequest.getId())).thenReturn(Optional.of(product));
+        when(cartProductRepository.save(any())).thenReturn(cartProduct);
+
+        assertThrows(DuplicateCartItemException.class, () -> userService.addWishList(email, idRequest));
+        verify(userRepository, atLeastOnce()).findByEmail(email);
+        verify(productRepository, atLeastOnce()).findById(idRequest.getId());
+        verify(cartProductRepository, atLeastOnce()).save(any());
+    }
+
+    @Test
+    @DisplayName("회원의 장바구니를 조회한다.")
+    public void getWishList() {
+        User user = createUserDto().toEntity();
+        Cart cart = new Cart();
+        user.createCart(cart);
+        String email= "jungkh405@naver.com";
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+
+        userService.getWishList(email);
+
+        assertThat(user.getWishList().size()).isEqualTo(0);
+        verify(userRepository, atLeastOnce()).findByEmail(email);
+    }
+
+    @Test
+    @DisplayName("카트에서 해당 상품을 삭제한다.")
+    public void deleteWishList() {
+        IdRequest idRequest = IdRequest.builder()
+            .id(1L).build();
+
+        userService.deleteWishList(idRequest);
+
+        verify(cartProductRepository, atLeastOnce()).deleteById(any());
     }
 }
