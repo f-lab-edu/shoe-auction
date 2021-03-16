@@ -118,39 +118,25 @@ class AdminApiControllerTest {
                         .description("email"),
                     fieldWithPath("content.[].userLevel").type(JsonFieldType.STRING)
                         .description("userLevel"),
-                    fieldWithPath("pageable.offset").type(JsonFieldType.NUMBER)
-                        .description("offset"),
-                    fieldWithPath("pageable.pageSize").type(JsonFieldType.NUMBER)
-                        .description("pageSize - 기본값 10 고정"),
-                    fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER)
-                        .description("응답한 페이지 번호"),
-                    fieldWithPath("pageable.paged").type(JsonFieldType.BOOLEAN)
-                        .description("paged"),
-                    fieldWithPath("pageable.unpaged").type(JsonFieldType.BOOLEAN)
-                        .description("unpaged"),
-                    fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
-                    fieldWithPath("size").type(JsonFieldType.NUMBER)
-                        .description("현재 조회 요청 개수- 기본값 10 고정"),
-                    fieldWithPath("number").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
-                    fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("첫번째 페이지 인지 여부"),
-                    fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 인지 여부"),
-                    fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
-                        .description("엘리먼트의 수 - 기본값 10 고정"),
-                    fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("비어있는지 여부"),
-                    fieldWithPath("totalElements").type(JsonFieldType.NUMBER)
-                        .description("전체 엘리먼트 개수")
+                    fieldWithPath("pageable.offset").ignored(),
+                    fieldWithPath("pageable.pageSize").ignored(),
+                    fieldWithPath("pageable.pageNumber").ignored(),
+                    fieldWithPath("pageable.paged").ignored(),
+                    fieldWithPath("pageable.unpaged").ignored(),
+                    fieldWithPath("pageable.sort.sorted").ignored(),
+                    fieldWithPath("pageable.sort.unsorted").ignored(),
+                    fieldWithPath("pageable.sort.empty").ignored(),
+                    fieldWithPath("sort.empty").ignored(),
+                    fieldWithPath("sort.sorted").ignored(),
+                    fieldWithPath("sort.unsorted").ignored(),
+                    fieldWithPath("totalPages").ignored(),
+                    fieldWithPath("size").ignored(),
+                    fieldWithPath("number").ignored(),
+                    fieldWithPath("first").ignored(),
+                    fieldWithPath("last").ignored(),
+                    fieldWithPath("numberOfElements").ignored(),
+                    fieldWithPath("empty").ignored(),
+                    fieldWithPath("totalElements").ignored()
                 )
             ));
     }
@@ -183,41 +169,26 @@ class AdminApiControllerTest {
                     fieldWithPath("content.[].id").type(JsonFieldType.NUMBER).description("ID"),
                     fieldWithPath("content.[].email").type(JsonFieldType.STRING)
                         .description("email"),
-                    fieldWithPath("content.[].userLevel").type(JsonFieldType.STRING)
-                        .description("userLevel"),
-                    fieldWithPath("pageable.offset").type(JsonFieldType.NUMBER)
-                        .description("offset"),
-                    fieldWithPath("pageable.pageSize").type(JsonFieldType.NUMBER)
-                        .description("pageSize - 기본값 10 고정"),
-                    fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER)
-                        .description("응답한 페이지 번호"),
-                    fieldWithPath("pageable.paged").type(JsonFieldType.BOOLEAN)
-                        .description("paged"),
-                    fieldWithPath("pageable.unpaged").type(JsonFieldType.BOOLEAN)
-                        .description("unpaged"),
-                    fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
-                    fieldWithPath("size").type(JsonFieldType.NUMBER)
-                        .description("현재 조회 요청 개수- 기본값 10 고정"),
-                    fieldWithPath("number").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
-                    fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("첫번째 페이지 인지 여부"),
-                    fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 인지 여부"),
-                    fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
-                        .description("엘리먼트의 수 - 기본값 10 고정"),
-                    fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("비어있는지 여부"),
-                    fieldWithPath("totalElements").type(JsonFieldType.NUMBER)
-                        .description("전체 엘리먼트 개수")
+                    fieldWithPath("content.[].userLevel").ignored(),
+                    fieldWithPath("pageable.offset").ignored(),
+                    fieldWithPath("pageable.pageSize").ignored(),
+                    fieldWithPath("pageable.pageNumber").ignored(),
+                    fieldWithPath("pageable.paged").ignored(),
+                    fieldWithPath("pageable.unpaged").ignored(),
+                    fieldWithPath("pageable.sort.sorted").ignored(),
+                    fieldWithPath("pageable.sort.unsorted").ignored(),
+                    fieldWithPath("pageable.sort.empty").ignored(),
+                    fieldWithPath("sort.empty").ignored(),
+                    fieldWithPath("sort.sorted").ignored(),
+                    fieldWithPath("sort.unsorted").ignored(),
+                    fieldWithPath("totalPages").ignored(),
+                    fieldWithPath("size").ignored(),
+                    fieldWithPath("number").ignored(),
+                    fieldWithPath("first").ignored(),
+                    fieldWithPath("last").ignored(),
+                    fieldWithPath("numberOfElements").ignored(),
+                    fieldWithPath("empty").ignored(),
+                    fieldWithPath("totalElements").ignored()
                 )
             ));
     }
@@ -250,39 +221,25 @@ class AdminApiControllerTest {
                         .description("email"),
                     fieldWithPath("content.[].userLevel").type(JsonFieldType.STRING)
                         .description("userLevel"),
-                    fieldWithPath("pageable.offset").type(JsonFieldType.NUMBER)
-                        .description("offset"),
-                    fieldWithPath("pageable.pageSize").type(JsonFieldType.NUMBER)
-                        .description("pageSize - 기본값 10 고정"),
-                    fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER)
-                        .description("응답한 페이지 번호"),
-                    fieldWithPath("pageable.paged").type(JsonFieldType.BOOLEAN)
-                        .description("paged"),
-                    fieldWithPath("pageable.unpaged").type(JsonFieldType.BOOLEAN)
-                        .description("unpaged"),
-                    fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
-                    fieldWithPath("size").type(JsonFieldType.NUMBER)
-                        .description("현재 조회 요청 개수- 기본값 10 고정"),
-                    fieldWithPath("number").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
-                    fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("첫번째 페이지 인지 여부"),
-                    fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 인지 여부"),
-                    fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
-                        .description("엘리먼트의 수 - 기본값 10 고정"),
-                    fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("비어있는지 여부"),
-                    fieldWithPath("totalElements").type(JsonFieldType.NUMBER)
-                        .description("전체 엘리먼트 개수")
+                    fieldWithPath("pageable.offset").ignored(),
+                    fieldWithPath("pageable.pageSize").ignored(),
+                    fieldWithPath("pageable.pageNumber").ignored(),
+                    fieldWithPath("pageable.paged").ignored(),
+                    fieldWithPath("pageable.unpaged").ignored(),
+                    fieldWithPath("pageable.sort.sorted").ignored(),
+                    fieldWithPath("pageable.sort.unsorted").ignored(),
+                    fieldWithPath("pageable.sort.empty").ignored(),
+                    fieldWithPath("sort.empty").ignored(),
+                    fieldWithPath("sort.sorted").ignored(),
+                    fieldWithPath("sort.unsorted").ignored(),
+                    fieldWithPath("totalPages").ignored(),
+                    fieldWithPath("size").ignored(),
+                    fieldWithPath("number").ignored(),
+                    fieldWithPath("first").ignored(),
+                    fieldWithPath("last").ignored(),
+                    fieldWithPath("numberOfElements").ignored(),
+                    fieldWithPath("empty").ignored(),
+                    fieldWithPath("totalElements").ignored()
                 )
             ));
     }
@@ -319,39 +276,25 @@ class AdminApiControllerTest {
                         .description("email"),
                     fieldWithPath("content.[].userLevel").type(JsonFieldType.STRING)
                         .description("userLevel"),
-                    fieldWithPath("pageable.offset").type(JsonFieldType.NUMBER)
-                        .description("offset"),
-                    fieldWithPath("pageable.pageSize").type(JsonFieldType.NUMBER)
-                        .description("pageSize - 기본값 10 고정"),
-                    fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER)
-                        .description("응답한 페이지 번호"),
-                    fieldWithPath("pageable.paged").type(JsonFieldType.BOOLEAN)
-                        .description("paged"),
-                    fieldWithPath("pageable.unpaged").type(JsonFieldType.BOOLEAN)
-                        .description("unpaged"),
-                    fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN)
-                        .description("정렬 - 사용하지 않음"),
-                    fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
-                    fieldWithPath("size").type(JsonFieldType.NUMBER)
-                        .description("현재 조회 요청 개수- 기본값 10 고정"),
-                    fieldWithPath("number").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
-                    fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("첫번째 페이지 인지 여부"),
-                    fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 인지 여부"),
-                    fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
-                        .description("엘리먼트의 수 - 기본값 10 고정"),
-                    fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("비어있는지 여부"),
-                    fieldWithPath("totalElements").type(JsonFieldType.NUMBER)
-                        .description("전체 엘리먼트 개수")
+                    fieldWithPath("pageable.offset").ignored(),
+                    fieldWithPath("pageable.pageSize").ignored(),
+                    fieldWithPath("pageable.pageNumber").ignored(),
+                    fieldWithPath("pageable.paged").ignored(),
+                    fieldWithPath("pageable.unpaged").ignored(),
+                    fieldWithPath("pageable.sort.sorted").ignored(),
+                    fieldWithPath("pageable.sort.unsorted").ignored(),
+                    fieldWithPath("pageable.sort.empty").ignored(),
+                    fieldWithPath("sort.empty").ignored(),
+                    fieldWithPath("sort.sorted").ignored(),
+                    fieldWithPath("sort.unsorted").ignored(),
+                    fieldWithPath("totalPages").ignored(),
+                    fieldWithPath("size").ignored(),
+                    fieldWithPath("number").ignored(),
+                    fieldWithPath("first").ignored(),
+                    fieldWithPath("last").ignored(),
+                    fieldWithPath("numberOfElements").ignored(),
+                    fieldWithPath("empty").ignored(),
+                    fieldWithPath("totalElements").ignored()
                 )
             ));
     }
@@ -364,7 +307,7 @@ class AdminApiControllerTest {
             .email("jungkh405@naver.com")
             .nickname("17171771")
             .phone("01012345678")
-            .account(new Account("카카오뱅크","333333333333","마리아"))
+            .account(new Account("카카오뱅크", "333333333333", "마리아"))
             .modifiedDate(LocalDateTime.now())
             .createDate(LocalDateTime.now())
             .userLevel(UserLevel.UNAUTH)
@@ -385,11 +328,15 @@ class AdminApiControllerTest {
                     fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
                     fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
                     fieldWithPath("phone").type(JsonFieldType.STRING).description("회원 휴대폰번호"),
-                    subsectionWithPath("account").type(JsonFieldType.OBJECT).description("회원의 계좌정보"),
+                    subsectionWithPath("account").type(JsonFieldType.OBJECT)
+                        .description("회원의 계좌정보"),
                     fieldWithPath("createDate").type(JsonFieldType.VARIES).description("회원 가입 일시"),
-                    fieldWithPath("modifiedDate").type(JsonFieldType.VARIES).description("회원 정보 수정 일시"),
-                    fieldWithPath("userLevel").type(JsonFieldType.STRING).description("회원 권한[UNAUTH/AUTH/ADMIN"),
-                    fieldWithPath("userStatus").type(JsonFieldType.STRING).description("회원 상태[BAN/NORMAL]")
+                    fieldWithPath("modifiedDate").type(JsonFieldType.VARIES)
+                        .description("회원 정보 수정 일시"),
+                    fieldWithPath("userLevel").type(JsonFieldType.STRING)
+                        .description("회원 권한[UNAUTH/AUTH/ADMIN"),
+                    fieldWithPath("userStatus").type(JsonFieldType.STRING)
+                        .description("회원 상태[BAN/NORMAL]")
                 )
 
             ));
@@ -410,7 +357,8 @@ class AdminApiControllerTest {
             .andDo(print())
             .andExpect(status().isOk())
             .andDo(document("admin/ban", requestFields(
-                fieldWithPath("id").type(JsonFieldType.NUMBER).description("BAN또는 NORMAL 처리할 회원의 IP[PK]"),
+                fieldWithPath("id").type(JsonFieldType.NUMBER)
+                    .description("BAN또는 NORMAL 처리할 회원의 IP[PK]"),
                 fieldWithPath("userStatus").type(JsonFieldType.STRING).description("BAN / NORMAL")
             )));
     }

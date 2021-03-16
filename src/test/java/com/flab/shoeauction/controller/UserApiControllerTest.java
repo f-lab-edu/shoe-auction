@@ -310,8 +310,7 @@ class UserApiControllerTest {
             .andExpect(status().isCreated())
             .andDo(document("users/certification/sms/send", requestFields(
                 fieldWithPath("phone").type(JsonFieldType.STRING).description("인증번호를 받을 휴대폰 번호"),
-                fieldWithPath("certificationNumber").type(null)
-                    .description("null : 인증 번호 발송시 사용하지 않는 값")
+                fieldWithPath("certificationNumber").ignored()
             )));
     }
 
@@ -517,8 +516,7 @@ class UserApiControllerTest {
             .andExpect(status().isCreated())
             .andDo(document("users/certification/email/send", requestFields(
                 fieldWithPath("email").type(JsonFieldType.STRING).description("인증번호를 받을 이메일"),
-                fieldWithPath("certificationNumber").type(JsonFieldType.NULL)
-                    .description("null : 인증 이메일 발송시 사용하지 않는 값")
+                fieldWithPath("certificationNumber").ignored()
             )));
     }
 
@@ -590,8 +588,7 @@ class UserApiControllerTest {
                 fieldWithPath("email").type(JsonFieldType.STRING)
                     .description("비밀번호를 변경할 회원 ID(email)"),
                 fieldWithPath("passwordAfter").type(JsonFieldType.STRING).description("변경할 비밀번호"),
-                fieldWithPath("passwordBefore").type(JsonFieldType.NULL)
-                    .description("null : 비밀번호 찾기에서는 이전 비밀번호를 알 수 없음")
+                fieldWithPath("passwordBefore").ignored()
             )))
         ;
     }
@@ -747,12 +744,9 @@ class UserApiControllerTest {
             .andDo(print())
             .andExpect(status().isOk())
             .andDo(document("users/changeUserInfo/nickname/changeSuccessful", requestFields(
-                fieldWithPath("email").type(JsonFieldType.NULL)
-                    .description("null : 닉네임 변경시 사용되지 않는 값"),
-                fieldWithPath("password").type(JsonFieldType.NULL)
-                    .description("null : 닉네임 변경시 사용되지 않는 값"),
-                fieldWithPath("phone").type(JsonFieldType.NULL)
-                    .description("null : 닉네임 변경시 사용되지 않는 값"),
+                fieldWithPath("email").ignored(),
+                fieldWithPath("password").ignored(),
+                fieldWithPath("phone").ignored(),
                 fieldWithPath("nickname").type(JsonFieldType.STRING).description("새로운 닉네임")
             )));
     }
@@ -776,12 +770,9 @@ class UserApiControllerTest {
             .andDo(print())
             .andExpect(status().isBadRequest())
             .andDo(document("users/changeUserInfo/nickname/changeFailure", requestFields(
-                fieldWithPath("email").type(JsonFieldType.NULL)
-                    .description("null : 닉네임 변경시 사용되지 않는 값"),
-                fieldWithPath("password").type(JsonFieldType.NULL)
-                    .description("null : 닉네임 변경시 사용되지 않는 값"),
-                fieldWithPath("phone").type(JsonFieldType.NULL)
-                    .description("null : 닉네임 변경시 사용되지 않는 값"),
+                fieldWithPath("email").ignored(),
+                fieldWithPath("password").ignored(),
+                fieldWithPath("phone").ignored(),
                 fieldWithPath("nickname").type(JsonFieldType.STRING).description("새로운 닉네임")
             )));
     }
@@ -846,14 +837,10 @@ class UserApiControllerTest {
             .andExpect(status().isOk())
             .andDo(document("users/changeUserInfo/addressBook/delete", requestFields(
                 fieldWithPath("id").type(JsonFieldType.NUMBER).description("ID"),
-                fieldWithPath("addressName").type(JsonFieldType.NULL)
-                    .description("null : 주소록 삭제시 ID 만 요청"),
-                fieldWithPath("roadNameAddress").type(JsonFieldType.NULL)
-                    .description("null : 주소록 삭제시 ID 만 요청"),
-                fieldWithPath("detailedAddress").type(JsonFieldType.NULL)
-                    .description("null : 주소록 삭제시 ID 만 요청"),
-                fieldWithPath("postalCode").type(JsonFieldType.NULL)
-                    .description("null : 주소록 삭제시 ID 만 요청")
+                fieldWithPath("addressName").ignored(),
+                fieldWithPath("roadNameAddress").ignored(),
+                fieldWithPath("detailedAddress").ignored(),
+                fieldWithPath("postalCode").ignored()
             )));
     }
 
@@ -946,7 +933,8 @@ class UserApiControllerTest {
             .andDo(print())
             .andExpect(status().isOk())
             .andDo(document("users/carts/deleteWishList", requestFields(
-                fieldWithPath("id").type(JsonFieldType.NUMBER).description("카트상품(CartProduct)의 ID[PK]")
+                fieldWithPath("id").type(JsonFieldType.NUMBER)
+                    .description("카트상품(CartProduct)의 ID[PK]")
             )));
     }
 }
