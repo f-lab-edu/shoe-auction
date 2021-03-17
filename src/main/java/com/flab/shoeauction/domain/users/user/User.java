@@ -61,9 +61,6 @@ public class User extends UserBase {
     @JoinColumn(name = "CART_ID")
     private Cart cart;
 
-    @OneToMany(mappedBy = "user")
-    private List<Trade> trades = new ArrayList<>();
-
     public UserInfoDto toUserInfoDto() {
         return UserInfoDto.builder()
             .email(this.getEmail())
