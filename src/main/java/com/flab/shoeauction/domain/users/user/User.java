@@ -9,6 +9,7 @@ import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.cart.Cart;
 import com.flab.shoeauction.domain.cart.CartProduct;
+import com.flab.shoeauction.domain.trade.Trade;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserBase;
 import com.flab.shoeauction.domain.users.common.UserLevel;
@@ -59,6 +60,9 @@ public class User extends UserBase {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CART_ID")
     private Cart cart;
+
+    @OneToMany(mappedBy = "user")
+    private List<Trade> trades = new ArrayList<>();
 
     public UserInfoDto toUserInfoDto() {
         return UserInfoDto.builder()

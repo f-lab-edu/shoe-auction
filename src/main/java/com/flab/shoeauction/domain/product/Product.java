@@ -4,7 +4,10 @@ import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
 import com.flab.shoeauction.domain.BaseTimeEntity;
 import com.flab.shoeauction.domain.brand.Brand;
+import com.flab.shoeauction.domain.trade.Trade;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -68,6 +72,9 @@ public class Product extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "BRAND_ID")
     private Brand brand;
+
+    @OneToMany(mappedBy = "product")
+    private List<Trade> trades = new ArrayList<>();
 
     @Builder
     public Product(String nameKor, String nameEng, String modelNumber, String color,
