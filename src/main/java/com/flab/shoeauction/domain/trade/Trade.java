@@ -38,10 +38,10 @@ public class Trade extends BaseTimeEntity {
     private Product product;
 
     @Enumerated(EnumType.STRING)
-    private String type;
+    private TradeType type;
 
     @Enumerated(EnumType.STRING)
-    private String status;
+    private TradeStatus status;
 
     private Long price;
 }
