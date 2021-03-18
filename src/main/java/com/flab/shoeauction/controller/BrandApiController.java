@@ -28,7 +28,7 @@ public class BrandApiController {
 
     private final BrandService brandService;
 
-    //@LoginCheck(authority = UserLevel.ADMIN)
+    @LoginCheck(authority = UserLevel.ADMIN)
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void createBrand(@Valid @RequestPart SaveRequest requestDto,

@@ -1,10 +1,12 @@
 package com.flab.shoeauction.controller;
 
+import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
 import com.flab.shoeauction.domain.product.Currency;
 import com.flab.shoeauction.domain.product.SizeClassification;
 import com.flab.shoeauction.domain.product.SizeUnit;
+import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.service.BrandService;
 import com.flab.shoeauction.service.ProductService;
 import javax.validation.Valid;
@@ -30,7 +32,7 @@ public class ProductApiController {
     private final ProductService productService;
     private final BrandService brandService;
 
-    //@LoginCheck(authority = UserLevel.ADMIN)
+    @LoginCheck(authority = UserLevel.ADMIN)
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void createProduct(@Valid @RequestPart SaveRequest requestDto,
@@ -45,14 +47,14 @@ public class ProductApiController {
         return ResponseEntity.ok(productInfoResponse);
     }
 
-    //@LoginCheck(authority = UserLevel.ADMIN)
+    @LoginCheck(authority = UserLevel.ADMIN)
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
     }
 
-    //@LoginCheck(authority = UserLevel.ADMIN)
+    @LoginCheck(authority = UserLevel.ADMIN)
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}")
     public void updateProduct(@PathVariable Long id,
