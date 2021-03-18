@@ -28,7 +28,7 @@ public class BrandApiController {
 
     private final BrandService brandService;
 
-    @LoginCheck(authority = UserLevel.ADMIN)
+    //@LoginCheck(authority = UserLevel.ADMIN)
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void createBrand(@Valid @RequestPart SaveRequest requestDto,
@@ -36,7 +36,6 @@ public class BrandApiController {
         brandService.saveBrand(requestDto, brandImage);
     }
 
-    @LoginCheck(authority = UserLevel.ADMIN)
     @GetMapping("/{id}")
     public ResponseEntity<BrandInfo> getBrandInfo(@PathVariable Long id) {
         BrandInfo brandInfoResponse = brandService.getBrandInfo(id);

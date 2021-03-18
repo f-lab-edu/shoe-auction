@@ -66,6 +66,12 @@ public class ProductDto {
         @NotNull(message = "브랜드를 선택해주세요.")
         private BrandInfo brand;
 
+        private String originImagePath;
+
+        private String thumbnailImagePath;
+
+        private String resizedImagePath;
+
         public Product toEntity() {
             return Product.builder()
                 .nameKor(this.nameKor)
@@ -81,7 +87,21 @@ public class ProductDto {
                 .maxSize(this.maxSize)
                 .sizeGap(this.sizeGap)
                 .brand(this.brand.toEntity())
+                .originImagePath(this.originImagePath)
+                .thumbnailImagePath(this.thumbnailImagePath)
+                .resizedImagePath(this.resizedImagePath)
                 .build();
+        }
+
+        public void setImagePath(String originImagePath, String thumbnailImagePath,
+            String resizedImagePath) {
+            this.originImagePath = originImagePath;
+            this.thumbnailImagePath = thumbnailImagePath;
+            this.resizedImagePath = resizedImagePath;
+        }
+
+        public void deleteImagePath() {
+            setImagePath(null, null, null);
         }
     }
 
