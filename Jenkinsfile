@@ -6,15 +6,6 @@ pipeline {
 
 
   stages {
-     stage('checkout') {
-       steps {
-          checkout scm
-          echo 'git checkout success'
-
-          }
-     }
-
-
      stage('build') {
        steps {
           echo 'build success'
@@ -29,5 +20,4 @@ pipeline {
           sh "./gradlew test"
       }
     }
-
 }
