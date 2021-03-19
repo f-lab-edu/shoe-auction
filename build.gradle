@@ -83,9 +83,3 @@ configurations {
 compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
-
-task print() {
-    doLast{
-        println "JENKINS TEST"
-    }
-}
