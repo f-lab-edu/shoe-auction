@@ -6,16 +6,17 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-           echo 'build success'
            sh "chmod +x gradlew"
            sh "./gradlew clean build --no-daemon"
+           echo 'build success'
+
       }
     }
 
     stage('Test') {
       steps {
-          echo 'test success'
           sh "./gradlew test"
+          echo 'test success'
       }
     }
 
