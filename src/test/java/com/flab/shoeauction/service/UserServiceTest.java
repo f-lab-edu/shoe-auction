@@ -477,7 +477,7 @@ class UserServiceTest {
 
         userService.getWishList(email);
 
-        assertThat(user.getWishList().size()).isEqualTo(0);
+        assertThat(user.getWishList().size()).isEqualTo(1);
         verify(userRepository, atLeastOnce()).findByEmail(email);
     }
 
