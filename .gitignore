@@ -1,8 +1,6 @@
 HELP.md
 .gradle
-gradle/
 build/
-!gradle/wrapper/gradle-wrapper.jar
 lib/*
 
 ### IntelliJ IDEA ###
