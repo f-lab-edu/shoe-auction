@@ -14,8 +14,9 @@ pipeline {
 
     stage('Test') {
       steps {
-        sh './gradlew test'
-        echo 'Test Success!'
+        echo 'Compile project'
+        sh "chmod +x gradlew"
+        sh "./gradlew test"
       }
     }
 
