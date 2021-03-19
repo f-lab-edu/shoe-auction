@@ -9,21 +9,19 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /**
- * @EnableRedisHttpSession
- * 해당 어노테이션은 properties의 spring.session.store-type의 값에 redis를 설정하는 것과 동일하게 작동합니다.
- * 동작 과정은 Filter를 implement하는 SpringSessionRepositoryFilter라는 스프링 빈을 생성합니다.
- * 해당 필터는 HttpSession의 구현체를 바꾸어서 Redis에서 Spring Session을 지원하도록 해줍니다.
+ * @EnableRedisHttpSession 해당 어노테이션은 properties의 spring.session.store-type의 값에 redis를 설정하는 것과 동일하게
+ * 작동합니다. 동작 과정은 Filter를 implement하는 SpringSessionRepositoryFilter라는 스프링 빈을 생성합니다. 해당 필터는
+ * HttpSession의 구현체를 바꾸어서 Redis에서 Spring Session을 지원하도록 해줍니다.
  */
 @EnableRedisHttpSession
 @Configuration
 public class RedisConfig {
 
-    @Value("${spring.redis.host}")
+    @Value("${spring.redis.session.host}")
     private String redisHost;
 
-    @Value("${spring.redis.port}")
+    @Value("${spring.redis.session.port}")
     private int redisPort;
-
 
     /*
      * 자바에서 레디스를 사용하기 위해서 레디스 클라이언트가 필요하다.
@@ -45,7 +43,8 @@ public class RedisConfig {
      * 문자열 저장의 특화된 RedisTemplate의 서브 클래스 StringRedisTemplate를 사용했다.
      * StringRedisTemplate의 default Serializer는 StringSerializer이다.
      */
-    @Bean
+
+    @Bean(name = "redisTemplate")
     public StringRedisTemplate stringRedisTemplate() {
         StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
         stringRedisTemplate.setConnectionFactory(redisConnectionFactory());

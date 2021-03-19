@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class BrandDto {
 
     @Getter
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SaveRequest {

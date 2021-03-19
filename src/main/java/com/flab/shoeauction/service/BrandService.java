@@ -41,7 +41,7 @@ public class BrandService {
 
     @Transactional
     @CacheEvict(value = "brands", allEntries = true)
-    public void saveBrand(SaveRequest requestDto, MultipartFile brandImage) {
+    public void saveBrand(SaveRequest requestDto, @Nullable MultipartFile brandImage) {
         if (checkDuplicateName(requestDto)) {
             throw new DuplicateBrandNameException();
         }
@@ -59,10 +59,12 @@ public class BrandService {
         Brand brand = brandRepository.findById(id)
             .orElseThrow(BrandNotFoundException::new);
         String path = brand.getOriginImagePath();
-        String key = FileNameUtils.getFileName(path);
 
         brandRepository.deleteById(id);
-        awsS3Service.deleteBrandImage(key);
+        if (path != null) {
+            String key = FileNameUtils.getFileName(path);
+            awsS3Service.deleteBrandImage(key);
+        }
     }
 
     /*
@@ -100,7 +102,7 @@ public class BrandService {
     private boolean isDeleteSavedImage(String savedImagePath, String updatedImagePath,
         MultipartFile brandImage) {
         return ((updatedImagePath == null && savedImagePath != null) ||
-            (updatedImagePath != null && brandImage != null));
+            (savedImagePath != null && brandImage != null));
     }
 
     public void checkBrandExist(BrandInfo productsBrand) {

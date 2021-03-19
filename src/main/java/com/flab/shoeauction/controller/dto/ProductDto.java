@@ -66,6 +66,12 @@ public class ProductDto {
         @NotNull(message = "브랜드를 선택해주세요.")
         private BrandInfo brand;
 
+        private String originImagePath;
+
+        private String thumbnailImagePath;
+
+        private String resizedImagePath;
+
         public Product toEntity() {
             return Product.builder()
                 .nameKor(this.nameKor)
@@ -81,7 +87,21 @@ public class ProductDto {
                 .maxSize(this.maxSize)
                 .sizeGap(this.sizeGap)
                 .brand(this.brand.toEntity())
+                .originImagePath(this.originImagePath)
+                .thumbnailImagePath(this.thumbnailImagePath)
+                .resizedImagePath(this.resizedImagePath)
                 .build();
+        }
+
+        public void setImagePath(String originImagePath, String thumbnailImagePath,
+            String resizedImagePath) {
+            this.originImagePath = originImagePath;
+            this.thumbnailImagePath = thumbnailImagePath;
+            this.resizedImagePath = resizedImagePath;
+        }
+
+        public void deleteImagePath() {
+            setImagePath(null, null, null);
         }
     }
 
@@ -96,8 +116,6 @@ public class ProductDto {
         private String nameEng;
         private String modelNumber;
         private String color;
-        //@JsonDeserialize(using = LocalDateDeserializer.class)
-        //@JsonSerialize(using = LocalDateSerializer.class)
         private LocalDate releaseDate;
         private int releasePrice;
         private Currency currency;
@@ -132,7 +150,8 @@ public class ProductDto {
         private Brand brand;
 
         @Builder
-        public WishItemResponse(Long id, Long productId, String nameKor, String nameEng, Brand brand) {
+        public WishItemResponse(Long id, Long productId, String nameKor, String nameEng,
+            Brand brand) {
             this.id = id;
             this.productId = productId;
             this.nameKor = nameKor;
@@ -141,4 +160,3 @@ public class ProductDto {
         }
     }
 }
-

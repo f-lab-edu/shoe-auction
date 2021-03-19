@@ -14,8 +14,7 @@ Andy Wilkinson;
 [[overview_http_verbs]]
 == HTTP Methods
 
-RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its
-use of HTTP verbs.
+RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP verbs.
 
 |===
 | Verb | Usage
@@ -36,8 +35,7 @@ use of HTTP verbs.
 [[overview_http_status_codes]]
 == HTTP status codes
 
-RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its
-use of HTTP status codes.
+RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP status codes.
 
 |===
 | Status code | Usage
@@ -46,14 +44,16 @@ use of HTTP status codes.
 | The request completed successfully
 
 | `201 Created`
-| A new resource has been created successfully. The resource's URI is available from the response's
+| A new resource has been created successfully.
+The resource's URI is available from the response's
 `Location` header
 
 | `204 No Content`
 | An update to an existing resource has been applied successfully
 
 | `400 Bad Request`
-| The request was malformed. The response body will include an error providing further information
+| The request was malformed.
+The response body will include an error providing further information
 
 | `401 Unauthorized`
 | The request has not been applied because it lacks valid authentication credentials for the target resource.
@@ -65,7 +65,8 @@ use of HTTP status codes.
 | The requested resource did not exist
 
 | `409 Conflict`
-| The request could not be completed due to a conflict with the current state of the target resource. This code is used in situations where the user might be able to resolve the conflict and resubmit the request.
+| The request could not be completed due to a conflict with the current state of the target resource.
+This code is used in situations where the user might be able to resolve the conflict and resubmit the request.
 |===
 
 == USER
@@ -225,6 +226,7 @@ include::{snippets}/users/certification/sms/failure/http-response.adoc[]
 ---
 
 ==== 이메일 인증(토큰)
+
 `*_1. Success : Authentication Successful_*`
 
 **request-parameters**
@@ -269,6 +271,7 @@ NOTE: 회원가입시 입력한 이메일로 인증 토큰이 전송됩니다. �
 === 2. login / logout
 
 ==== 로그인
+
 `*_1. Success_*`
 
 **request-fields**
@@ -295,8 +298,8 @@ include::{snippets}/users/login/failure/http-response.adoc[]
 
 ---
 
-
 ==== 로그아웃
+
 `*_1. Success_*`
 
 **Example request**
@@ -311,6 +314,7 @@ include::{snippets}/users/logout/http-response.adoc[]
 === 3. 비밀번호 찾기
 
 ==== 회원 리소스
+
 `*_1. successful get resource_*`
 
 include::{snippets}/users/forgetPassword/resource/successful/path-parameters.adoc[]
@@ -377,7 +381,6 @@ include::{snippets}/users/certification/sms/failure/http-response.adoc[]
 
 ==== 이메일 인증
 
-
 `*_1. Send Email_*`
 
 **request-fields**
@@ -419,7 +422,6 @@ NOTE: 비밀번호 분실시 이메일 또는 휴대폰중 하나를 선택하�
 
 ---
 
-
 === 4. 회원 정보 수정
 
 ==== 닉네임 변경
@@ -451,11 +453,9 @@ include::{snippets}/users/changeUserInfo/nickname/changeFailure/http-request.ado
 include::{snippets}/users/changeUserInfo/nickname/changeFailure/http-response.adoc[]
 
 
-NOTE: 닉네임은 7일에 한번만 변경이 가능합니다. 중복 검사를 통과하고 변경한지 7일이 초과되었을 경우에만
-닉네임 변경에 성공합니다.
+NOTE: 닉네임은 7일에 한번만 변경이 가능합니다. 중복 검사를 통과하고 변경한지 7일이 초과되었을 경우에만 닉네임 변경에 성공합니다.
 
 ---
-
 
 ==== 비밀번호 변경
 
@@ -516,6 +516,7 @@ include::{snippets}/users/changeUserInfo/account/change/http-response.adoc[]
 ---
 
 ==== 주소록 설정
+
 `*_1. Successful : add_*`
 
 **request-fields**
@@ -570,3 +571,128 @@ include::{snippets}/users/my-infos/response-fields.adoc[]
 NOTE: 현재 로그인되어있는 사용자의 my-infos 리소스를 가져옵니다.
 
 ---
+
+=== 6. 브랜드 전체 조회
+
+**curl**
+
+include::{snippets}/brands/get/curl-request.adoc[]
+
+**response-fields**
+
+include::{snippets}/brands/get/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/brands/get/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/brands/get/http-response.adoc[]
+
+
+== ADMIN
+
+---
+
+=== 1. 회원 관리
+
+---
+
+=== 2. 브랜드 관리
+
+---
+
+==== 브랜드 생성
+
+**curl**
+
+include::{snippets}/brands/create/curl-request.adoc[]
+
+**request-fields**
+
+include::{snippets}/brands/create/request-part-requestDto-fields.adoc[]
+
+**request-parts(Optional)**
+
+include::{snippets}/brands/create/request-parts.adoc[]
+
+**Example request**
+
+include::{snippets}/brands/create/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/brands/create/http-response.adoc[]
+
+---
+
+==== 브랜드 정보 조회
+
+**curl**
+
+include::{snippets}/brands/get/details/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/brands/get/details/path-parameters.adoc[]
+
+**response-fields**
+
+include::{snippets}/brands/get/details/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/brands/get/details/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/brands/get/details/http-response.adoc[]
+
+---
+
+==== 브랜드 수정
+
+**curl**
+
+include::{snippets}/brands/update/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/brands/update/path-parameters.adoc[]
+
+**request-fields**
+
+include::{snippets}/brands/update/request-part-requestDto-fields.adoc[]
+
+**request-parts(Optional)**
+
+include::{snippets}/brands/create/request-parts.adoc[]
+
+**Example request**
+
+include::{snippets}/brands/update/http-request.adoc[]
+
+---
+
+==== 브랜드 삭제
+
+**curl**
+
+include::{snippets}/brands/delete/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/brands/delete/path-parameters.adoc[]
+
+**Example request**
+
+include::{snippets}/brands/delete/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/brands/delete/http-response.adoc[]
+
+---
+
+=== 3. 상품 관리

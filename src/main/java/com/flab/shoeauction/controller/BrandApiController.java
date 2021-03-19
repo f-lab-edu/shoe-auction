@@ -36,7 +36,6 @@ public class BrandApiController {
         brandService.saveBrand(requestDto, brandImage);
     }
 
-    @LoginCheck(authority = UserLevel.ADMIN)
     @GetMapping("/{id}")
     public ResponseEntity<BrandInfo> getBrandInfo(@PathVariable Long id) {
         BrandInfo brandInfoResponse = brandService.getBrandInfo(id);

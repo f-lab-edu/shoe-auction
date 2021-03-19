@@ -19,9 +19,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RequestMapping("/products")
@@ -34,9 +35,10 @@ public class ProductApiController {
     @LoginCheck(authority = UserLevel.ADMIN)
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void createProduct(@Valid @RequestBody SaveRequest requestDto) {
+    public void createProduct(@Valid @RequestPart SaveRequest requestDto,
+        @RequestPart(required = false) MultipartFile productImage) {
         brandService.checkBrandExist(requestDto.getBrand());
-        productService.saveProduct(requestDto);
+        productService.saveProduct(requestDto, productImage);
     }
 
     @GetMapping("/{id}")
@@ -56,8 +58,9 @@ public class ProductApiController {
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}")
     public void updateProduct(@PathVariable Long id,
-        @Valid @RequestBody SaveRequest requestDto) {
-        productService.updateProduct(id, requestDto);
+        @Valid @RequestPart SaveRequest requestDto,
+        @RequestPart(required = false) MultipartFile productImage) {
+        productService.updateProduct(id, requestDto, productImage);
     }
 
     @GetMapping("/currencies")
