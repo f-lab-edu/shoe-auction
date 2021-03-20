@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,8 @@ import lombok.NoArgsConstructor;
  */
 
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Product extends BaseTimeEntity {
@@ -63,6 +66,11 @@ public class Product extends BaseTimeEntity {
 
     private double sizeGap;
 
+    private String originImagePath;
+
+    private String thumbnailImagePath;
+
+    private String resizedImagePath;
 
     /*
      * 상품 조회 등의 Product를 사용 하는 비즈니스 로직은 대부분 Brand를 함께 사용한다.
@@ -75,26 +83,6 @@ public class Product extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "product")
     private List<Trade> trades = new ArrayList<>();
-
-    @Builder
-    public Product(String nameKor, String nameEng, String modelNumber, String color,
-        LocalDate releaseDate, int releasePrice, Currency currency,
-        SizeClassification sizeClassification, SizeUnit sizeUnit, double minSize, double maxSize,
-        double sizeGap, Brand brand) {
-        this.nameKor = nameKor;
-        this.nameEng = nameEng;
-        this.modelNumber = modelNumber;
-        this.color = color;
-        this.releaseDate = releaseDate;
-        this.releasePrice = releasePrice;
-        this.currency = currency;
-        this.sizeClassification = sizeClassification;
-        this.sizeUnit = sizeUnit;
-        this.minSize = minSize;
-        this.maxSize = maxSize;
-        this.sizeGap = sizeGap;
-        this.brand = brand;
-    }
 
     public ProductInfoResponse toProductInfoResponse() {
         return ProductInfoResponse.builder()
@@ -129,5 +117,8 @@ public class Product extends BaseTimeEntity {
         this.maxSize = updatedProduct.getMaxSize();
         this.sizeGap = updatedProduct.getSizeGap();
         this.brand = updatedProduct.getBrand().toEntity();
+        this.originImagePath = updatedProduct.getOriginImagePath();
+        this.thumbnailImagePath = updatedProduct.getThumbnailImagePath();
+        this.resizedImagePath = updatedProduct.getResizedImagePath();
     }
 }
