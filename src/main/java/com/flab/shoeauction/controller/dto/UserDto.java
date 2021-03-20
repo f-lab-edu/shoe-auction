@@ -1,14 +1,12 @@
 package com.flab.shoeauction.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import java.time.LocalDateTime;
-import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -125,18 +123,14 @@ public class UserDto {
         private String email;
         private String nickname;
         private String phone;
-        private List<AddressBook> addressBooks;
-        private Account account;
         private UserLevel userLevel;
 
         @Builder
         public UserInfoDto(String email, String nickname, String phone,
-            List<AddressBook> addressBooks, Account account, UserLevel userLevel) {
+            UserLevel userLevel) {
             this.email = email;
             this.nickname = nickname;
             this.phone = phone;
-            this.addressBooks = addressBooks;
-            this.account = account;
             this.userLevel = userLevel;
         }
 
@@ -273,5 +267,6 @@ public class UserDto {
             this.userStatus = userStatus;
         }
     }
+
 
 }

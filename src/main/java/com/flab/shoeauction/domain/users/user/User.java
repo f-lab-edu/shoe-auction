@@ -15,16 +15,12 @@ import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -49,9 +45,9 @@ public class User extends UserBase {
 
     private UserStatus userStatus;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "USER_ID")
-    private List<AddressBook> addressesBook = new ArrayList<>();
+    @OneToOne
+    @JoinColumn(name = "ADDRESSBOOK_ID")
+    private AddressBook addressBook;
 
     /**
      * USER는 하나의 CART만 가질 수 있고, CART 또한 여러명의 유저가 함께 사용할 수 없다. 따라서 일대일 매핑으로 처리한다.
@@ -65,7 +61,6 @@ public class User extends UserBase {
             .email(this.getEmail())
             .nickname(this.getNickname())
             .phone(this.getPhone())
-            .account(this.getAccount())
             .userLevel(this.userLevel)
             .build();
     }
@@ -85,8 +80,8 @@ public class User extends UserBase {
         this.account = account;
     }
 
-    public void addAddressBook(Address address) {
-        this.addressesBook.add(new AddressBook(address));
+    public void addAddress(Address address) {
+        this.addressBook.addAddress(address);
     }
 
     public void updateNickname(SaveRequest requestDto) {
@@ -107,14 +102,15 @@ public class User extends UserBase {
     }
 
     @Builder
-    public User(Long id, String email, String password, UserLevel userLevel, String nickname, String phone,
-        LocalDateTime nicknameModifiedDate, List<AddressBook> addressBooks, UserStatus userStatus) {
+    public User(Long id, String email, String password, UserLevel userLevel, String nickname,
+        String phone,
+        LocalDateTime nicknameModifiedDate, AddressBook addressBook, UserStatus userStatus) {
         super(id, email, password, userLevel);
         this.nickname = nickname;
         this.phone = phone;
         this.userLevel = userLevel;
         this.nicknameModifiedDate = nicknameModifiedDate;
-        this.addressesBook = addressBooks;
+        this.addressBook = addressBook;
         this.userStatus = userStatus;
     }
 
@@ -130,6 +126,14 @@ public class User extends UserBase {
             .userLevel(this.userLevel)
             .userStatus(this.userStatus)
             .build();
+    }
+
+    public void createAddressBook(AddressBook addressBook) {
+        this.addressBook = addressBook;
+    }
+
+    public void deleteAddress(Address address) {
+        this.addressBook.deleteAddress(address);
     }
 
     public void updateUserStatus(UserStatus userStatus) {
@@ -148,6 +152,7 @@ public class User extends UserBase {
         cart.addCartProducts(cartItem);
     }
 
+
     public Set<WishItemResponse> getWishList() {
         return cart.getWishList()
             .stream()
@@ -161,5 +166,4 @@ public class User extends UserBase {
             .map(CartProduct::getProduct)
             .anyMatch(v -> v.getId() == cartItem.getProductId());
     }
-
 }

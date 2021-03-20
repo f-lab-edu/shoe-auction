@@ -1,14 +1,15 @@
 package com.flab.shoeauction.service;
 
-import com.flab.shoeauction.controller.dto.AddressBookDto;
+import com.flab.shoeauction.controller.dto.AddressDto;
+import com.flab.shoeauction.controller.dto.AddressDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.ProductDto.IdRequest;
 import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
-import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.addressBook.AddressBookRepository;
+import com.flab.shoeauction.domain.addressBook.AddressRepository;
 import com.flab.shoeauction.domain.cart.Cart;
 import com.flab.shoeauction.domain.cart.CartProduct;
 import com.flab.shoeauction.domain.cart.CartProductRepository;
@@ -45,6 +46,7 @@ public class UserService {
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
     private final CartProductRepository cartProductRepository;
+    private final AddressRepository addressRepository;
 
     public boolean checkEmailDuplicate(String email) {
         return userRepository.existsByEmail(email);
@@ -54,7 +56,7 @@ public class UserService {
         return userRepository.existsByNickname(nickname);
     }
 
-    public void save(SaveRequest requestDto) {
+    public void save(com.flab.shoeauction.controller.dto.UserDto.SaveRequest requestDto) {
         if (checkEmailDuplicate(requestDto.getEmail())) {
             throw new DuplicateEmailException();
         }
@@ -112,35 +114,53 @@ public class UserService {
 
     }
 
-    public List<AddressBook> getAddressBooks(String email) {
+    public List<Address> getAddressBook(String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
-        return user.getAddressesBook();
+        AddressBook addressBook = user.getAddressBook();
+        return addressBook.getAddressList();
+
     }
 
     @Transactional
-    public void addAddressBook(String email, Address address) {
+    public void addAddress(String email, SaveRequest requestDto) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
-        user.addAddressBook(address);
+        if(user.getAddressBook() == null) {
+            AddressBook addressBook = addressBookRepository.save(new AddressBook());
+
+            user.createAddressBook(addressBook);
+
+        }
+
+        user.addAddress(requestDto.toEntity());
     }
 
     @Transactional
-    public void deleteAddressBook(AddressBookDto requestDto) {
-        Long addressBookId = requestDto.getId();
-        addressBookRepository.deleteById(addressBookId);
+    public void deleteAddress(String email, AddressDto.IdRequest idRequest) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+
+        Long addressId = idRequest.getId();
+
+        Address address = addressRepository.findById(addressId).orElseThrow();
+
+        user.deleteAddress(address);
+
     }
 
     @Transactional
-    public void updateAddressBook(AddressBookDto requestDto) {
-        Long addressBookId = requestDto.getId();
-        AddressBook addressBook = addressBookRepository.findById(addressBookId).orElseThrow();
-        addressBook.updateAddressBook(requestDto);
+    public void updateAddress(SaveRequest requestDto) {
+
+        Long addressId = requestDto.getId();
+        Address address = addressRepository.findById(addressId).orElseThrow();
+        address.updateAddress(requestDto);
+
     }
 
     @Transactional
-    public void updateNickname(String email, SaveRequest requestDto) {
+    public void updateNickname(String email, com.flab.shoeauction.controller.dto.UserDto.SaveRequest requestDto) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
