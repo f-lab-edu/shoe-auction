@@ -12,7 +12,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -24,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer.sharedHttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flab.shoeauction.controller.dto.AddressBookDto;
+import com.flab.shoeauction.controller.dto.AddressDto;
 import com.flab.shoeauction.controller.dto.ProductDto.IdRequest;
 import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
@@ -36,7 +35,6 @@ import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.UserDto.SmsCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.addressBook.Address;
-import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.brand.Brand;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserLevel;
@@ -416,26 +414,16 @@ class UserApiControllerTest {
 
     }
 
-
     @Test
     @DisplayName("회원 정보 - 마이페이지(회원 정보)를 리턴한다.")
     void myPage() throws Exception {
-        List<AddressBook> addressBooks = new ArrayList<>();
-        Address address = new Address
-            ("우리집", "행복로19", "700동 100호", "12345");
-        AddressBook addressBook = new AddressBook(address);
-        addressBooks.add(addressBook);
 
         UserInfoDto userInfoDto = UserInfoDto.builder()
             .email("jungkh405@naver.com")
             .nickname("17171771")
             .phone("01012345678")
-            .account(new Account("카카오뱅크", "123456789", "정기혁"))
-            .addressBooks(addressBooks)
             .userLevel(UserLevel.UNAUTH)
             .build();
-
-        String email = "jungkh405@naver.com";
 
         given(sessionLoginService.getCurrentUser(any())).willReturn(userInfoDto);
 
@@ -448,10 +436,6 @@ class UserApiControllerTest {
                     fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
                     fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
                     fieldWithPath("phone").type(JsonFieldType.STRING).description("회원 휴대폰 번호"),
-                    subsectionWithPath("account").type(JsonFieldType.OBJECT)
-                        .description("회원 환급 계좌정보"),
-                    subsectionWithPath("addressBooks").type(JsonFieldType.ARRAY)
-                        .description("회원 주소록"),
                     fieldWithPath("userLevel").type(JsonFieldType.STRING)
                         .description("이메일 인증 여부")
                 )));
@@ -780,18 +764,25 @@ class UserApiControllerTest {
     @Test
     @DisplayName("주소록 - 주소록에 주소를 추가한다.")
     void addAddressBook() throws Exception {
-        Address address = new Address
-            ("우리집", "행복로19", "700동 100호", "12345");
-        String currentUser = "jungkh405@naver.com";
 
-        doNothing().when(userService).addAddressBook(currentUser, address);
+        String currentUser = "jungkh405@naver.com";
+        AddressDto.SaveRequest requestDto = AddressDto.SaveRequest.builder()
+            .id(1L)
+            .addressName("새 집")
+            .roadNameAddress("새집로 123")
+            .detailedAddress("789동 123호")
+            .postalCode("23456")
+            .build();
+
+        doNothing().when(userService).addAddress(currentUser, requestDto);
 
         mockMvc.perform(post("/users/addressBook")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(address)))
+            .content(objectMapper.writeValueAsString(requestDto)))
             .andDo(print())
             .andExpect(status().isOk())
             .andDo(document("users/changeUserInfo/addressBook/add/successful", requestFields(
+                fieldWithPath("id").ignored(),
                 fieldWithPath("addressName").type(JsonFieldType.STRING).description("주소록 이름"),
                 fieldWithPath("roadNameAddress").type(JsonFieldType.STRING).description("도로명 주소"),
                 fieldWithPath("detailedAddress").type(JsonFieldType.STRING).description("상세 주소"),
@@ -802,63 +793,61 @@ class UserApiControllerTest {
     @Test
     @DisplayName("주소록 - 회원의 주소록 정보를 가져온다.")
     void getAddressBook() throws Exception {
-
-        List<AddressBook> addressBooks = new ArrayList<>();
-        Address address = new Address
-            ("우리집", "행복로19", "700동 100호", "12345");
-        AddressBook addressBook = new AddressBook(address);
-        addressBooks.add(addressBook);
-
-        given(userService.getAddressBooks(any())).willReturn(addressBooks);
+        List<Address> addressList = new ArrayList<>();
+        Address address = new Address(1L, "우리집", "동수천로", "111동 111호", "12345");
+        addressList.add(address);
+        given(userService.getAddressBook(any())).willReturn(addressList);
 
         mockMvc.perform(get("/users/addressBook")
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("users/changeUserInfo/addressBook/Resource"));
+            .andDo(document("users/changeUserInfo/addressBook/Resource", responseFields(
+                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("주소 ID[PK]"),
+                fieldWithPath("[].addressName").type(JsonFieldType.STRING).description("주소 이름"),
+                fieldWithPath("[].roadNameAddress").type(JsonFieldType.STRING)
+                    .description("도로명 주소"),
+                fieldWithPath("[].detailedAddress").type(JsonFieldType.STRING).description("상세 주소"),
+                fieldWithPath("[].postalCode").type(JsonFieldType.STRING).description("우편 번호")
+            )));
     }
 
     @Test
-    @DisplayName("주소록 - 주소록을 삭제한다.")
+    @DisplayName("주소록 - 주소록에 있는 주소를 삭제한다.")
     void deleteAddressBook() throws Exception {
-        AddressBookDto addressBookDto = AddressBookDto.builder()
-            .id(1L)
-            .addressName(null)
-            .roadNameAddress(null)
-            .detailedAddress(null)
-            .postalCode(null).build();
+        String currentUser = "jungkh405@naver.com";
+        AddressDto.IdRequest idRequest = AddressDto.IdRequest.builder()
+            .id(2L)
+            .build();
 
-        doNothing().when(userService).deleteAddressBook(addressBookDto);
+        doNothing().when(userService).deleteAddress(currentUser, idRequest);
 
         mockMvc.perform(delete("/users/addressBook")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(addressBookDto)))
+            .content(objectMapper.writeValueAsString(idRequest)))
             .andDo(print())
             .andExpect(status().isOk())
             .andDo(document("users/changeUserInfo/addressBook/delete", requestFields(
-                fieldWithPath("id").type(JsonFieldType.NUMBER).description("ID"),
-                fieldWithPath("addressName").ignored(),
-                fieldWithPath("roadNameAddress").ignored(),
-                fieldWithPath("detailedAddress").ignored(),
-                fieldWithPath("postalCode").ignored()
+                fieldWithPath("id").type(JsonFieldType.NUMBER).description("삭제할 주소의 ID[PK]")
             )));
     }
 
     @Test
     @DisplayName("주소록 - 주소록에 있는 주소 중 하나를 수정한다.")
     void updateAddressBook() throws Exception {
-        AddressBookDto addressBookDto = AddressBookDto.builder()
+        AddressDto.SaveRequest requestDto = AddressDto.SaveRequest.builder()
             .id(1L)
-            .addressName("우리집")
-            .roadNameAddress("행복로123")
-            .detailedAddress("123동123호")
-            .postalCode("12345").build();
+            .addressName("새 집")
+            .roadNameAddress("새집로 123")
+            .detailedAddress("789동 123호")
+            .postalCode("23456")
+            .build();
 
-        doNothing().when(userService).updateAddressBook(addressBookDto);
+        doNothing().when(userService).updateAddress(requestDto);
 
         mockMvc.perform(patch("/users/addressBook")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(addressBookDto)))
+            .content(objectMapper.writeValueAsString(requestDto)))
             .andDo(print())
             .andExpect(status().isOk())
             .andDo(document("users/changeUserInfo/addressBook/update", requestFields(

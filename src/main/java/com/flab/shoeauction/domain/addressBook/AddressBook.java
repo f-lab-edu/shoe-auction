@@ -1,35 +1,34 @@
 package com.flab.shoeauction.domain.addressBook;
 
-import com.flab.shoeauction.controller.dto.AddressBookDto;
-import javax.persistence.Embedded;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import lombok.AccessLevel;
-import lombok.Builder;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class AddressBook {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Embedded
-    private Address address;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "ADDRESSBOOK_ID")
+    private List<Address> addressList = new ArrayList<>();
 
-    @Builder
-    public AddressBook(Address address) {
-        this.address = address;
+    public void addAddress(Address address) {
+        addressList.add(address);
     }
 
-    public void updateAddressBook(AddressBookDto requestDto) {
-        address.updateAddress(requestDto);
+    public void deleteAddress(Address address) {
+        addressList.remove(address);
     }
-
-
 }

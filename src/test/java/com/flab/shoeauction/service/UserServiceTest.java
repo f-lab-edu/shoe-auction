@@ -8,14 +8,15 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.flab.shoeauction.controller.dto.AddressBookDto;
+import com.flab.shoeauction.controller.dto.AddressDto;
 import com.flab.shoeauction.controller.dto.ProductDto.IdRequest;
+import com.flab.shoeauction.controller.dto.UserDto;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
-import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.addressBook.AddressBookRepository;
+import com.flab.shoeauction.domain.addressBook.AddressRepository;
 import com.flab.shoeauction.domain.brand.Brand;
 import com.flab.shoeauction.domain.cart.Cart;
 import com.flab.shoeauction.domain.cart.CartProduct;
@@ -38,7 +39,6 @@ import com.flab.shoeauction.exception.user.WrongPasswordException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -67,11 +67,13 @@ class UserServiceTest {
     ProductRepository productRepository;
     @Mock
     CartProductRepository cartProductRepository;
+    @Mock
+    AddressRepository addressRepository;
     @InjectMocks
     UserService userService;
 
-    private SaveRequest createUserDto() {
-        SaveRequest saveRequest = SaveRequest.builder()
+    private UserDto.SaveRequest createUserDto() {
+        UserDto.SaveRequest saveRequest = UserDto.SaveRequest.builder()
             .email("test123@test.com")
             .password("test1234")
             .phone("01011112222")
@@ -106,7 +108,8 @@ class UserServiceTest {
     @DisplayName("이메일과 닉네임이 중복되지 않으면 회원가입에 성공한다.")
     public void signUp_Successful() {
 
-        SaveRequest saveRequest = createUserDto();
+        UserDto.SaveRequest saveRequest = createUserDto();
+
 
         when(userRepository.existsByEmail("test123@test.com")).thenReturn(false);
         when(userRepository.existsByNickname("17171771")).thenReturn(false);
@@ -119,7 +122,7 @@ class UserServiceTest {
     @Test
     @DisplayName("이메일 중복으로 회원가입에 실패한다.")
     public void emailDuplicate() {
-        SaveRequest saveRequest = createUserDto();
+        UserDto.SaveRequest saveRequest = createUserDto();
         when(userRepository.existsByEmail("test123@test.com")).thenReturn(true);
 
         assertThrows(DuplicateEmailException.class, () -> userService.save(saveRequest));
@@ -130,7 +133,8 @@ class UserServiceTest {
     @Test
     @DisplayName("닉네임 중복으로 회원가입에 실패한다.")
     public void nicknameDuplicate() {
-        SaveRequest saveRequest = createUserDto();
+        UserDto.SaveRequest saveRequest = createUserDto();
+
         when(userRepository.existsByNickname("17171771")).thenReturn(true);
 
         assertThrows(DuplicateNicknameException.class, () -> userService.save(saveRequest));
@@ -253,72 +257,85 @@ class UserServiceTest {
     @Test
     @DisplayName("주소록 수정 -주소록에 등록된 주소들 중 하나를 선택하여 수정한다.")
     public void updateAddressBook() {
-        Address address = new Address("우리집", "땡땡땡로 123", "123동 456호", "12345");
-        AddressBook addressBook = new AddressBook(address);
-        AddressBookDto addressBookDto = new AddressBookDto(2L, "친구집", "사랑로 123", "123-1", "11111");
-        when(addressBookRepository.findById(addressBookDto.getId()))
-            .thenReturn(Optional.of(addressBook));
+        Address address = new Address(1L,"우리집", "땡땡땡로 123", "123동 456호", "12345");
+        AddressDto.SaveRequest requestDto = AddressDto.SaveRequest.builder()
+            .id(1L)
+            .addressName("새 집")
+            .roadNameAddress("새집로 123")
+            .detailedAddress("789동 123호")
+            .postalCode("23456")
+            .build();
 
-        userService.updateAddressBook(addressBookDto);
+        when(addressRepository.findById(requestDto.getId())).thenReturn(Optional.of(address));
+        userService.updateAddress(requestDto);
 
-        assertThat(addressBook.getAddress().getAddressName())
-            .isEqualTo(addressBookDto.getAddressName());
-        assertThat(addressBook.getAddress().getDetailedAddress())
-            .isEqualTo(addressBookDto.getDetailedAddress());
-        assertThat(addressBook.getAddress().getPostalCode())
-            .isEqualTo(addressBookDto.getPostalCode());
-        assertThat(addressBook.getAddress().getRoadNameAddress())
-            .isEqualTo(addressBookDto.getRoadNameAddress());
-
-        verify(addressBookRepository, atLeastOnce()).findById(any());
+        assertThat(address.getAddressName()).isEqualTo(requestDto.getAddressName());
+        assertThat(address.getDetailedAddress()).isEqualTo(requestDto.getDetailedAddress());
+        assertThat(address.getPostalCode()).isEqualTo(requestDto.getPostalCode());
+        assertThat(address.getRoadNameAddress()).isEqualTo(requestDto.getRoadNameAddress());
+        verify(addressRepository, atLeastOnce()).findById(any());
     }
 
     @Test
     @DisplayName("주소록 추가 - 올바른 주소 입력시 주소록 추가에 성공한다.")
     public void addAddressBook() {
-        ArrayList<AddressBook> addressBooks = new ArrayList<>();
+
+        AddressBook addressBook = new AddressBook();
+
         User user = User.builder()
             .email("test123@test.com")
             .password("test1234")
             .nickname("17171771")
             .phone("01020180103")
-            .addressBooks(addressBooks).build();
-        String email = "test123@test.com";
-        Address address = new Address("우리집", "땡땡땡로 123", "111동 111호", "12345");
-        Address address2 = new Address("친구집", "친구집로 123", "222동 222호", "67890");
-        Address address3 = new Address("별장", "해변로 123", "333동 333호", "11111");
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+            .addressBook(addressBook)
+            .build();
 
-        userService.addAddressBook(email, address);
-        userService.addAddressBook(email, address2);
-        userService.addAddressBook(email, address3);
+        AddressDto.SaveRequest requestDto = AddressDto.SaveRequest.builder()
+            .id(1L)
+            .addressName("새 집")
+            .roadNameAddress("새집로 123")
+            .detailedAddress("789동 123호")
+            .postalCode("23456")
+            .build();
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        userService.addAddress(user.getEmail(), requestDto);
 
-        assertThat(user.getAddressesBook().size()).isEqualTo(3);
+        assertThat(user.getAddressBook().getAddressList().size()).isEqualTo(1);
+
     }
 
     @Test
     @DisplayName("주소록 조회 - 해당 USER의 주소록을 불러온다.")
     public void getAddressBooks() {
-        ArrayList<AddressBook> addressBooks = new ArrayList<>();
+        AddressBook addressBook = new AddressBook();
+
+        AddressDto.SaveRequest requestDto = AddressDto.SaveRequest.builder()
+            .id(1L)
+            .addressName("새 집")
+            .roadNameAddress("새집로 123")
+            .detailedAddress("789동 123호")
+            .postalCode("23456")
+            .build();
+
+        addressBook.addAddress(requestDto.toEntity());
+
         User user = User.builder()
             .email("test123@test.com")
             .password("test1234")
             .nickname("17171771")
             .phone("01020180103")
-            .addressBooks(addressBooks).build();
-        String email = "test123@test.com";
-        Address address = new Address("우리집", "땡땡땡로 123", "111동 111호", "12345");
-        Address address2 = new Address("친구집", "친구집로 123", "222동 222호", "67890");
-        Address address3 = new Address("별장", "해변로 123", "333동 333호", "11111");
-        user.addAddressBook(address);
-        user.addAddressBook(address2);
-        user.addAddressBook(address3);
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+            .addressBook(addressBook)
+            .build();
 
-        List<AddressBook> addressBookList = userService.getAddressBooks(email);
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        List<Address> addressList = userService.getAddressBook(user.getEmail());
 
-        assertThat(addressBookList.size()).isEqualTo(3);
-        verify(userRepository, atLeastOnce()).findByEmail(email);
+        assertThat(addressList.size()).isEqualTo(1);
+        assertThat(addressList.get(0).getAddressName()).isEqualTo(requestDto.getAddressName());
+        assertThat(addressList.get(0).getDetailedAddress()).isEqualTo(requestDto.getDetailedAddress());
+        assertThat(addressList.get(0).getPostalCode()).isEqualTo(requestDto.getPostalCode());
+        assertThat(addressList.get(0).getRoadNameAddress()).isEqualTo(requestDto.getRoadNameAddress());
+        verify(userRepository, atLeastOnce()).findByEmail(user.getEmail());
     }
 
     @Test
@@ -330,7 +347,7 @@ class UserServiceTest {
             .nicknameModifiedDate(LocalDateTime.now().minusDays(8))
             .build();
         String email = "test123@test.com";
-        SaveRequest requestDto = SaveRequest.builder()
+        UserDto.SaveRequest requestDto = UserDto.SaveRequest.builder()
             .nickname("자우림")
             .build();
         String nicknameAfter = requestDto.getNickname();
@@ -349,7 +366,7 @@ class UserServiceTest {
     public void failToUpdateNicknameByDuplicate() {
         User user = createUserDto().toEntity();
         String email = "test123@test.com";
-        SaveRequest requestDto = SaveRequest.builder()
+        UserDto.SaveRequest requestDto = UserDto.SaveRequest.builder()
             .nickname("자우림")
             .build();
         String nicknameAfter = requestDto.getNickname();
@@ -366,7 +383,7 @@ class UserServiceTest {
     @DisplayName("닉네인 변경 실패 - 닉네임을 변경하고 7일이 지나지 않았다면 닉네임 변경에 실패한다.")
     public void failToUpdateNicknameByTerm() {
         User user = createUserDto().toEntity();
-        SaveRequest requestDto = SaveRequest.builder()
+        UserDto.SaveRequest requestDto = UserDto.SaveRequest.builder()
             .nickname("자우림")
             .build();
         String email = "test123@test.com";
@@ -383,7 +400,7 @@ class UserServiceTest {
     @Test
     @DisplayName("비밀번호가 일치하여 회원 탈퇴 성공한다.")
     public void deleteSuccess() {
-        SaveRequest saveRequest = createUserDto();
+        UserDto.SaveRequest saveRequest = createUserDto();
         String email = saveRequest.getEmail();
         String password = saveRequest.getPassword();
 
@@ -398,7 +415,7 @@ class UserServiceTest {
     @Test
     @DisplayName("비밀번호가 일치하지 않아 회원 탈퇴 실패한다.")
     public void deleteFailure() {
-        SaveRequest saveRequest = createUserDto();
+        UserDto.SaveRequest saveRequest = createUserDto();
         String email = saveRequest.getEmail();
         String password = saveRequest.getPassword();
 

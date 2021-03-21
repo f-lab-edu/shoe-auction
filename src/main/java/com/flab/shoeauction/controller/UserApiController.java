@@ -5,7 +5,8 @@ import static com.flab.shoeauction.common.utils.constants.ResponseConstants.OK;
 
 import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.common.annotation.LoginCheck;
-import com.flab.shoeauction.controller.dto.AddressBookDto;
+import com.flab.shoeauction.controller.dto.AddressDto;
+import com.flab.shoeauction.controller.dto.AddressDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.ProductDto.IdRequest;
 import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
@@ -13,11 +14,9 @@ import com.flab.shoeauction.controller.dto.UserDto.EmailCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.LoginRequest;
 import com.flab.shoeauction.controller.dto.UserDto.PasswordRequest;
-import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.UserDto.SmsCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.addressBook.Address;
-import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.service.SessionLoginService;
 import com.flab.shoeauction.service.UserService;
@@ -61,7 +60,8 @@ public class UserApiController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createUser(@Valid @RequestBody SaveRequest requestDto) {
+    public ResponseEntity<Void> createUser(
+        @Valid @RequestBody com.flab.shoeauction.controller.dto.UserDto.SaveRequest requestDto) {
         userService.save(requestDto);
         emailCertificationService.sendEmailForEmailCheck(requestDto.getEmail());
         return CREATED;
@@ -167,32 +167,34 @@ public class UserApiController {
 
     @LoginCheck
     @PostMapping("/addressBook")
-    public void addAddressBook(@CurrentUser String email, @RequestBody Address address) {
-        userService.addAddressBook(email, address);
+    public void addAddressBook(@CurrentUser String email, @RequestBody SaveRequest saveRequest) {
+        userService.addAddress(email, saveRequest);
     }
 
     @LoginCheck
     @GetMapping("/addressBook")
-    public ResponseEntity<List<AddressBook>> getAddressBookResource(@CurrentUser String email) {
-        List<AddressBook> addressBooks = userService.getAddressBooks(email);
-        return ResponseEntity.ok(addressBooks);
+    public ResponseEntity<List<Address>> getAddressBookResource(@CurrentUser String email) {
+        List<Address> addressList = userService.getAddressBook(email);
+        return ResponseEntity.ok(addressList);
     }
 
     @LoginCheck
     @DeleteMapping("/addressBook")
-    public void deleteAddressBook(@RequestBody AddressBookDto requestDto) {
-        userService.deleteAddressBook(requestDto);
+    public void deleteAddressBook(@CurrentUser String email,
+        @RequestBody AddressDto.IdRequest idRequest) {
+        userService.deleteAddress(email, idRequest);
     }
 
     @LoginCheck
     @PatchMapping("/addressBook")
-    public void updateAddressBook(@RequestBody AddressBookDto requestDto) {
-        userService.updateAddressBook(requestDto);
+    public void updateAddressBook(@RequestBody SaveRequest requestDto) {
+        userService.updateAddress(requestDto);
     }
 
     @LoginCheck
     @PatchMapping("/nickname")
-    public void updateNickname(@CurrentUser String email, @RequestBody SaveRequest requestDto) {
+    public void updateNickname(@CurrentUser String email,
+        @RequestBody com.flab.shoeauction.controller.dto.UserDto.SaveRequest requestDto) {
         userService.updateNickname(email, requestDto);
     }
 
