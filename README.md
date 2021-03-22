@@ -15,4 +15,5 @@
 ## 사용 기술
 ![적용기술](https://user-images.githubusercontent.com/39195377/111874691-b4410280-89d9-11eb-80b3-aaa96dc94cfa.PNG)
 
-
+## 🧚‍♀️ WIKI
+해당 프로젝트의 모든 정보는 [WIKI](https://github.com/f-lab-edu/shoe-auction/wiki)를 통해 참고하실 수 있습니다. 
