@@ -124,6 +124,7 @@ public class ProductDto {
         private double minSize;
         private double maxSize;
         private double sizeGap;
+        private String resizedImagePath;
         private BrandInfo brand;
     }
 
@@ -158,5 +159,8 @@ public class ProductDto {
             this.nameEng = nameEng;
             this.brand = brand;
         }
+
     }
+
+
 }
