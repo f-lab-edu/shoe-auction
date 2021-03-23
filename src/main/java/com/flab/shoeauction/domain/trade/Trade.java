@@ -45,6 +45,8 @@ public class Trade extends BaseTimeEntity {
 
     private Long price;
 
+    private double productSize;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RETURN_ID")
     private Address returnAddress;
@@ -55,7 +57,7 @@ public class Trade extends BaseTimeEntity {
 
     @Builder
     public Trade(User publisher, User seller, User buyer,
-        Product product, TradeStatus status, Long price,
+        Product product, TradeStatus status, Long price, double productSize,
         Address returnAddress, Address shippingAddress) {
         this.publisher = publisher;
         this.seller = seller;
@@ -63,6 +65,7 @@ public class Trade extends BaseTimeEntity {
         this.product = product;
         this.status = status;
         this.price = price;
+        this.productSize = productSize;
         this.returnAddress = returnAddress;
         this.shippingAddress = shippingAddress;
     }

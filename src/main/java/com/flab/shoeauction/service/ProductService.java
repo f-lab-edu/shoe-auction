@@ -1,7 +1,7 @@
 package com.flab.shoeauction.service;
 
 import com.flab.shoeauction.common.utils.file.FileNameUtils;
-import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
+import com.flab.shoeauction.controller.dto.ProductDto.ProductInfo;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
 import com.flab.shoeauction.domain.product.Product;
 import com.flab.shoeauction.domain.product.ProductRepository;
@@ -39,7 +39,7 @@ public class ProductService {
     }
 
     @Cacheable(value = "product", key = "#id")
-    public ProductInfoResponse getProductInfo(Long id) {
+    public ProductInfo getProductInfo(Long id) {
         return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException())
             .toProductInfoResponse();
     }

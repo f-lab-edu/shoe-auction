@@ -1,9 +1,10 @@
 package com.flab.shoeauction.service;
 
-import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
+import com.flab.shoeauction.controller.dto.ProductDto.ProductInfo;
 import com.flab.shoeauction.controller.dto.TradeDto.SaveRequest;
-import com.flab.shoeauction.controller.dto.TradeDto.SellResourceResponse;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeResource;
 import com.flab.shoeauction.controller.dto.UserDto.TradeUserInfo;
+import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.product.Product;
 import com.flab.shoeauction.domain.product.ProductRepository;
 import com.flab.shoeauction.domain.trade.Trade;
@@ -23,7 +24,7 @@ public class TradeService {
     private final ProductRepository productRepository;
     private final TradeRepository tradeRepository;
 
-    public SellResourceResponse getSellResource(String email, Long productId) {
+    public TradeResource getSellResource(String email, Long productId) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
@@ -34,11 +35,11 @@ public class TradeService {
 
     }
 
-    private SellResourceResponse makeSellResource(User user, Product product) {
-        ProductInfoResponse productInfo = product.toProductInfoResponse();
+    private TradeResource makeSellResource(User user, Product product) {
+        ProductInfo productInfo = product.toProductInfoResponse();
         TradeUserInfo tradeUserInfo = user.createTradeUserInfo();
 
-        return SellResourceResponse.builder()
+        return TradeResource.builder()
             .tradeUserInfo(tradeUserInfo)
             .productInfo(productInfo)
             .build();
@@ -49,8 +50,22 @@ public class TradeService {
     public void createSalesBid(String email, SaveRequest requestDto) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+        Product product = productRepository.findById(requestDto.getProductId()).orElseThrow();
+        Address address = user.findAddress(requestDto.getAddressId());
 
-        Trade trade = requestDto.toEntityBySeller(user);
+        Trade trade = requestDto.toEntityBySeller(user, product, address);
+
+        tradeRepository.save(trade);
+    }
+
+    @Transactional
+    public void createPurchaseBid(String email, SaveRequest requestDto) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+        Product product = productRepository.findById(requestDto.getProductId()).orElseThrow();
+        Address address = user.findAddress(requestDto.getAddressId());
+
+        Trade trade = requestDto.toEntityByBuyer(user, product, address);
 
         tradeRepository.save(trade);
     }

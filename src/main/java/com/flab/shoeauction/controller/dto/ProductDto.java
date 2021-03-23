@@ -109,7 +109,7 @@ public class ProductDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class ProductInfoResponse {
+    public static class ProductInfo {
 
         private Long id;
         private String nameKor;

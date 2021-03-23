@@ -1,7 +1,7 @@
 package com.flab.shoeauction.controller;
 
 import com.flab.shoeauction.common.annotation.LoginCheck;
-import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
+import com.flab.shoeauction.controller.dto.ProductDto.ProductInfo;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
 import com.flab.shoeauction.domain.product.Currency;
 import com.flab.shoeauction.domain.product.SizeClassification;
@@ -43,8 +43,8 @@ public class ProductApiController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductInfoResponse> getProductInfo(@PathVariable Long id) {
-        ProductInfoResponse productInfoResponse = productService.getProductInfo(id);
+    public ResponseEntity<ProductInfo> getProductInfo(@PathVariable Long id) {
+        ProductInfo productInfoResponse = productService.getProductInfo(id);
         return ResponseEntity.ok(productInfoResponse);
     }
 

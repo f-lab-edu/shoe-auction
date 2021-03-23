@@ -1,6 +1,6 @@
 package com.flab.shoeauction.domain.product;
 
-import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
+import com.flab.shoeauction.controller.dto.ProductDto.ProductInfo;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
 import com.flab.shoeauction.domain.BaseTimeEntity;
 import com.flab.shoeauction.domain.brand.Brand;
@@ -79,8 +79,8 @@ public class Product extends BaseTimeEntity {
 
 
 
-    public ProductInfoResponse toProductInfoResponse() {
-        return ProductInfoResponse.builder()
+    public ProductInfo toProductInfoResponse() {
+        return ProductInfo.builder()
             .id(this.id)
             .nameKor(this.nameKor)
             .nameEng(this.nameEng)

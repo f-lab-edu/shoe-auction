@@ -2,7 +2,7 @@ package com.flab.shoeauction.controller;
 
 import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.controller.dto.TradeDto;
-import com.flab.shoeauction.controller.dto.TradeDto.SellResourceResponse;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeResource;
 import com.flab.shoeauction.service.TradeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,22 +21,21 @@ public class TradeApiController {
 
     private final TradeService tradeService;
 
-//    @GetMapping("/buy/{productId}")
-//    public ResponseEntity<TradeUserInfoResponse> getResourceOfTrade(@CurrentUser String email,
-//        @PathVariable String productId, @RequestParam String size) {
-//
-//    }
-
-    @GetMapping("/sell/{productId}")
-    public SellResourceResponse getResourceOfProductSold(@CurrentUser String email,
+    @GetMapping("/{productId}")
+    public TradeResource getResourceOfProductSold(@CurrentUser String email,
         @PathVariable Long productId) {
         return tradeService.getSellResource(email, productId);
     }
 
-    @PostMapping("/sell")
+    @PostMapping("/sell/bid")
     @ResponseStatus(HttpStatus.CREATED)
     public void salesBid(@CurrentUser String email, @RequestBody TradeDto.SaveRequest requestDto) {
         tradeService.createSalesBid(email, requestDto);
     }
 
+    @PostMapping("/buy/bid")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void purchaseBid(@CurrentUser String email, @RequestBody TradeDto.SaveRequest requestDto) {
+        tradeService.createPurchaseBid(email, requestDto);
+    }
 }

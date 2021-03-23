@@ -5,6 +5,7 @@ lib/*
 
 ### IntelliJ IDEA ###
 .idea
+.project
 *.iws
 *.iml
 *.ipr

@@ -171,8 +171,13 @@ public class User extends UserBase {
     public TradeUserInfo createTradeUserInfo() {
         return TradeUserInfo.builder()
             .account(this.account)
-            .addressBook(addressBook.getAddressList())
+            .addressBook(this.addressBook)
             .build();
+
+    }
+
+    public Address findAddress(Long addressId) {
+        return addressBook.findAddress(addressId);
 
     }
 }

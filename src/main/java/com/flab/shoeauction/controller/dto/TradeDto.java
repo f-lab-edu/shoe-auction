@@ -1,6 +1,6 @@
 package com.flab.shoeauction.controller.dto;
 
-import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
+import com.flab.shoeauction.controller.dto.ProductDto.ProductInfo;
 import com.flab.shoeauction.controller.dto.UserDto.TradeUserInfo;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.product.Product;
@@ -15,15 +15,15 @@ public class TradeDto {
 
     @Getter
     @NoArgsConstructor
-    public static class SellResourceResponse {
+    public static class TradeResource {
 
         private TradeUserInfo tradeUserInfo;
-        private ProductInfoResponse productInfo;
+        private ProductInfo productInfo;
         // TODO :현재 사이즈 + 현재 프로덕트 중 최고가로 구매입찰 되어있는 프로덕트의 정보 (ID/PRICE)
 
         @Builder
-        public SellResourceResponse(
-            TradeUserInfo tradeUserInfo, ProductInfoResponse productInfo) {
+        public TradeResource(
+            TradeUserInfo tradeUserInfo, ProductInfo productInfo) {
             this.tradeUserInfo = tradeUserInfo;
             this.productInfo = productInfo;
         }
@@ -33,40 +33,43 @@ public class TradeDto {
     @NoArgsConstructor
     public static class SaveRequest {
 
-        private TradeStatus status;
         private Long price;
-        private Product product; // DTO로 받도록 리팩토링
-        private Address address;
+        private double productSize;
+        private Long productId; // DTO로 받도록 리팩토링
+        private Long addressId;
 
         @Builder
-        public SaveRequest(Product product, TradeStatus status, Long price, Address address) {
-            this.product = product;
-            this.status = status;
+        public SaveRequest(Long productId, double productSize, Long price,
+            Long addressId) {
+            this.productId = productId;
+            this.productSize = productSize;
             this.price = price;
-            this.address = address;
+            this.addressId = addressId;
         }
 
         // 판매 입찰용
-        public Trade toEntityBySeller(User user) {
+        public Trade toEntityBySeller(User user, Product product, Address address) {
             return Trade.builder()
                 .price(this.price)
+                .productSize(this.productSize)
                 .status(TradeStatus.BID)
-                .product(this.product)
+                .product(product)
                 .publisher(user)
                 .seller(user)
-                .returnAddress(this.address)
+                .returnAddress(address)
                 .build();
         }
 
         // 구매 입찰용
-        public Trade toEntityByBuyer(User user) {
+        public Trade toEntityByBuyer(User user, Product product, Address address) {
             return Trade.builder()
                 .price(this.price)
+                .productSize(this.productSize)
                 .status(TradeStatus.BID)
-                .product(this.product)
+                .product(product)
                 .publisher(user)
                 .buyer(user)
-                .shippingAddress(this.address)
+                .shippingAddress(address)
                 .build();
         }
     }
