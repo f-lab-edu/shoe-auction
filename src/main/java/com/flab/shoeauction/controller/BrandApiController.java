@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -32,7 +31,7 @@ public class BrandApiController {
     @LoginCheck(authority = UserLevel.ADMIN)
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void createBrand(@Valid @RequestBody SaveRequest requestDto,
+    public void createBrand(@Valid @RequestPart SaveRequest requestDto,
         @RequestPart(required = false) MultipartFile brandImage) {
         brandService.saveBrand(requestDto, brandImage);
     }
