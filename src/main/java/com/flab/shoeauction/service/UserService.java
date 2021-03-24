@@ -117,6 +117,12 @@ public class UserService {
     public List<Address> getAddressBook(String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+
+        if(user.getAddressBook() == null) {
+            AddressBook addressBook = addressBookRepository.save(new AddressBook());
+            user.createAddressBook(addressBook);
+        }
+
         AddressBook addressBook = user.getAddressBook();
         return addressBook.getAddressList();
 
@@ -129,9 +135,7 @@ public class UserService {
 
         if(user.getAddressBook() == null) {
             AddressBook addressBook = addressBookRepository.save(new AddressBook());
-
             user.createAddressBook(addressBook);
-
         }
 
         user.addAddress(requestDto.toEntity());
