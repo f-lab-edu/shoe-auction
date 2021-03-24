@@ -109,7 +109,7 @@ public class ProductDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class ProductInfo {
+    public static class ProductInfo  {
 
         private Long id;
         private String nameKor;
@@ -126,6 +126,8 @@ public class ProductDto {
         private double sizeGap;
         private String resizedImagePath;
         private BrandInfo brand;
+//        private List<TradeBidResponse> trades = new ArrayList<>();
+
     }
 
     @Getter

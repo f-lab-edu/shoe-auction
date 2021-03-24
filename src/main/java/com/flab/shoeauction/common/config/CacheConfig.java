@@ -62,12 +62,14 @@ public class CacheConfig {
      * 때문에 역직렬화 시 에러가 발생한다.
      * 따라서 적절한 ObjectMapper를 Serializer에 전달하여 직렬화 및 역직렬화를 정상화 시켰다.
      */
+
     private ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         mapper.registerModule(new JavaTimeModule());
         return mapper;
     }
+
 
     private RedisCacheConfiguration redisCacheDefaultConfiguration() {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration
@@ -108,6 +110,7 @@ public class CacheConfig {
      */
     @Bean
     public CacheManager redisCacheManager(@Qualifier("redisCacheConnectionFactory") RedisConnectionFactory redisConnectionFactory) {
+
         RedisCacheManager redisCacheManager = RedisCacheManager.RedisCacheManagerBuilder
             .fromConnectionFactory(redisConnectionFactory)
             .cacheDefaults(redisCacheDefaultConfiguration())

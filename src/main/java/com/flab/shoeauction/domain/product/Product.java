@@ -104,6 +104,7 @@ public class Product extends BaseTimeEntity {
             .build();
     }
 
+
     public void update(SaveRequest updatedProduct) {
         this.nameKor = updatedProduct.getNameKor();
         this.nameEng = updatedProduct.getNameEng();
