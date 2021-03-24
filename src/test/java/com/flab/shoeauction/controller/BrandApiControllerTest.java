@@ -165,8 +165,8 @@ class BrandApiControllerTest {
                     fieldWithPath("thumbnailImagePath").ignored()),
                 requestParts(
                     partWithName("requestDto").ignored(),
-                    partWithName("brandImage").description("저장할 브랜드의 이미지 파일").optional()
-                )));
+                    partWithName("brandImage").description("저장할 브랜드의 이미지 파일").optional())
+            ));
     }
 
     @Test
@@ -259,7 +259,7 @@ class BrandApiControllerTest {
                     fieldWithPath("thumbnailImagePath").ignored()),
                 requestParts(
                     partWithName("requestDto").ignored(),
-                    partWithName("brandImage").description("변경할 브랜드의 이미지 파일").optional()
+                    partWithName("brandImage").description("수정할 브랜드의 이미지 파일").optional()
                 )));
     }
 
