@@ -178,6 +178,5 @@ public class User extends UserBase {
 
     public Address findAddress(Long addressId) {
         return addressBook.findAddress(addressId);
-
     }
 }

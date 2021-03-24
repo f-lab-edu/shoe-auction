@@ -35,7 +35,8 @@ public class TradeApiController {
 
     @PostMapping("/buy/bid")
     @ResponseStatus(HttpStatus.CREATED)
-    public void purchaseBid(@CurrentUser String email, @RequestBody TradeDto.SaveRequest requestDto) {
+    public void purchaseBid(@CurrentUser String email,
+        @RequestBody TradeDto.SaveRequest requestDto) {
         tradeService.createPurchaseBid(email, requestDto);
     }
 }
