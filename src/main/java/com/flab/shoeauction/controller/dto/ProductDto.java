@@ -20,6 +20,8 @@ public class ProductDto {
 
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class SaveRequest {
 
         @NotBlank(message = "제품 한글명을 입력해주세요.")
@@ -125,6 +127,7 @@ public class ProductDto {
         private double maxSize;
         private double sizeGap;
         private BrandInfo brand;
+        private String resizedImagePath;
     }
 
     @Getter
