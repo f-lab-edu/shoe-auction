@@ -131,7 +131,7 @@ public class Product extends BaseTimeEntity {
             .filter(v -> v.getStatus() == TradeStatus.BID && v.getBuyer() == null
                 && v.getProductSize() == size)
             .sorted(Comparator.comparing(Trade::getPrice))
-            .map(Trade::toBidListResponse)
+            .map(Trade::toTradeBidResponse)
             .findFirst()
             .orElse(null);
     }
@@ -141,7 +141,7 @@ public class Product extends BaseTimeEntity {
             .filter(v -> v.getStatus() == TradeStatus.BID && v.getSeller() == null
                 && v.getProductSize() == size)
             .sorted(Comparator.comparing(Trade::getPrice).reversed())
-            .map(Trade::toBidListResponse)
+            .map(Trade::toTradeBidResponse)
             .findFirst()
             .orElse(null);
     }
@@ -151,7 +151,7 @@ public class Product extends BaseTimeEntity {
         return getTrades().stream()
             .filter(v -> v.getStatus() == TradeStatus.BID && v.getBuyer() == null)
             .sorted(Comparator.comparing(Trade::getPrice))
-            .map(Trade::toBidListResponse)
+            .map(Trade::toTradeBidResponse)
             .collect(Collectors.toList());
     }
 
@@ -159,7 +159,7 @@ public class Product extends BaseTimeEntity {
         return getTrades().stream()
             .filter(v -> v.getStatus() == TradeStatus.BID && v.getSeller() == null)
             .sorted(Comparator.comparing(Trade::getPrice).reversed())
-            .map(Trade::toBidListResponse)
+            .map(Trade::toTradeBidResponse)
             .collect(Collectors.toList());
     }
 
