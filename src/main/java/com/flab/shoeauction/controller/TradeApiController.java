@@ -21,7 +21,7 @@ public class TradeApiController {
 
     private final TradeService tradeService;
 
-    @GetMapping("/sell/{productId}")
+    @GetMapping("/{productId}")
     public TradeResource obtainResourceForBid(@CurrentUser String email,
         @PathVariable Long productId, double size) {
         return tradeService.getResourceForBid(email, productId, size);
