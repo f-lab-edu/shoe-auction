@@ -43,7 +43,7 @@ public class ProductService {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException());
 
-       return product.toProductInfoResponse();
+        return product.toProductInfoResponse();
     }
 
     @CacheEvict(value = "product", key = "#id")

@@ -1,13 +1,18 @@
 package com.flab.shoeauction.domain.product;
 
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfo;
+import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoByTrade;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeBidResponse;
 import com.flab.shoeauction.domain.BaseTimeEntity;
 import com.flab.shoeauction.domain.brand.Brand;
 import com.flab.shoeauction.domain.trade.Trade;
+import com.flab.shoeauction.domain.trade.TradeStatus;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -81,10 +86,11 @@ public class Product extends BaseTimeEntity {
     @JoinColumn(name = "BRAND_ID")
     private Brand brand;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
     private List<Trade> trades = new ArrayList<>();
 
     public ProductInfo toProductInfoResponse() {
+
         return ProductInfo.builder()
             .id(this.id)
             .nameKor(this.nameKor)
@@ -100,8 +106,61 @@ public class Product extends BaseTimeEntity {
             .maxSize(this.maxSize)
             .sizeGap(this.sizeGap)
             .resizedImagePath(this.resizedImagePath)
+            .saleBids(getSaleBids())
+            .purchaseBids(getPurchaseBids())
             .brand(brand.toBrandInfo())
             .build();
+    }
+
+
+    public ProductInfoByTrade toProductInfoByTrade(double size) {
+        return ProductInfoByTrade.builder()
+            .id(this.id)
+            .nameKor(this.nameKor)
+            .nameEng(this.nameEng)
+            .modelNumber(this.modelNumber)
+            .color(this.color)
+            .brand(brand.toBrandInfo())
+            .immediatePurchasePrice(getLowestPrice(size)) //구매 BID 중 최고가격 (판매자 입장)
+            .immediateSalePrice(getHighestPrice(size)) // 판매 BID중 최저 가격 (구매자 입장)
+            .build();
+    }
+
+    private TradeBidResponse getLowestPrice(double size) {
+        return trades.stream()
+            .filter(v -> v.getStatus() == TradeStatus.BID && v.getBuyer() == null
+                && v.getProductSize() == size)
+            .sorted(Comparator.comparing(Trade::getPrice))
+            .map(Trade::toBidListResponse)
+            .findFirst()
+            .orElse(null);
+    }
+
+    private TradeBidResponse getHighestPrice(double size) {
+        return trades.stream()
+            .filter(v -> v.getStatus() == TradeStatus.BID && v.getSeller() == null
+                && v.getProductSize() == size)
+            .sorted(Comparator.comparing(Trade::getPrice).reversed())
+            .map(Trade::toBidListResponse)
+            .findFirst()
+            .orElse(null);
+    }
+
+
+    private List<TradeBidResponse> getSaleBids() {
+        return getTrades().stream()
+            .filter(v -> v.getStatus() == TradeStatus.BID && v.getBuyer() == null)
+            .sorted(Comparator.comparing(Trade::getPrice))
+            .map(Trade::toBidListResponse)
+            .collect(Collectors.toList());
+    }
+
+    private List<TradeBidResponse> getPurchaseBids() {
+        return getTrades().stream()
+            .filter(v -> v.getStatus() == TradeStatus.BID && v.getSeller() == null)
+            .sorted(Comparator.comparing(Trade::getPrice).reversed())
+            .map(Trade::toBidListResponse)
+            .collect(Collectors.toList());
     }
 
 
@@ -123,4 +182,6 @@ public class Product extends BaseTimeEntity {
         this.thumbnailImagePath = updatedProduct.getThumbnailImagePath();
         this.resizedImagePath = updatedProduct.getResizedImagePath();
     }
+
+
 }

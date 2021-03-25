@@ -1,6 +1,6 @@
 package com.flab.shoeauction.controller.dto;
 
-import com.flab.shoeauction.controller.dto.ProductDto.ProductInfo;
+import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoByTrade;
 import com.flab.shoeauction.controller.dto.UserDto.TradeUserInfo;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.product.Product;
@@ -19,32 +19,33 @@ public class TradeDto {
     public static class TradeResource {
 
         private TradeUserInfo tradeUserInfo;
-        private ProductInfo productInfo;
+        private ProductInfoByTrade ProductInfoByTrade;
         // TODO :현재 사이즈 + 현재 프로덕트 중 최고가로 구매입찰 되어있는 프로덕트의 정보 (ID/PRICE)
 
         @Builder
         public TradeResource(
-            TradeUserInfo tradeUserInfo, ProductInfo productInfo) {
+            TradeUserInfo tradeUserInfo, ProductInfoByTrade productInfoByTrade) {
             this.tradeUserInfo = tradeUserInfo;
-            this.productInfo = productInfo;
+            this.ProductInfoByTrade = productInfoByTrade;
         }
     }
 
     @Getter
     @NoArgsConstructor
     public static class TradeBidResponse implements Serializable {
+        private Long id;
         private Long productId;
         private double productSize;
         private Long price;
 
         @Builder
-        public TradeBidResponse(Long productId, double productSize, Long price) {
+        public TradeBidResponse(Long id, Long productId, double productSize, Long price) {
+            this.id = id;
             this.productId = productId;
             this.productSize = productSize;
             this.price = price;
         }
     }
-
 
     @Getter
     @NoArgsConstructor

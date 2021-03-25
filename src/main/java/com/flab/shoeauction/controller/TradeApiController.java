@@ -21,10 +21,10 @@ public class TradeApiController {
 
     private final TradeService tradeService;
 
-    @GetMapping("/{productId}")
-    public TradeResource getResourceOfProductSold(@CurrentUser String email,
-        @PathVariable Long productId) {
-        return tradeService.getSellResource(email, productId);
+    @GetMapping("/sell/{productId}")
+    public TradeResource obtainResourceForBid(@CurrentUser String email,
+        @PathVariable Long productId, double size) {
+        return tradeService.getResourceForBid(email, productId, size);
     }
 
     @PostMapping("/sell/bid")

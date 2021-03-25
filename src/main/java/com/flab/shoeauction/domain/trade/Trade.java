@@ -74,8 +74,9 @@ public class Trade extends BaseTimeEntity {
         this.shippingAddress = shippingAddress;
     }
 
-    public TradeBidResponse toTradeBidResponse() {
+    public TradeBidResponse toBidListResponse() {
         return TradeBidResponse.builder()
+            .id(this.id)
             .price(this.price)
             .productId(product.getId())
             .productSize(this.productSize)

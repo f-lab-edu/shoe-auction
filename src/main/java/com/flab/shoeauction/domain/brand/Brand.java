@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Brand extends BaseTimeEntity {
+public class Brand extends BaseTimeEntity  {
 
     @Id
     @GeneratedValue

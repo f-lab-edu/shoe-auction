@@ -1,12 +1,15 @@
 package com.flab.shoeauction.controller.dto;
 
 import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeBidResponse;
 import com.flab.shoeauction.domain.brand.Brand;
 import com.flab.shoeauction.domain.product.Currency;
 import com.flab.shoeauction.domain.product.Product;
 import com.flab.shoeauction.domain.product.SizeClassification;
 import com.flab.shoeauction.domain.product.SizeUnit;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -20,6 +23,8 @@ public class ProductDto {
 
     @Getter
     @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
     public static class SaveRequest {
 
         @NotBlank(message = "제품 한글명을 입력해주세요.")
@@ -109,7 +114,7 @@ public class ProductDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class ProductInfo  {
+    public static class ProductInfo {
 
         private Long id;
         private String nameKor;
@@ -126,8 +131,25 @@ public class ProductDto {
         private double sizeGap;
         private String resizedImagePath;
         private BrandInfo brand;
-//        private List<TradeBidResponse> trades = new ArrayList<>();
+        private List<TradeBidResponse> saleBids = new ArrayList<>();
+        private List<TradeBidResponse> purchaseBids = new ArrayList<>();
 
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ProductInfoByTrade {
+
+        private Long id;
+        private String nameKor;
+        private String nameEng;
+        private String modelNumber;
+        private String color;
+        private BrandInfo brand;
+        private TradeBidResponse immediatePurchasePrice;
+        private TradeBidResponse immediateSalePrice;
     }
 
     @Getter
