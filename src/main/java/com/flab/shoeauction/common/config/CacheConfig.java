@@ -57,7 +57,6 @@ public class CacheConfig {
         return lettuceConnectionFactory;
     }
 
-
     /*
      * Jackson2는 Java8의 LocalDate의 타입을 알지못해서적절하게 직렬화해주지 않는다.
      * 때문에 역직렬화 시 에러가 발생한다.
@@ -71,7 +70,6 @@ public class CacheConfig {
         mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
         return mapper;
     }
-
 
     private RedisCacheConfiguration redisCacheDefaultConfiguration() {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration

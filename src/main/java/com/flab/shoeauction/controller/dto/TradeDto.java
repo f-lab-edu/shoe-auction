@@ -20,7 +20,6 @@ public class TradeDto {
 
         private TradeUserInfo tradeUserInfo;
         private ProductInfoByTrade ProductInfoByTrade;
-        // TODO :현재 사이즈 + 현재 프로덕트 중 최고가로 구매입찰 되어있는 프로덕트의 정보 (ID/PRICE)
 
         @Builder
         public TradeResource(
