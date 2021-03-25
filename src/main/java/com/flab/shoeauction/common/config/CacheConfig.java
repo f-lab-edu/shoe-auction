@@ -1,5 +1,6 @@
 package com.flab.shoeauction.common.config;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -67,6 +68,7 @@ public class CacheConfig {
         ObjectMapper mapper = new ObjectMapper();
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         mapper.registerModule(new JavaTimeModule());
+        mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
         return mapper;
     }
 
@@ -109,7 +111,8 @@ public class CacheConfig {
      * withInitialCacheConfigurations에 설정하여서 캐시 별로 만료기간을 다르게 설정하였다.
      */
     @Bean
-    public CacheManager redisCacheManager(@Qualifier("redisCacheConnectionFactory") RedisConnectionFactory redisConnectionFactory) {
+    public CacheManager redisCacheManager(
+        @Qualifier("redisCacheConnectionFactory") RedisConnectionFactory redisConnectionFactory) {
 
         RedisCacheManager redisCacheManager = RedisCacheManager.RedisCacheManagerBuilder
             .fromConnectionFactory(redisConnectionFactory)

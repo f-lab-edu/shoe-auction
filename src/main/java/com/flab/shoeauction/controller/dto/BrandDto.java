@@ -47,7 +47,7 @@ public class BrandDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class BrandInfo  {
+    public static class BrandInfo {
 
         private Long id;
         private String nameKor;
