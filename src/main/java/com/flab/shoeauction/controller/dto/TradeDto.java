@@ -7,7 +7,6 @@ import com.flab.shoeauction.domain.product.Product;
 import com.flab.shoeauction.domain.trade.Trade;
 import com.flab.shoeauction.domain.trade.TradeStatus;
 import com.flab.shoeauction.domain.users.user.User;
-import java.io.Serializable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,7 +30,7 @@ public class TradeDto {
 
     @Getter
     @NoArgsConstructor
-    public static class TradeBidResponse implements Serializable {
+    public static class TradeBidResponse  {
         private Long id;
         private Long productId;
         private double productSize;
