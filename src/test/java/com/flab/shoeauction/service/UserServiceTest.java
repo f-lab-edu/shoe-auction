@@ -9,27 +9,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.flab.shoeauction.controller.dto.AddressDto;
-import com.flab.shoeauction.controller.dto.ProductDto.IdRequest;
 import com.flab.shoeauction.controller.dto.UserDto;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
-import com.flab.shoeauction.domain.addressBook.AddressBookRepository;
 import com.flab.shoeauction.domain.addressBook.AddressRepository;
-import com.flab.shoeauction.domain.brand.Brand;
-import com.flab.shoeauction.domain.cart.Cart;
-import com.flab.shoeauction.domain.cart.CartProduct;
 import com.flab.shoeauction.domain.cart.CartProductRepository;
-import com.flab.shoeauction.domain.product.Currency;
-import com.flab.shoeauction.domain.product.Product;
 import com.flab.shoeauction.domain.product.ProductRepository;
-import com.flab.shoeauction.domain.product.SizeClassification;
-import com.flab.shoeauction.domain.product.SizeUnit;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
-import com.flab.shoeauction.exception.user.DuplicateCartItemException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
@@ -37,7 +27,6 @@ import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.exception.user.WrongPasswordException;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -62,13 +51,12 @@ class UserServiceTest {
     @Mock
     EncryptionService encryptionService;
     @Mock
-    AddressBookRepository addressBookRepository;
-    @Mock
     ProductRepository productRepository;
     @Mock
     CartProductRepository cartProductRepository;
     @Mock
     AddressRepository addressRepository;
+
     @InjectMocks
     UserService userService;
 
@@ -82,42 +70,7 @@ class UserServiceTest {
         return saveRequest;
     }
 
-    private Product createProduct() {
-        Brand brand = new Brand(3L, "나이키", "nike", "123123213", "234234234");
-        return Product.builder()
-            .nameKor("조던")
-            .nameEng("jordan")
-            .modelNumber("12345")
-            .color("RED")
-            .releaseDate(LocalDate.now())
-            .releasePrice(200000)
-            .currency(Currency.KRW)
-            .sizeClassification(SizeClassification.MENS)
-            .sizeUnit(SizeUnit.MM)
-            .minSize(230)
-            .maxSize(320)
-            .sizeGap(10)
-            .brand(brand)
-            .build();
 
-
-    }
-
-
-    @Test
-    @DisplayName("이메일과 닉네임이 중복되지 않으면 회원가입에 성공한다.")
-    public void signUp_Successful() {
-
-        UserDto.SaveRequest saveRequest = createUserDto();
-
-
-        when(userRepository.existsByEmail("test123@test.com")).thenReturn(false);
-        when(userRepository.existsByNickname("17171771")).thenReturn(false);
-
-        userService.save(saveRequest);
-
-        verify(userRepository, atLeastOnce()).save(any());
-    }
 
     @Test
     @DisplayName("이메일 중복으로 회원가입에 실패한다.")
@@ -427,85 +380,5 @@ class UserServiceTest {
         verify(userRepository, never()).deleteByEmail(email);
     }
 
-    @Test
-    @DisplayName("중복된 상품이 아닌경우 위시리스트에 상품을 추가한다.")
-    public void addWishList() {
-        User user = createUserDto().toEntity();
-        Product product = createProduct();
-        Cart cart = new Cart();
-        user.createCart(cart);
-        CartProduct cartProduct = CartProduct.builder()
-            .cart(cart)
-            .product(product)
-            .build();
-        String email = "test123@test.com";
-        IdRequest idRequest = IdRequest
-            .builder()
-            .id(2L)
-            .build();
 
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-        when(productRepository.findById(idRequest.getId())).thenReturn(Optional.of(product));
-        when(cartProductRepository.save(any())).thenReturn(cartProduct);
-
-        userService.addWishList(email, idRequest);
-        assertThat(user.getWishList().size()).isEqualTo(1);
-        verify(userRepository, atLeastOnce()).findByEmail(email);
-        verify(productRepository, atLeastOnce()).findById(idRequest.getId());
-        verify(cartProductRepository, atLeastOnce()).save(any());
-
-    }
-    @Test
-    @DisplayName("장바구니에 이미 동일한 상품이 존재하는 경우  DuplicateCartItemException이 발생한다.")
-    public void failToAddWishList() {
-        User user = createUserDto().toEntity();
-        Product product = createProduct();
-        Cart cart = new Cart();
-        user.createCart(cart);
-        CartProduct cartProduct = CartProduct.builder()
-            .cart(cart)
-            .product(product)
-            .build();
-        String email = "test123@test.com";
-        IdRequest idRequest = IdRequest
-            .builder()
-            .id(2L)
-            .build();
-        user.addCartItem(cartProduct);
-
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-        when(productRepository.findById(idRequest.getId())).thenReturn(Optional.of(product));
-        when(cartProductRepository.save(any())).thenReturn(cartProduct);
-
-        assertThrows(DuplicateCartItemException.class, () -> userService.addWishList(email, idRequest));
-        verify(userRepository, atLeastOnce()).findByEmail(email);
-        verify(productRepository, atLeastOnce()).findById(idRequest.getId());
-        verify(cartProductRepository, atLeastOnce()).save(any());
-    }
-
-    @Test
-    @DisplayName("회원의 장바구니를 조회한다.")
-    public void getWishList() {
-        User user = createUserDto().toEntity();
-        Cart cart = new Cart();
-        user.createCart(cart);
-        String email= "jungkh405@naver.com";
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-
-        userService.getWishList(email);
-
-        assertThat(user.getWishList().size()).isEqualTo(0);
-        verify(userRepository, atLeastOnce()).findByEmail(email);
-    }
-
-    @Test
-    @DisplayName("카트에서 해당 상품을 삭제한다.")
-    public void deleteWishList() {
-        IdRequest idRequest = IdRequest.builder()
-            .id(1L).build();
-
-        userService.deleteWishList(idRequest);
-
-        verify(cartProductRepository, atLeastOnce()).deleteById(any());
-    }
 }

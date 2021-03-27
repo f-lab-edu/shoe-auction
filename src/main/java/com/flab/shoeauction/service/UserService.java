@@ -56,6 +56,7 @@ public class UserService {
         return userRepository.existsByNickname(nickname);
     }
 
+    @Transactional
     public void save(com.flab.shoeauction.controller.dto.UserDto.SaveRequest requestDto) {
         if (checkEmailDuplicate(requestDto.getEmail())) {
             throw new DuplicateEmailException();
@@ -65,8 +66,15 @@ public class UserService {
         }
         requestDto.passwordEncryption(encryptionService);
 
-        userRepository.save(requestDto.toEntity());
+        User user = userRepository.save(requestDto.toEntity());
+        createRequiredInformation(user);
     }
+
+    public void createRequiredInformation(User user) {
+        user.createCart(cartRepository.save(new Cart()));
+        user.createAddressBook(addressBookRepository.save(new AddressBook()));
+    }
+
 
     public FindUserResponse getUserResource(String email) {
         return userRepository.findByEmail(email)
@@ -117,11 +125,6 @@ public class UserService {
     public List<Address> getAddressBook(String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
-
-        if(user.getAddressBook() == null) {
-            AddressBook addressBook = addressBookRepository.save(new AddressBook());
-            user.createAddressBook(addressBook);
-        }
 
         AddressBook addressBook = user.getAddressBook();
         return addressBook.getAddressList();
@@ -195,39 +198,5 @@ public class UserService {
         user.updateUserLevel();
     }
 
-    @Transactional
-    public void addWishList(String email, IdRequest idRequest) {
-        User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
-        if (user.getCart() == null) {
-            Cart cart = cartRepository.save(new Cart());
-            user.createCart(cart);
-        }
-
-        Product product = productRepository.findById(idRequest.getId()).orElseThrow();
-        CartProduct cartItem = cartProductRepository.save(new CartProduct(user.getCart(), product));
-
-        if (user.checkCartItemDuplicate(cartItem)) {
-            throw new DuplicateCartItemException("장바구니 중복");
-        }
-
-        user.addCartItem(cartItem);
-    }
-
-    public Set<WishItemResponse> getWishList(String email) {
-        User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
-
-        if (user.getCart() == null) {
-            Cart cart = cartRepository.save(new Cart());
-            user.createCart(cart);
-        }
-        return user.getWishList();
-    }
-
-    @Transactional
-    public void deleteWishList(IdRequest idRequest) {
-        cartProductRepository.deleteById(idRequest.getId());
-    }
 }

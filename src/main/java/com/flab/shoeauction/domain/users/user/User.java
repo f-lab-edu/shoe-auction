@@ -45,7 +45,7 @@ public class User extends UserBase {
 
     private UserStatus userStatus;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADDRESSBOOK_ID")
     private AddressBook addressBook;
 
@@ -154,6 +154,7 @@ public class User extends UserBase {
 
 
     public Set<WishItemResponse> getWishList() {
+        System.out.println("**********요기*(********");
         return cart.getWishList()
             .stream()
             .map(CartProduct::toWishItemDto)

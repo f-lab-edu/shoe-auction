@@ -24,8 +24,6 @@ import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfig
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.shoeauction.controller.dto.AddressDto;
-import com.flab.shoeauction.controller.dto.ProductDto.IdRequest;
-import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.EmailCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
@@ -35,7 +33,6 @@ import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.UserDto.SmsCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.addressBook.Address;
-import com.flab.shoeauction.domain.brand.Brand;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException;
@@ -49,9 +46,7 @@ import com.flab.shoeauction.service.UserService;
 import com.flab.shoeauction.service.certification.EmailCertificationService;
 import com.flab.shoeauction.service.certification.SmsCertificationService;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -104,20 +99,7 @@ class UserApiControllerTest {
             .build();
     }
 
-    private Set<WishItemResponse> createWishList() {
-        Set<WishItemResponse> set = new HashSet<>();
 
-        WishItemResponse wishItemResponse = WishItemResponse.builder()
-            .id(1L)
-            .nameKor("조던")
-            .nameEng("Jordan")
-            .productId(2L)
-            .brand(new Brand(3L, "나이키", "nike", "1234", "5678")).build();
-
-        set.add(wishItemResponse);
-
-        return set;
-    }
 
 
     @Test
@@ -859,71 +841,5 @@ class UserApiControllerTest {
             )));
     }
 
-    @Test
-    @DisplayName("카트 - 위시리스트를 조회한다.")
-    void getWishList() throws Exception {
-        Set<WishItemResponse> wishList = createWishList();
-        given(userService.getWishList(any())).willReturn(wishList);
 
-        mockMvc.perform(get("/users/carts"))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andDo(document("users/carts/getWishList", responseFields(
-                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("CartProduct ID"),
-                fieldWithPath("[].productId").type(JsonFieldType.NUMBER).description("상품의 ID[PK]"),
-                fieldWithPath("[].nameKor").type(JsonFieldType.STRING).description("상품 이름(한글)"),
-                fieldWithPath("[].nameEng").type(JsonFieldType.STRING).description("상품 이름(영어"),
-                fieldWithPath("[].brand.createdDate").type(JsonFieldType.VARIES)
-                    .description("브랜드 생성 날짜"),
-                fieldWithPath("[].brand.modifiedDate").type(JsonFieldType.VARIES)
-                    .description("브랜드 정보 수정 날짜"),
-                fieldWithPath("[].brand.id").type(JsonFieldType.NUMBER).description("브랜드 ID[PK]"),
-                fieldWithPath("[].brand.nameKor").type(JsonFieldType.STRING)
-                    .description("브랜드 이름(한글)"),
-                fieldWithPath("[].brand.nameEng").type(JsonFieldType.STRING)
-                    .description("브랜드 이름(영어)"),
-                fieldWithPath("[].brand.originImagePath").type(JsonFieldType.STRING)
-                    .description("브랜드 이미지 경로"),
-                fieldWithPath("[].brand.thumbnailImagePath").type(JsonFieldType.STRING)
-                    .description("브랜드 이미지 경로(썸네일)")
-            )));
-    }
-
-    @Test
-    @DisplayName("카트 - 위시리스트에 상품을 추가한다.")
-    void addWishList() throws Exception {
-        String email = "jungkh405@naver.com";
-        IdRequest idRequest = IdRequest.builder()
-            .id(1L).build();
-
-        doNothing().when(userService).addWishList(email, idRequest);
-
-        mockMvc.perform(post("/users/carts")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(idRequest)))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andDo(document("users/carts/addWishList", requestFields(
-                fieldWithPath("id").type(JsonFieldType.NUMBER).description("상품(Product)의 ID[PK]")
-            )));
-    }
-
-    @Test
-    @DisplayName("카트 - 위시리스트에 등록된 상품을 삭제한다.")
-    void deleteWishList() throws Exception {
-        IdRequest idRequest = IdRequest.builder()
-            .id(1L).build();
-
-        doNothing().when(userService).deleteWishList(idRequest);
-
-        mockMvc.perform(delete("/users/carts")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(idRequest)))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andDo(document("users/carts/deleteWishList", requestFields(
-                fieldWithPath("id").type(JsonFieldType.NUMBER)
-                    .description("카트상품(CartProduct)의 ID[PK]")
-            )));
-    }
 }

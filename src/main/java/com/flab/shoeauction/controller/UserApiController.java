@@ -7,8 +7,6 @@ import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.controller.dto.AddressDto;
 import com.flab.shoeauction.controller.dto.AddressDto.SaveRequest;
-import com.flab.shoeauction.controller.dto.ProductDto.IdRequest;
-import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.EmailCertificationRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
@@ -23,7 +21,6 @@ import com.flab.shoeauction.service.UserService;
 import com.flab.shoeauction.service.certification.EmailCertificationService;
 import com.flab.shoeauction.service.certification.SmsCertificationService;
 import java.util.List;
-import java.util.Set;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -196,23 +193,5 @@ public class UserApiController {
     public void updateNickname(@CurrentUser String email,
         @RequestBody com.flab.shoeauction.controller.dto.UserDto.SaveRequest requestDto) {
         userService.updateNickname(email, requestDto);
-    }
-
-    @LoginCheck
-    @GetMapping("/carts")
-    public Set<WishItemResponse> getWishList(@CurrentUser String email) {
-        return userService.getWishList(email);
-    }
-
-    @LoginCheck
-    @PostMapping("/carts")
-    public void addWishList(@CurrentUser String email, @RequestBody IdRequest idRequest) {
-        userService.addWishList(email, idRequest);
-    }
-
-    @LoginCheck
-    @DeleteMapping("/carts")
-    public void deleteWishList(@RequestBody IdRequest idRequest) {
-        userService.deleteWishList(idRequest);
     }
 }
