@@ -572,7 +572,99 @@ NOTE: 현재 로그인되어있는 사용자의 my-infos 리소스를 가져옵�
 
 ---
 
-=== 6. 브랜드 전체 조회
+=== 6. 상품 관련 조회
+
+---
+
+==== 상품 정보 조회
+
+**curl**
+
+include::{snippets}/products/get/details/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/products/get/details/path-parameters.adoc[]
+
+**response-fields**
+
+include::{snippets}/products/get/details/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/products/get/details/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/products/get/details/http-response.adoc[]
+
+---
+
+==== 상품 통화 단위 목록 조회
+
+**curl**
+
+include::{snippets}/products/get/currencies/curl-request.adoc[]
+
+**response-fields**
+
+include::{snippets}/products/get/currencies/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/products/get/currencies/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/products/get/currencies/http-response.adoc[]
+
+---
+
+==== 상품 사이즈 분류 목록 조회
+
+**curl**
+
+include::{snippets}/products/get/size-classifications/curl-request.adoc[]
+
+**response-fields**
+
+include::{snippets}/products/get/size-classifications/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/products/get/size-classifications/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/products/get/size-classifications/http-response.adoc[]
+
+---
+
+==== 상품 사이즈 단위 목록 조회
+
+**curl**
+
+include::{snippets}/products/get/size-units/curl-request.adoc[]
+
+**response-fields**
+
+include::{snippets}/products/get/size-units/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/products/get/size-units/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/products/get/size-units/http-response.adoc[]
+
+---
+
+=== 7. 브랜드 조회
+
+---
+
+==== 브랜드 전체 조회
 
 **curl**
 
@@ -589,7 +681,6 @@ include::{snippets}/brands/get/http-request.adoc[]
 **Example response**
 
 include::{snippets}/brands/get/http-response.adoc[]
-
 
 == ADMIN
 
@@ -667,7 +758,7 @@ include::{snippets}/brands/update/request-part-requestDto-fields.adoc[]
 
 **request-parts(Optional)**
 
-include::{snippets}/brands/create/request-parts.adoc[]
+include::{snippets}/brands/update/request-parts.adoc[]
 
 **Example request**
 
@@ -696,3 +787,73 @@ include::{snippets}/brands/delete/http-response.adoc[]
 ---
 
 === 3. 상품 관리
+
+---
+
+==== 상품 생성
+
+**curl**
+
+include::{snippets}/products/create/curl-request.adoc[]
+
+**request-fields**
+
+include::{snippets}/products/create/request-part-requestDto-fields.adoc[]
+
+**request-parts(Optional)**
+
+include::{snippets}/products/create/request-parts.adoc[]
+
+**Example request**
+
+include::{snippets}/products/create/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/products/create/http-response.adoc[]
+
+---
+
+==== 상품 수정
+
+**curl**
+
+include::{snippets}/products/update/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/products/update/path-parameters.adoc[]
+
+**request-fields**
+
+include::{snippets}/products/update/request-part-requestDto-fields.adoc[]
+
+**request-parts(Optional)**
+
+include::{snippets}/products/update/request-parts.adoc[]
+
+**Example request**
+
+include::{snippets}/products/update/http-request.adoc[]
+
+---
+
+==== 상품 삭제
+
+**curl**
+
+include::{snippets}/products/delete/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/products/delete/path-parameters.adoc[]
+
+**Example request**
+
+include::{snippets}/products/delete/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/products/delete/http-response.adoc[]
+
+---

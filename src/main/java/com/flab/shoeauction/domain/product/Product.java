@@ -100,6 +100,7 @@ public class Product extends BaseTimeEntity {
             .maxSize(this.maxSize)
             .sizeGap(this.sizeGap)
             .brand(brand.toBrandInfo())
+            .resizedImagePath(this.resizedImagePath)
             .build();
     }
 
