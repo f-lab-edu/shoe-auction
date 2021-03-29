@@ -17,7 +17,7 @@ pipeline {
     stage('Build') {
       steps {
            sh "chmod +x gradlew"
-           sh "./gradlew build -x test"
+           sh "./gradlew build -x test --no-daemon"
            echo 'build success'
 
       }
