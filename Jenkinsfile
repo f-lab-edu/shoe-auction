@@ -1,7 +1,6 @@
 pipeline {
   agent any
    environment {
-          PATH = "/opt/gradle/gradle-6.3/bin:$PATH"
       }
 
 
@@ -16,8 +15,7 @@ pipeline {
 
     stage('Build') {
       steps {
-           sh "chmod +x gradlew"
-           sh "./gradlew clean build --no-daemon"
+           sh "./gradlew clean build"
            echo 'build success'
 
       }
