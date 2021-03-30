@@ -5,6 +5,22 @@ pipeline {
     }
   stages {
 
+    stage('Git Checkout') {
+              steps {
+                  checkout scm
+                  echo 'Git Checkout Success!'
+              }
+    }
+
+
+    stage('Test') {
+        steps {
+            sh 'gradle test'
+            echo 'test success'
+        }
+      }
+
+
     stage('Build') {
       steps {
 
