@@ -5,17 +5,10 @@ pipeline {
     }
   stages {
 
-   stage('Test') {
-        steps {
-            sh 'gradle test'
-            echo 'test success'
-        }
-      }
-
     stage('Build') {
       steps {
 
-           sh 'gradle clean build --exclude-task test'
+           sh 'gradle clean build --exclude-task test --exclude-task asciidoctor'
            echo 'build success'
 
       }
