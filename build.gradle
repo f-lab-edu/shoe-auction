@@ -33,6 +33,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
     implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml'
+    implementation group: 'com.lmax', name: 'disruptor', version: '3.3.4'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
