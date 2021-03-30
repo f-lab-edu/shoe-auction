@@ -5,13 +5,6 @@ pipeline {
     }
   stages {
 
-   stage('Test') {
-        steps {
-            sh 'gradle test'
-            echo 'test success'
-        }
-      }
-
     stage('Build') {
       steps {
 
