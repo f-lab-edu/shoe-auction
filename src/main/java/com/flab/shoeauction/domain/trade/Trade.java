@@ -94,4 +94,9 @@ public class Trade extends BaseTimeEntity {
         this.seller = seller;
         this.status = TradeStatus.PROGRESS;
     }
+
+    public Long getPublisherId() {
+        return publisher.getId();
+    }
+
 }

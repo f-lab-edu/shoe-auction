@@ -35,12 +35,12 @@ public class TradeService {
         Product product = productRepository.findById(productId)
             .orElseThrow();
 
-        return makeSellResource(user, product, size);
+        return makeTradeResource(user, product, size);
 
     }
 
-    private TradeResource makeSellResource(User user, Product product, double size) {
-        ProductInfoByTrade productInfoByTrade = product.toProductInfoByTrade(size);
+    private TradeResource makeTradeResource(User user, Product product, double size) {
+        ProductInfoByTrade productInfoByTrade = product.toProductInfoByTrade(user, size);
         TradeUserInfo tradeUserInfo = user.createTradeUserInfo();
 
         return TradeResource.builder()
@@ -81,7 +81,8 @@ public class TradeService {
         User buyer = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
-        Address shippingAddress = addressRepository.findById(requestDto.getAddressId()).orElseThrow();
+        Address shippingAddress = addressRepository.findById(requestDto.getAddressId())
+            .orElseThrow();
 
         Trade trade = tradeRepository.findById(requestDto.getTradeId()).orElseThrow();
 
