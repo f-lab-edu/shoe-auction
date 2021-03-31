@@ -53,6 +53,8 @@ dependencies {
     runtimeOnly group: 'org.springframework.cloud', name: 'spring-cloud-dependencies', version: 'Hoxton.SR10', ext: 'pom'
 
     implementation group: 'org.apache.tika', name: 'tika-parsers', version: '1.25'
+
+    implementation 'com.google.firebase:firebase-admin:7.1.1'
 }
 
 configurations {
