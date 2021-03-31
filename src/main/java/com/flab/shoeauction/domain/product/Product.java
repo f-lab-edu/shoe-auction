@@ -123,8 +123,8 @@ public class Product extends BaseTimeEntity {
             .modelNumber(this.modelNumber)
             .color(this.color)
             .brand(brand.toBrandInfo())
-            .immediatePurchasePrice(getLowestPrice(currentUser, size)) //구매 BID 중 최고가격 (판매자 입장)
-            .immediateSalePrice(getHighestPrice(currentUser, size)) // 판매 BID중 최저 가격 (구매자 입장)
+            .immediatePurchasePrice(getLowestPrice(currentUser, size))
+            .immediateSalePrice(getHighestPrice(currentUser, size))
             .build();
     }
 
