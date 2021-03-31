@@ -13,22 +13,22 @@ public class SmsCertificationDao {
     private final String PREFIX = "sms:";
     private final int LIMIT_TIME = 3 * 60;
 
-    private final StringRedisTemplate stringRedisTemplate;
+    private final StringRedisTemplate redisTemplate;
 
     public void createSmsCertification(String phone, String certificationNumber) {
-        stringRedisTemplate.opsForValue()
+        redisTemplate.opsForValue()
             .set(PREFIX + phone, certificationNumber, Duration.ofSeconds(LIMIT_TIME));
     }
 
     public String getSmsCertification(String phone) {
-        return stringRedisTemplate.opsForValue().get(PREFIX + phone);
+        return redisTemplate.opsForValue().get(PREFIX + phone);
     }
 
     public void removeSmsCertification(String phone) {
-        stringRedisTemplate.delete(PREFIX + phone);
+        redisTemplate.delete(PREFIX + phone);
     }
 
     public boolean hasKey(String phone) {
-        return stringRedisTemplate.hasKey(PREFIX + phone);
+        return redisTemplate.hasKey(PREFIX + phone);
     }
 }
