@@ -130,14 +130,14 @@ public class Product extends BaseTimeEntity {
 
     private TradeBidResponse getLowestPrice(User currentUser, double size) {
         return trades.stream()
-            .filter(LowestPriceFilter(currentUser, size))
+            .filter(lowestPriceFilter(currentUser, size))
             .sorted(Comparator.comparing(Trade::getPrice))
             .map(Trade::toTradeBidResponse)
             .findFirst()
             .orElse(null);
     }
 
-    private Predicate<Trade> LowestPriceFilter(User currentUser, double size) {
+    private Predicate<Trade> lowestPriceFilter(User currentUser, double size) {
         return v -> v.getStatus() == TradeStatus.BID && v.getBuyer() == null
             && v.getProductSize() == size && v.getPublisherId() != currentUser.getId();
     }
