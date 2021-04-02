@@ -3,14 +3,18 @@ package com.flab.shoeauction.controller;
 import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
-import com.flab.shoeauction.domain.product.Currency;
-import com.flab.shoeauction.domain.product.SizeClassification;
-import com.flab.shoeauction.domain.product.SizeUnit;
+import com.flab.shoeauction.controller.dto.ProductDto.SearchCondition;
+import com.flab.shoeauction.controller.dto.ProductDto.ThumbnailResponse;
+import com.flab.shoeauction.domain.product.common.Currency;
+import com.flab.shoeauction.domain.product.common.SizeClassification;
+import com.flab.shoeauction.domain.product.common.SizeUnit;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.service.BrandService;
 import com.flab.shoeauction.service.ProductService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -46,6 +50,15 @@ public class ProductApiController {
     public ResponseEntity<ProductInfoResponse> getProductInfo(@PathVariable Long id) {
         ProductInfoResponse productInfoResponse = productService.getProductInfo(id);
         return ResponseEntity.ok(productInfoResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ThumbnailResponse>> getProductsThumbnail(
+        SearchCondition condition, Pageable pageable) {
+        Page<ThumbnailResponse> productThumbnailsPage =
+            productService.findProducts(condition, pageable);
+
+        return ResponseEntity.ok(productThumbnailsPage);
     }
 
     @LoginCheck(authority = UserLevel.ADMIN)

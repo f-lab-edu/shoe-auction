@@ -3,6 +3,8 @@ package com.flab.shoeauction.service;
 import com.flab.shoeauction.common.utils.file.FileNameUtils;
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
+import com.flab.shoeauction.controller.dto.ProductDto.SearchCondition;
+import com.flab.shoeauction.controller.dto.ProductDto.ThumbnailResponse;
 import com.flab.shoeauction.domain.product.Product;
 import com.flab.shoeauction.domain.product.ProductRepository;
 import com.flab.shoeauction.exception.product.DuplicateModelNumberException;
@@ -12,6 +14,8 @@ import javax.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -98,5 +102,10 @@ public class ProductService {
         MultipartFile productImage) {
         return ((updatedImagePath == null && savedImagePath != null) ||
             (savedImagePath != null && productImage != null));
+    }
+
+    public Page<ThumbnailResponse> findProducts(SearchCondition condition,
+        Pageable pageable) {
+        return productRepository.findAllBySearchCondition(condition, pageable);
     }
 }

@@ -2,10 +2,11 @@ package com.flab.shoeauction.controller.dto;
 
 import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
 import com.flab.shoeauction.domain.brand.Brand;
-import com.flab.shoeauction.domain.product.Currency;
+import com.flab.shoeauction.domain.product.common.Currency;
 import com.flab.shoeauction.domain.product.Product;
-import com.flab.shoeauction.domain.product.SizeClassification;
-import com.flab.shoeauction.domain.product.SizeUnit;
+import com.flab.shoeauction.domain.product.common.OrderStandard;
+import com.flab.shoeauction.domain.product.common.SizeClassification;
+import com.flab.shoeauction.domain.product.common.SizeUnit;
 import java.time.LocalDate;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -14,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class ProductDto {
@@ -161,5 +163,28 @@ public class ProductDto {
             this.nameEng = nameEng;
             this.brand = brand;
         }
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ThumbnailResponse {
+
+        private Long id;
+        private String productThumbnailImagePath;
+        private String brandThumbnailImagePath;
+        private String nameKor;
+        private String nameEng;
+        private int lowestPrice;
+    }
+
+    @Getter
+    @Setter
+    public static class SearchCondition {
+
+        private String keyword;
+        private Long brandId;
+        private OrderStandard orderStandard;
     }
 }
