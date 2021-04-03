@@ -199,7 +199,7 @@ public class ProductDto {
         private String brandThumbnailImagePath;
         private String nameKor;
         private String nameEng;
-        private int lowestPrice;
+        private Long lowestPrice;
     }
 
     @Getter

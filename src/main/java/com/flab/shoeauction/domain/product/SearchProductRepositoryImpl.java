@@ -1,6 +1,7 @@
 package com.flab.shoeauction.domain.product;
 
 import static com.flab.shoeauction.domain.product.QProduct.product;
+import static com.flab.shoeauction.domain.trade.QTrade.trade;
 import static org.springframework.util.StringUtils.hasText;
 
 import com.flab.shoeauction.controller.dto.ProductDto.SearchCondition;
@@ -32,11 +33,16 @@ public class SearchProductRepositoryImpl implements SearchProductRepository {
                 product.thumbnailImagePath.as("productThumbnailImagePath"),
                 product.brand.thumbnailImagePath.as("brandThumbnailImagePath"),
                 product.nameKor,
-                product.nameEng)) // TODO: Trade 구현 완료되면 lowestPrice 추가하기
+                product.nameEng,
+                trade.price.min().as("lowestPrice")
+                ))
             .from(product)
+            .leftJoin(product.trades, trade)
+            .groupBy(product)
             .where(
                 eqBrandId(condition.getBrandId()),
-                containsKeyword(condition.getKeyword())
+                containsKeyword(condition.getKeyword()),
+                trade.buyer.isNull()
             ).orderBy(
                 getOrderSpecifier(condition.getOrderStandard())
             )
