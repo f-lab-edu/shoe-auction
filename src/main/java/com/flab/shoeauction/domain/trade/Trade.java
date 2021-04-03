@@ -1,6 +1,8 @@
 package com.flab.shoeauction.domain.trade;
 
+import com.flab.shoeauction.controller.dto.TradeDto.TradeBidResponse;
 import com.flab.shoeauction.domain.BaseTimeEntity;
+import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.product.Product;
 import com.flab.shoeauction.domain.users.user.User;
 import javax.persistence.Entity;
@@ -11,9 +13,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Trade extends BaseTimeEntity {
 
@@ -41,4 +48,55 @@ public class Trade extends BaseTimeEntity {
     private TradeStatus status;
 
     private Long price;
+
+    private double productSize;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "RETURN_ID")
+    private Address returnAddress;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SHIPPING_ID")
+    private Address shippingAddress;
+
+    @Builder
+    public Trade(User publisher, User seller, User buyer,
+        Product product, TradeStatus status, Long price, double productSize,
+        Address returnAddress, Address shippingAddress) {
+        this.publisher = publisher;
+        this.seller = seller;
+        this.buyer = buyer;
+        this.product = product;
+        this.status = status;
+        this.price = price;
+        this.productSize = productSize;
+        this.returnAddress = returnAddress;
+        this.shippingAddress = shippingAddress;
+    }
+
+    public TradeBidResponse toTradeBidResponse() {
+        return TradeBidResponse.builder()
+            .id(this.id)
+            .price(this.price)
+            .productId(product.getId())
+            .productSize(this.productSize)
+            .build();
+    }
+
+    public void makeImmediatePurchase(User buyer, Address shippingAddress) {
+        this.shippingAddress = shippingAddress;
+        this.buyer = buyer;
+        this.status = TradeStatus.PROGRESS;
+    }
+
+    public void makeImmediateSale(User seller, Address returnAddress) {
+        this.returnAddress = returnAddress;
+        this.seller = seller;
+        this.status = TradeStatus.PROGRESS;
+    }
+
+    public Long getPublisherId() {
+        return publisher.getId();
+    }
+
 }
