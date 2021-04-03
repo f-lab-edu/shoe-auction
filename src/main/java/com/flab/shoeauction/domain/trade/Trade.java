@@ -82,4 +82,21 @@ public class Trade extends BaseTimeEntity {
             .productSize(this.productSize)
             .build();
     }
+
+    public void makeImmediatePurchase(User buyer, Address shippingAddress) {
+        this.shippingAddress = shippingAddress;
+        this.buyer = buyer;
+        this.status = TradeStatus.PROGRESS;
+    }
+
+    public void makeImmediateSale(User seller, Address returnAddress) {
+        this.returnAddress = returnAddress;
+        this.seller = seller;
+        this.status = TradeStatus.PROGRESS;
+    }
+
+    public Long getPublisherId() {
+        return publisher.getId();
+    }
+
 }

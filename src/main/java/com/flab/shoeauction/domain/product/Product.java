@@ -8,10 +8,12 @@ import com.flab.shoeauction.domain.BaseTimeEntity;
 import com.flab.shoeauction.domain.brand.Brand;
 import com.flab.shoeauction.domain.trade.Trade;
 import com.flab.shoeauction.domain.trade.TradeStatus;
+import com.flab.shoeauction.domain.users.user.User;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -113,7 +115,7 @@ public class Product extends BaseTimeEntity {
     }
 
 
-    public ProductInfoByTrade toProductInfoByTrade(double size) {
+    public ProductInfoByTrade toProductInfoByTrade(User currentUser, double size) {
         return ProductInfoByTrade.builder()
             .id(this.id)
             .nameKor(this.nameKor)
@@ -121,29 +123,37 @@ public class Product extends BaseTimeEntity {
             .modelNumber(this.modelNumber)
             .color(this.color)
             .brand(brand.toBrandInfo())
-            .immediatePurchasePrice(getLowestPrice(size)) //구매 BID 중 최고가격 (판매자 입장)
-            .immediateSalePrice(getHighestPrice(size)) // 판매 BID중 최저 가격 (구매자 입장)
+            .immediatePurchasePrice(getLowestPrice(currentUser, size))
+            .immediateSalePrice(getHighestPrice(currentUser, size))
             .build();
     }
 
-    private TradeBidResponse getLowestPrice(double size) {
+    private TradeBidResponse getLowestPrice(User currentUser, double size) {
         return trades.stream()
-            .filter(v -> v.getStatus() == TradeStatus.BID && v.getBuyer() == null
-                && v.getProductSize() == size)
+            .filter(lowestPriceFilter(currentUser, size))
             .sorted(Comparator.comparing(Trade::getPrice))
             .map(Trade::toTradeBidResponse)
             .findFirst()
             .orElse(null);
     }
 
-    private TradeBidResponse getHighestPrice(double size) {
+    private Predicate<Trade> lowestPriceFilter(User currentUser, double size) {
+        return v -> v.getStatus() == TradeStatus.BID && v.getBuyer() == null
+            && v.getProductSize() == size && v.getPublisherId() != currentUser.getId();
+    }
+
+    private TradeBidResponse getHighestPrice(User currentUser, double size) {
         return trades.stream()
-            .filter(v -> v.getStatus() == TradeStatus.BID && v.getSeller() == null
-                && v.getProductSize() == size)
+            .filter(highestPriceFilter(currentUser, size))
             .sorted(Comparator.comparing(Trade::getPrice).reversed())
             .map(Trade::toTradeBidResponse)
             .findFirst()
             .orElse(null);
+    }
+
+    private Predicate<Trade> highestPriceFilter(User currentUser, double size) {
+        return v -> v.getStatus() == TradeStatus.BID && v.getSeller() == null
+            && v.getProductSize() == size && v.getPublisherId() != currentUser.getId();
     }
 
 

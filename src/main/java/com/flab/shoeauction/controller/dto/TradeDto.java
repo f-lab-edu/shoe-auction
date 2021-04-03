@@ -30,7 +30,8 @@ public class TradeDto {
 
     @Getter
     @NoArgsConstructor
-    public static class TradeBidResponse  {
+    public static class TradeBidResponse {
+
         private Long id;
         private Long productId;
         private double productSize;
@@ -89,4 +90,21 @@ public class TradeDto {
                 .build();
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class ImmediateTradeRequest {
+
+        private Long tradeId;
+        private Long addressId;
+        private Long productId;
+
+        @Builder
+        public ImmediateTradeRequest(Long tradeId, Long addressId, Long productId) {
+            this.tradeId = tradeId;
+            this.addressId = addressId;
+            this.productId = productId;
+        }
+    }
+
 }
