@@ -16,22 +16,21 @@ import org.springframework.stereotype.Component;
 public class FCMInitializer {
 
     @Value("${fcm.certification}")
-    private String GOOGLE_APPLICATION_CREDENTIALS;
+    private String googleApplicationCredentials;
 
     @PostConstruct
-    public void initialize() {
-        ClassPathResource resource = new ClassPathResource(GOOGLE_APPLICATION_CREDENTIALS);
+    public void initialize() throws IOException {
+        ClassPathResource resource = new ClassPathResource(googleApplicationCredentials);
 
         try (InputStream is = resource.getInputStream()) {
             FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(is))
                 .build();
+
             if (FirebaseApp.getApps().isEmpty()) {
                 FirebaseApp.initializeApp(options);
                 log.info("FirebaseApp initialization complete");
             }
-        } catch (IOException exception) {
-            log.error("FirebaseApp initialization fail");
         }
     }
 }
