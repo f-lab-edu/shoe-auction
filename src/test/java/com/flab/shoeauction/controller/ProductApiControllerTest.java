@@ -4,8 +4,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeBidResponse;
 import com.flab.shoeauction.domain.product.Currency;
 import com.flab.shoeauction.domain.product.SizeClassification;
 import com.flab.shoeauction.domain.product.SizeUnit;
@@ -31,6 +32,8 @@ import com.flab.shoeauction.service.ProductService;
 import com.flab.shoeauction.service.SessionLoginService;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -128,8 +131,43 @@ class ProductApiControllerTest {
             .brand(createBrandInfo())
             .resizedImagePath(
                 "https://shoeauction-brands-resized.s3.ap-northeast-2.amazonaws.com/brand.png")
+            .purchaseBids(createPurchaseBids())
+            .saleBids(createSales())
             .build();
     }
+
+    private List<TradeBidResponse> createPurchaseBids() {
+
+        List<TradeBidResponse> purchaseBids = new ArrayList<>();
+
+        TradeBidResponse tradeBidResponse = TradeBidResponse.builder()
+            .id(5L)
+            .productId(1L)
+            .productSize(260.0)
+            .price(300000L)
+            .build();
+
+        purchaseBids.add(tradeBidResponse);
+
+        return purchaseBids;
+    }
+
+    private List<TradeBidResponse> createSales() {
+
+        List<TradeBidResponse> saleBids = new ArrayList<>();
+
+        TradeBidResponse tradeBidResponse = TradeBidResponse.builder()
+            .id(5L)
+            .productId(1L)
+            .productSize(260.0)
+            .price(200000L)
+            .build();
+
+        saleBids.add(tradeBidResponse);
+
+        return saleBids;
+    }
+
 
     private MockMultipartFile createImageFile() {
         return new MockMultipartFile("productImage", "productImage", MediaType.IMAGE_PNG_VALUE,
@@ -244,7 +282,15 @@ class ProductApiControllerTest {
                     fieldWithPath("brand.originImagePath").ignored(),
                     fieldWithPath("brand.thumbnailImagePath").ignored(),
                     fieldWithPath("resizedImagePath").type(JsonFieldType.STRING)
-                        .description("조회한 상품의 이미지 경로")
+                    .description("조회한 상품의 이미지 경로"),
+                    fieldWithPath("saleBids.[].id").type(JsonFieldType.NUMBER).description("판매 입찰 ID"),
+                    fieldWithPath("saleBids.[].productId").type(JsonFieldType.NUMBER).description("판매 입찰 productID"),
+                    fieldWithPath("saleBids.[].productSize").type(JsonFieldType.NUMBER).description("판매 입찰 물품 사이즈"),
+                    fieldWithPath("saleBids.[].price").type(JsonFieldType.NUMBER).description("판매 입찰 물품 가격"),
+                    fieldWithPath("purchaseBids.[].id").type(JsonFieldType.NUMBER).description("구매 입찰  ID"),
+                    fieldWithPath("purchaseBids.[].productId").type(JsonFieldType.NUMBER).description("구매 입찰  productId"),
+                    fieldWithPath("purchaseBids.[].productSize").type(JsonFieldType.NUMBER).description("구매 입찰 물품 사이즈"),
+                    fieldWithPath("purchaseBids.[].price").type(JsonFieldType.NUMBER).description("구매 입찰 물품 가격")
                 )
             ));
     }

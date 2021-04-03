@@ -15,8 +15,6 @@ import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.addressBook.AddressRepository;
-import com.flab.shoeauction.domain.cart.CartProductRepository;
-import com.flab.shoeauction.domain.product.ProductRepository;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
@@ -50,10 +48,6 @@ class UserServiceTest {
     UserRepository userRepository;
     @Mock
     EncryptionService encryptionService;
-    @Mock
-    ProductRepository productRepository;
-    @Mock
-    CartProductRepository cartProductRepository;
     @Mock
     AddressRepository addressRepository;
 

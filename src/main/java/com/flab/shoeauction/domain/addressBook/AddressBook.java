@@ -31,4 +31,11 @@ public class AddressBook {
     public void deleteAddress(Address address) {
         addressList.remove(address);
     }
+
+    public Address findAddress(Long addressId) {
+        return addressList.stream()
+            .filter(address -> address.getId() == addressId)
+            .findAny()
+            .orElseThrow();
+    }
 }

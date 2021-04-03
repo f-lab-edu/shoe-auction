@@ -3,6 +3,7 @@ package com.flab.shoeauction.domain.users.user;
 import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
+import com.flab.shoeauction.controller.dto.UserDto.TradeUserInfo;
 import com.flab.shoeauction.controller.dto.UserDto.UserDetailsResponse;
 import com.flab.shoeauction.controller.dto.UserDto.UserInfoDto;
 import com.flab.shoeauction.domain.addressBook.Address;
@@ -45,7 +46,7 @@ public class User extends UserBase {
 
     private UserStatus userStatus;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "ADDRESSBOOK_ID")
     private AddressBook addressBook;
 
@@ -154,7 +155,6 @@ public class User extends UserBase {
 
 
     public Set<WishItemResponse> getWishList() {
-        System.out.println("**********요기*(********");
         return cart.getWishList()
             .stream()
             .map(CartProduct::toWishItemDto)
@@ -166,5 +166,17 @@ public class User extends UserBase {
             .stream()
             .map(CartProduct::getProduct)
             .anyMatch(v -> v.getId() == cartItem.getProductId());
+    }
+
+    public TradeUserInfo createTradeUserInfo() {
+        return TradeUserInfo.builder()
+            .account(this.account)
+            .addressBook(this.addressBook)
+            .build();
+
+    }
+
+    public Address findAddress(Long addressId) {
+        return addressBook.findAddress(addressId);
     }
 }
