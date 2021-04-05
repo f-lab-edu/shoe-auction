@@ -16,7 +16,6 @@ import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.Embedded;
@@ -54,7 +53,7 @@ public class User extends UserBase {
     /**
      * USER는 하나의 CART만 가질 수 있고, CART 또한 여러명의 유저가 함께 사용할 수 없다. 따라서 일대일 매핑으로 처리한다.
      */
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "CART_ID")
     private Cart cart;
 
