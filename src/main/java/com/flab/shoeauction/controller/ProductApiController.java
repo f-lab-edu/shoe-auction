@@ -16,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,11 +24,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RequestMapping("/products")
-@Controller
+@RestController
 public class ProductApiController {
 
     private final ProductService productService;
@@ -47,18 +46,16 @@ public class ProductApiController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductInfoResponse> getProductInfo(@PathVariable Long id) {
+    public ProductInfoResponse getProductInfo(@PathVariable Long id) {
         ProductInfoResponse productInfoResponse = productService.getProductInfo(id);
-        return ResponseEntity.ok(productInfoResponse);
+        return productInfoResponse;
     }
 
     @GetMapping
-    public ResponseEntity<Page<ThumbnailResponse>> getProductsThumbnail(
+    public Page<ThumbnailResponse> getProductsThumbnail(
         SearchCondition condition, Pageable pageable) {
-        Page<ThumbnailResponse> productThumbnailsPage =
-            productService.findProducts(condition, pageable);
 
-        return ResponseEntity.ok(productThumbnailsPage);
+        return productService.findProducts(condition, pageable);
     }
 
     @LoginCheck(authority = UserLevel.ADMIN)
@@ -78,20 +75,20 @@ public class ProductApiController {
     }
 
     @GetMapping("/currencies")
-    public ResponseEntity<Currency[]> getCurrencies() {
+    public Currency[] getCurrencies() {
         Currency[] currencies = Currency.values();
-        return ResponseEntity.ok(currencies);
+        return currencies;
     }
 
     @GetMapping("/size-classifications")
-    public ResponseEntity<SizeClassification[]> getSizeClassifications() {
+    public SizeClassification[] getSizeClassifications() {
         SizeClassification[] sizeClassifications = SizeClassification.values();
-        return ResponseEntity.ok(sizeClassifications);
+        return sizeClassifications;
     }
 
     @GetMapping("/size-units")
-    public ResponseEntity<SizeUnit[]> getSizeUnits() {
+    public SizeUnit[] getSizeUnits() {
         SizeUnit[] sizeUnits = SizeUnit.values();
-        return ResponseEntity.ok(sizeUnits);
+        return sizeUnits;
     }
 }

@@ -9,8 +9,6 @@ import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,11 +17,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RequestMapping("/brands")
-@Controller
+@RestController
 public class BrandApiController {
 
     private final BrandService brandService;
@@ -37,15 +36,13 @@ public class BrandApiController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BrandInfo> getBrandInfo(@PathVariable Long id) {
-        BrandInfo brandInfoResponse = brandService.getBrandInfo(id);
-        return ResponseEntity.ok(brandInfoResponse);
+    public BrandInfo getBrandInfo(@PathVariable Long id) {
+        return brandService.getBrandInfo(id);
     }
 
     @GetMapping
-    public ResponseEntity<List<BrandInfo>> getBrandInfos() {
-        List<BrandInfo> brandInfoResponses = brandService.getBrandInfos();
-        return ResponseEntity.ok(brandInfoResponses);
+    public List<BrandInfo> getBrandInfos() {
+        return brandService.getBrandInfos();
     }
 
     @LoginCheck(authority = UserLevel.ADMIN)

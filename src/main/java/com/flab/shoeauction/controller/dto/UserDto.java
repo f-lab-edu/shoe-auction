@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @AllArgsConstructor
@@ -207,7 +206,6 @@ public class UserDto {
     }
 
     @Getter
-    @Setter
     @NoArgsConstructor
     public static class UserSearchCondition {
 
@@ -283,7 +281,6 @@ public class UserDto {
             this.account = account;
         }
     }
-
 
 
 }

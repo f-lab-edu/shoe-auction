@@ -3,8 +3,8 @@ package com.flab.shoeauction.controller.dto;
 import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeBidResponse;
 import com.flab.shoeauction.domain.brand.Brand;
-import com.flab.shoeauction.domain.product.common.Currency;
 import com.flab.shoeauction.domain.product.Product;
+import com.flab.shoeauction.domain.product.common.Currency;
 import com.flab.shoeauction.domain.product.common.OrderStandard;
 import com.flab.shoeauction.domain.product.common.SizeClassification;
 import com.flab.shoeauction.domain.product.common.SizeUnit;
@@ -18,7 +18,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class ProductDto {
@@ -203,7 +202,6 @@ public class ProductDto {
     }
 
     @Getter
-    @Setter
     public static class SearchCondition {
 
         private String keyword;
