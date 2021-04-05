@@ -10,9 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/**
- * 도로명 주소,상세주소
- */
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

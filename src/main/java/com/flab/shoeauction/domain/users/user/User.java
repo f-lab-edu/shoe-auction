@@ -16,6 +16,7 @@ import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.Embedded;
@@ -46,7 +47,7 @@ public class User extends UserBase {
 
     private UserStatus userStatus;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "ADDRESSBOOK_ID")
     private AddressBook addressBook;
 

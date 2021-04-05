@@ -52,7 +52,7 @@ public class TradeDto {
 
         private Long price;
         private double productSize;
-        private Long productId; // DTO로 받도록 리팩토링
+        private Long productId;
         private Long addressId;
 
         @Builder
@@ -62,6 +62,7 @@ public class TradeDto {
             this.productSize = productSize;
             this.price = price;
             this.addressId = addressId;
+
         }
 
         // 판매 입찰용
@@ -106,5 +107,4 @@ public class TradeDto {
             this.productId = productId;
         }
     }
-
 }
