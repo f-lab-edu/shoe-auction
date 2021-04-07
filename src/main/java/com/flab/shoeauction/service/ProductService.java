@@ -49,6 +49,11 @@ public class ProductService {
             .toProductInfoResponse();
     }
 
+    public Page<ThumbnailResponse> findProducts(SearchCondition condition,
+        Pageable pageable) {
+        return productRepository.findAllBySearchCondition(condition, pageable);
+    }
+
     @CacheEvict(value = "product", key = "#id")
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
@@ -102,10 +107,5 @@ public class ProductService {
         MultipartFile productImage) {
         return ((updatedImagePath == null && savedImagePath != null) ||
             (savedImagePath != null && productImage != null));
-    }
-
-    public Page<ThumbnailResponse> findProducts(SearchCondition condition,
-        Pageable pageable) {
-        return productRepository.findAllBySearchCondition(condition, pageable);
     }
 }

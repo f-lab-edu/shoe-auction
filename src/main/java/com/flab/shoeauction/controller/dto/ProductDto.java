@@ -201,7 +201,10 @@ public class ProductDto {
         private Long lowestPrice;
     }
 
+    @Builder
     @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class SearchCondition {
 
         private String keyword;

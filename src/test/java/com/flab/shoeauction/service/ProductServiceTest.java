@@ -13,12 +13,15 @@ import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
 import com.flab.shoeauction.controller.dto.ProductDto;
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
+import com.flab.shoeauction.controller.dto.ProductDto.SearchCondition;
+import com.flab.shoeauction.controller.dto.ProductDto.ThumbnailResponse;
 import com.flab.shoeauction.controller.dto.UserDto;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.brand.Brand;
-import com.flab.shoeauction.domain.product.common.Currency;
 import com.flab.shoeauction.domain.product.Product;
 import com.flab.shoeauction.domain.product.ProductRepository;
+import com.flab.shoeauction.domain.product.common.Currency;
+import com.flab.shoeauction.domain.product.common.OrderStandard;
 import com.flab.shoeauction.domain.product.common.SizeClassification;
 import com.flab.shoeauction.domain.product.common.SizeUnit;
 import com.flab.shoeauction.domain.trade.Trade;
@@ -38,6 +41,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -98,6 +105,7 @@ class ProductServiceTest {
             .build();
         return saveRequest;
     }
+
     private Product createProduct() {
         return Product.builder()
             .nameKor("덩크 로우")
@@ -119,6 +127,7 @@ class ProductServiceTest {
             .trades(createTrades())
             .build();
     }
+
     private ProductDto.SaveRequest createProductDto() {
         return ProductDto.SaveRequest.builder()
             .nameKor("덩크 로우")
@@ -173,6 +182,7 @@ class ProductServiceTest {
         list.add(purchase);
         return list;
     }
+
     private Product createAnotherProduct() {
         return Product.builder()
             .nameKor("992 메이드 인 USA")
@@ -217,12 +227,45 @@ class ProductServiceTest {
             "sample".getBytes());
     }
 
-    private List<Product> createProductList() {
-        List<Product> productList = new ArrayList<>();
-        productList.add(createProduct());
-        productList.add(createAnotherProduct());
+    private ThumbnailResponse createProductThumbnail() {
+        return ThumbnailResponse.builder()
+            .id(1L)
+            .productThumbnailImagePath(productThumbnailImagePath)
+            .brandThumbnailImagePath(brandThumbnailImagePath)
+            .nameKor("사카이")
+            .nameEng("Sakai")
+            .lowestPrice(500000L)
+            .build();
+    }
 
-        return productList;
+    private ThumbnailResponse createAnotherProductThumbnail() {
+        return ThumbnailResponse.builder()
+            .id(2L)
+            .productThumbnailImagePath(productThumbnailImagePath)
+            .brandThumbnailImagePath(brandThumbnailImagePath)
+            .nameKor("이지부스트")
+            .nameEng("YEEZY BOOST")
+            .lowestPrice(450000L)
+            .build();
+    }
+
+    private List<ThumbnailResponse> createProductThumbnailList() {
+        List<ThumbnailResponse> thumbnailList = new ArrayList<>();
+        thumbnailList.add(createProductThumbnail());
+        thumbnailList.add(createAnotherProductThumbnail());
+
+        return thumbnailList;
+    }
+
+    private SearchCondition createEmptySearchCondition() {
+        return SearchCondition.builder().build();
+    }
+
+    private SearchCondition createSearchCondition() {
+        return SearchCondition.builder()
+            .brandId(3L)
+            .keyword("ka")
+            .orderStandard(OrderStandard.LOW_PRICE).build();
     }
 
     @DisplayName("특정 id를 가진 상품이 존재하여 조회에 성공한다.")
@@ -252,6 +295,46 @@ class ProductServiceTest {
         verify(productRepository, times(1)).findById(id);
     }
 
+
+    @DisplayName("모든 상품들의 썸네일 정보를 조회한다.")
+    @Test
+    public void getAllProductThumbnails() {
+        List<ThumbnailResponse> list = createProductThumbnailList();
+        SearchCondition searchCondition = createEmptySearchCondition();
+        long total = list.size();
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<ThumbnailResponse> result = new PageImpl<>(list, pageable, total);
+        given(productRepository.findAllBySearchCondition(searchCondition, pageable))
+            .willReturn(result);
+
+        Page<ThumbnailResponse> searchedPage = productService
+            .findProducts(searchCondition, pageable);
+
+        assertThat(searchedPage.getContent().size()).isEqualTo(total);
+        assertThat(searchedPage.getTotalElements()).isEqualTo(total);
+        assertThat(searchedPage.getTotalPages()).isEqualTo(1);
+        verify(productRepository, times(1)).findAllBySearchCondition(searchCondition, pageable);
+    }
+
+    @DisplayName("검색 조건에 맞는 상품의 썸네일 정보를 조회한다.")
+    @Test
+    public void getSearchedProductThumbnails() {
+        List<ThumbnailResponse> list = new ArrayList<>();
+        list.add(createProductThumbnail());
+        SearchCondition searchCondition = createSearchCondition();
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<ThumbnailResponse> result = new PageImpl<>(list, pageable, 1);
+        given(productRepository.findAllBySearchCondition(searchCondition, pageable))
+            .willReturn(result);
+
+        Page<ThumbnailResponse> searchedPage = productService
+            .findProducts(searchCondition, pageable);
+
+        assertThat(searchedPage.getContent().size()).isEqualTo(1);
+        assertThat(searchedPage.getTotalElements()).isEqualTo(1);
+        assertThat(searchedPage.getTotalPages()).isEqualTo(1);
+        verify(productRepository, times(1)).findAllBySearchCondition(searchCondition, pageable);
+    }
 
     @DisplayName("특정 id를 가진 상품이 존재하지 않아 조회에 실패한다.")
     @Test

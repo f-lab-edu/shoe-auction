@@ -6,6 +6,7 @@ import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.ProductDto.SearchCondition;
 import com.flab.shoeauction.controller.dto.ProductDto.ThumbnailResponse;
 import com.flab.shoeauction.domain.product.common.Currency;
+import com.flab.shoeauction.domain.product.common.OrderStandard;
 import com.flab.shoeauction.domain.product.common.SizeClassification;
 import com.flab.shoeauction.domain.product.common.SizeUnit;
 import com.flab.shoeauction.domain.users.common.UserLevel;
@@ -76,19 +77,21 @@ public class ProductApiController {
 
     @GetMapping("/currencies")
     public Currency[] getCurrencies() {
-        Currency[] currencies = Currency.values();
-        return currencies;
+        return Currency.values();
     }
 
     @GetMapping("/size-classifications")
     public SizeClassification[] getSizeClassifications() {
-        SizeClassification[] sizeClassifications = SizeClassification.values();
-        return sizeClassifications;
+        return SizeClassification.values();
     }
 
     @GetMapping("/size-units")
     public SizeUnit[] getSizeUnits() {
-        SizeUnit[] sizeUnits = SizeUnit.values();
-        return sizeUnits;
+        return SizeUnit.values();
+    }
+
+    @GetMapping("/order-standards")
+    public OrderStandard[] getProductOrderStandards() {
+        return OrderStandard.values();
     }
 }
