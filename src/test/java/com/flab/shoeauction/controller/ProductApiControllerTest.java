@@ -183,7 +183,7 @@ class ProductApiControllerTest {
         List<TradeBidResponse> purchaseBids = new ArrayList<>();
 
         TradeBidResponse tradeBidResponse = TradeBidResponse.builder()
-            .id(5L)
+            .tradeId(5L)
             .productId(1L)
             .productSize(260.0)
             .price(300000L)
@@ -199,7 +199,7 @@ class ProductApiControllerTest {
         List<TradeBidResponse> saleBids = new ArrayList<>();
 
         TradeBidResponse tradeBidResponse = TradeBidResponse.builder()
-            .id(5L)
+            .tradeId(5L)
             .productId(1L)
             .productSize(260.0)
             .price(200000L)

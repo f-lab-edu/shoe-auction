@@ -60,9 +60,10 @@ public class Trade extends BaseTimeEntity {
     private Address shippingAddress;
 
     @Builder
-    public Trade(User publisher, User seller, User buyer,
+    public Trade(Long id, User publisher, User seller, User buyer,
         Product product, TradeStatus status, Long price, double productSize,
         Address returnAddress, Address shippingAddress) {
+        this.id = id;
         this.publisher = publisher;
         this.seller = seller;
         this.buyer = buyer;
@@ -76,7 +77,7 @@ public class Trade extends BaseTimeEntity {
 
     public TradeBidResponse toTradeBidResponse() {
         return TradeBidResponse.builder()
-            .id(this.id)
+            .tradeId(this.id)
             .price(this.price)
             .productId(product.getId())
             .productSize(this.productSize)
@@ -99,4 +100,7 @@ public class Trade extends BaseTimeEntity {
         return publisher.getId();
     }
 
+    public void updatePrice(Long price) {
+        this.price = price;
+    }
 }

@@ -4,6 +4,7 @@ import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoByTrade;
 import com.flab.shoeauction.controller.dto.TradeDto.ImmediateTradeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeResource;
+import com.flab.shoeauction.controller.dto.TradeDto.ChangeRequest;
 import com.flab.shoeauction.controller.dto.UserDto.TradeUserInfo;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressRepository;
@@ -100,5 +101,16 @@ public class TradeService {
         Trade trade = tradeRepository.findById(requestDto.getTradeId()).orElseThrow();
 
         trade.makeImmediateSale(seller, returnAddress);
+    }
+
+    @Transactional
+    public void updateTrade(ChangeRequest requestDto) {
+        Trade trade = tradeRepository.findById(requestDto.getTradeId()).orElseThrow();
+        trade.updatePrice(requestDto.getPrice());
+    }
+
+    @Transactional
+    public void deleteTrade(ChangeRequest requestDto) {
+        tradeRepository.deleteById(requestDto.getTradeId());
     }
 }
