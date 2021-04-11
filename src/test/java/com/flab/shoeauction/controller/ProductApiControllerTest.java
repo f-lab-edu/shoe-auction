@@ -325,7 +325,7 @@ class ProductApiControllerTest {
                     fieldWithPath("brand.thumbnailImagePath").ignored(),
                     fieldWithPath("resizedImagePath").type(JsonFieldType.STRING)
                         .description("조회한 상품의 이미지 경로"),
-                    fieldWithPath("saleBids.[].id").type(JsonFieldType.NUMBER)
+                    fieldWithPath("saleBids.[].tradeId").type(JsonFieldType.NUMBER)
                         .description("판매 입찰 ID"),
                     fieldWithPath("saleBids.[].productId").type(JsonFieldType.NUMBER)
                         .description("판매 입찰 productID"),
@@ -333,7 +333,7 @@ class ProductApiControllerTest {
                         .description("판매 입찰 물품 사이즈"),
                     fieldWithPath("saleBids.[].price").type(JsonFieldType.NUMBER)
                         .description("판매 입찰 물품 가격"),
-                    fieldWithPath("purchaseBids.[].id").type(JsonFieldType.NUMBER)
+                    fieldWithPath("purchaseBids.[].tradeId").type(JsonFieldType.NUMBER)
                         .description("구매 입찰  ID"),
                     fieldWithPath("purchaseBids.[].productId").type(JsonFieldType.NUMBER)
                         .description("구매 입찰  productId"),
