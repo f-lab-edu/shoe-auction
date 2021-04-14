@@ -23,11 +23,11 @@
     pay_method : 'card', // 'card'만 지원됩니다.
     merchant_uid : 'merchant_' + new Date().getTime(),
     name : '최초인증결제',
-    amount : 0, // 빌링키 발급만 진행하며 결제승인을 하지 않습니다.
-    customer_uid : customer_uid + 'iamport', //customer_uid 파라메터가 있어야 빌링키 발급을 시도합니다.
-    buyer_email : 'iamport@siot.do',
-    buyer_name : '아임포트',
-    buyer_tel : '02-1234-1234'
+    amount : 0,
+    customer_uid : customer_uid + 'iamport', //customer_uid , 빌링 키와 1:1 관계를 갖는 KEY
+    buyer_email : 'rlgur405@gmail.com',
+    buyer_name : 'shoe-auction',
+    buyer_tel : '010-2018-0103'
   }, function(rsp) {
     if ( rsp.success ) {
       alert('빌링키 발급 성공');
