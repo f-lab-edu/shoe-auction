@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+  <meta charset="UTF-8">
+  <title>Shoe-auction</title>
+
+</head>
+<body>
+<button id="uuid" value="{{customerId}}">결제수단등록</button>
+</body>
+</html>
+
+<script>
+  $('#uuid').click(function () {
+  IMP.init('imp02405334');
+
+  var customer_uid = document.getElementById("uuid").value;
+
+  IMP.request_pay({
+    pay_method : 'card', // 'card'만 지원됩니다.
+    merchant_uid : 'merchant_' + new Date().getTime(),
+    name : '최초인증결제',
+    amount : 0, // 빌링키 발급만 진행하며 결제승인을 하지 않습니다.
+    customer_uid : customer_uid + 'iamport', //customer_uid 파라메터가 있어야 빌링키 발급을 시도합니다.
+    buyer_email : 'iamport@siot.do',
+    buyer_name : '아임포트',
+    buyer_tel : '02-1234-1234'
+  }, function(rsp) {
+    if ( rsp.success ) {
+      alert('빌링키 발급 성공');
+      console.log(rsp);
+      $.ajax({
+        type : "POST",
+        url : "/payment",
+        dataType :JSON,
+        data : {
+          billingKey : rsp.customer_uid,
+          cardName : rsp.card_name
+        }
+      });
+
+    } else {
+      alert('빌링키 발급 실패');
+    }
+  });
+});
+</script>

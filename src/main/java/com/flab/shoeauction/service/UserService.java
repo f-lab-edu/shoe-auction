@@ -11,6 +11,7 @@ import com.flab.shoeauction.domain.addressBook.AddressRepository;
 import com.flab.shoeauction.domain.cart.Cart;
 import com.flab.shoeauction.domain.cart.CartRepository;
 import com.flab.shoeauction.domain.users.common.Account;
+import com.flab.shoeauction.domain.users.common.Payment;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
@@ -126,7 +127,7 @@ public class UserService {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
-        if(user.getAddressBook() == null) {
+        if (user.getAddressBook() == null) {
             AddressBook addressBook = addressBookRepository.save(new AddressBook());
             user.createAddressBook(addressBook);
         }
@@ -157,7 +158,8 @@ public class UserService {
     }
 
     @Transactional
-    public void updateNickname(String email, com.flab.shoeauction.controller.dto.UserDto.SaveRequest requestDto) {
+    public void updateNickname(String email,
+        com.flab.shoeauction.controller.dto.UserDto.SaveRequest requestDto) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
@@ -188,5 +190,11 @@ public class UserService {
         user.updateUserLevel();
     }
 
+    @Transactional
+    public void addPaymentMethod(String email, Payment payment) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
+        user.setPaymentMethod(payment);
+    }
 }

@@ -11,6 +11,7 @@ import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.cart.Cart;
 import com.flab.shoeauction.domain.cart.CartProduct;
 import com.flab.shoeauction.domain.users.common.Account;
+import com.flab.shoeauction.domain.users.common.Payment;
 import com.flab.shoeauction.domain.users.common.UserBase;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
@@ -38,6 +39,9 @@ public class User extends UserBase {
     private String nickname;
 
     private String phone;
+
+    @Embedded
+    private Payment payment;
 
     @Embedded
     private Account account;
@@ -178,5 +182,9 @@ public class User extends UserBase {
 
     public Address findAddress(Long addressId) {
         return addressBook.findAddress(addressId);
+    }
+
+    public void setPaymentMethod(Payment payment) {
+        this.payment = payment;
     }
 }
