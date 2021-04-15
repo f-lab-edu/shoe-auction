@@ -2,9 +2,13 @@ package com.flab.shoeauction.domain.users.user;
 
 import com.flab.shoeauction.domain.users.admin.AdminRepository;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long>, AdminRepository {
+
+    @EntityGraph(attributePaths = {"addressBook"})
+    Optional<User> findByEmail(String email);
 
     boolean existsByEmail(String email);
 
@@ -12,10 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long>, AdminReposito
 
     boolean existsByEmailAndPassword(String email, String password);
 
-    Optional<User> findByEmail(String email);
-
     void deleteByEmail(String email);
-
-
 
 }

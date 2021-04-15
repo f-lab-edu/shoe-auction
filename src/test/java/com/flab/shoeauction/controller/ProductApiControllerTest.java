@@ -1,17 +1,19 @@
 package com.flab.shoeauction.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -23,14 +25,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
-import com.flab.shoeauction.domain.product.Currency;
-import com.flab.shoeauction.domain.product.SizeClassification;
-import com.flab.shoeauction.domain.product.SizeUnit;
+import com.flab.shoeauction.controller.dto.ProductDto.SearchCondition;
+import com.flab.shoeauction.controller.dto.ProductDto.ThumbnailResponse;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeBidResponse;
+import com.flab.shoeauction.domain.product.common.Currency;
+import com.flab.shoeauction.domain.product.common.OrderStandard;
+import com.flab.shoeauction.domain.product.common.SizeClassification;
+import com.flab.shoeauction.domain.product.common.SizeUnit;
 import com.flab.shoeauction.service.BrandService;
 import com.flab.shoeauction.service.ProductService;
 import com.flab.shoeauction.service.SessionLoginService;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,6 +46,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -106,7 +118,8 @@ class ProductApiControllerTest {
             .maxSize(320)
             .sizeGap(5)
             .brand(createBrandInfo())
-            .originImagePath("https://shoeauction-brands-origin.s3.ap-northeast-2.amazonaws.com/brand.png")
+            .originImagePath(
+                "https://shoeauction-brands-origin.s3.ap-northeast-2.amazonaws.com/brand.png")
             .build();
     }
 
@@ -128,8 +141,75 @@ class ProductApiControllerTest {
             .brand(createBrandInfo())
             .resizedImagePath(
                 "https://shoeauction-brands-resized.s3.ap-northeast-2.amazonaws.com/brand.png")
+            .purchaseBids(createPurchaseBids())
+            .saleBids(createSales())
             .build();
     }
+
+    private ThumbnailResponse createProductThumbnail() {
+        return ThumbnailResponse.builder()
+            .id(99L)
+            .productThumbnailImagePath(
+                "https://shoeauction-products-thumbnail.s3.ap-northeast-2.amazonaws.com/product.png")
+            .brandThumbnailImagePath(
+                "https://shoeauction-brands-thumbnail.s3.ap-northeast-2.amazonaws.com/brand.png")
+            .nameKor("사카이")
+            .nameEng("Sakai")
+            .lowestPrice(500000L)
+            .build();
+    }
+
+    private Pageable createPageable() {
+        return PageRequest.of(0, 10);
+    }
+
+    private Page<ThumbnailResponse> createProductThumbnailsPage() {
+        List<ThumbnailResponse> thumbnailList = new ArrayList<>();
+        thumbnailList.add(createProductThumbnail());
+        Pageable pageable = createPageable();
+
+        return new PageImpl<>(thumbnailList, pageable, 1);
+    }
+
+    private SearchCondition createSearchCondition() {
+        return SearchCondition.builder()
+            .brandId(1L)
+            .keyword("ka")
+            .orderStandard(OrderStandard.LOW_PRICE).build();
+    }
+
+    private List<TradeBidResponse> createPurchaseBids() {
+
+        List<TradeBidResponse> purchaseBids = new ArrayList<>();
+
+        TradeBidResponse tradeBidResponse = TradeBidResponse.builder()
+            .tradeId(5L)
+            .productId(1L)
+            .productSize(260.0)
+            .price(300000L)
+            .build();
+
+        purchaseBids.add(tradeBidResponse);
+
+        return purchaseBids;
+    }
+
+    private List<TradeBidResponse> createSales() {
+
+        List<TradeBidResponse> saleBids = new ArrayList<>();
+
+        TradeBidResponse tradeBidResponse = TradeBidResponse.builder()
+            .tradeId(5L)
+            .productId(1L)
+            .productSize(260.0)
+            .price(200000L)
+            .build();
+
+        saleBids.add(tradeBidResponse);
+
+        return saleBids;
+    }
+
 
     private MockMultipartFile createImageFile() {
         return new MockMultipartFile("productImage", "productImage", MediaType.IMAGE_PNG_VALUE,
@@ -244,7 +324,77 @@ class ProductApiControllerTest {
                     fieldWithPath("brand.originImagePath").ignored(),
                     fieldWithPath("brand.thumbnailImagePath").ignored(),
                     fieldWithPath("resizedImagePath").type(JsonFieldType.STRING)
-                        .description("조회한 상품의 이미지 경로")
+                        .description("조회한 상품의 이미지 경로"),
+                    fieldWithPath("saleBids.[].tradeId").type(JsonFieldType.NUMBER)
+                        .description("판매 입찰 ID"),
+                    fieldWithPath("saleBids.[].productId").type(JsonFieldType.NUMBER)
+                        .description("판매 입찰 productID"),
+                    fieldWithPath("saleBids.[].productSize").type(JsonFieldType.NUMBER)
+                        .description("판매 입찰 물품 사이즈"),
+                    fieldWithPath("saleBids.[].price").type(JsonFieldType.NUMBER)
+                        .description("판매 입찰 물품 가격"),
+                    fieldWithPath("purchaseBids.[].tradeId").type(JsonFieldType.NUMBER)
+                        .description("구매 입찰  ID"),
+                    fieldWithPath("purchaseBids.[].productId").type(JsonFieldType.NUMBER)
+                        .description("구매 입찰  productId"),
+                    fieldWithPath("purchaseBids.[].productSize").type(JsonFieldType.NUMBER)
+                        .description("구매 입찰 물품 사이즈"),
+                    fieldWithPath("purchaseBids.[].price").type(JsonFieldType.NUMBER)
+                        .description("구매 입찰 물품 가격")
+                )
+            ));
+    }
+
+    @Test
+    @DisplayName("검색 조건 별 상품들의 썸네일을 조회한다.")
+    void findProducts() throws Exception {
+        Page<ThumbnailResponse> productThumbnailsPage = createProductThumbnailsPage();
+        given(productService.findProducts(any(), any()))
+            .willReturn(productThumbnailsPage);
+
+        mockMvc.perform(
+            get("/products?brandId=1&keyword=ka&orderStandard=LOW_PRICE")
+                .accept(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("products/get",
+                requestParameters(
+                    parameterWithName("brandId").description("조회할 상품 썸네일의 브랜드 ID").optional(),
+                    parameterWithName("keyword").description("조회할 상품의 검색 키워드").optional(),
+                    parameterWithName("orderStandard").description("조회할 상품의 정렬 조건").optional()
+                ),
+                responseFields(
+                    fieldWithPath("content.[].id").type(JsonFieldType.NUMBER)
+                        .description("조회한 상품의 ID"),
+                    fieldWithPath("content.[].productThumbnailImagePath").type(JsonFieldType.STRING)
+                        .description("조회한 상품의 썸네일 이미지 경로"),
+                    fieldWithPath("content.[].brandThumbnailImagePath").type(JsonFieldType.STRING)
+                        .description("조회한 상품의 브랜드 썸네일 이미지 경로"),
+                    fieldWithPath("content.[].nameKor").type(JsonFieldType.STRING)
+                        .description("조회한 상품의 한글명"),
+                    fieldWithPath("content.[].nameEng").type(JsonFieldType.STRING)
+                        .description("조회한 상품의 영문명"),
+                    fieldWithPath("content.[].lowestPrice").type(JsonFieldType.NUMBER)
+                        .description("조회한 상품의 즉시 구매 최저가"),
+                    fieldWithPath("pageable.offset").ignored(),
+                    fieldWithPath("pageable.pageSize").ignored(),
+                    fieldWithPath("pageable.pageNumber").ignored(),
+                    fieldWithPath("pageable.paged").ignored(),
+                    fieldWithPath("pageable.unpaged").ignored(),
+                    fieldWithPath("pageable.sort.sorted").ignored(),
+                    fieldWithPath("pageable.sort.unsorted").ignored(),
+                    fieldWithPath("pageable.sort.empty").ignored(),
+                    fieldWithPath("sort.empty").ignored(),
+                    fieldWithPath("sort.sorted").ignored(),
+                    fieldWithPath("sort.unsorted").ignored(),
+                    fieldWithPath("totalPages").ignored(),
+                    fieldWithPath("size").ignored(),
+                    fieldWithPath("number").ignored(),
+                    fieldWithPath("first").ignored(),
+                    fieldWithPath("last").ignored(),
+                    fieldWithPath("numberOfElements").ignored(),
+                    fieldWithPath("empty").ignored(),
+                    fieldWithPath("totalElements").ignored()
                 )
             ));
     }
@@ -352,8 +502,6 @@ class ProductApiControllerTest {
     @Test
     @DisplayName("상품의 사이즈 분류들을 조회한다.")
     void getSizeClassifications() throws Exception {
-        SizeClassification[] sizeClassifications = SizeClassification.values();
-
         mockMvc.perform(
             get("/products/size-classifications"))
             .andDo(print())
@@ -369,8 +517,6 @@ class ProductApiControllerTest {
     @Test
     @DisplayName("상품의 사이즈 단위들을 조회한다.")
     void getSizeUnits() throws Exception {
-        SizeUnit[] sizeUnits = SizeUnit.values();
-
         mockMvc.perform(
             get("/products/size-units"))
             .andDo(print())
@@ -380,6 +526,21 @@ class ProductApiControllerTest {
                 responseFields(
                     fieldWithPath("[]").type(JsonFieldType.ARRAY)
                         .description("상품의 사이즈 단위 목록"))
+            ));
+    }
+
+    @Test
+    @DisplayName("상품의 정렬 기준들을 조회한다.")
+    void getOrderStandard() throws Exception {
+        mockMvc.perform(
+            get("/products/order-standards"))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document(
+                "products/get/order-standards",
+                responseFields(
+                    fieldWithPath("[]").type(JsonFieldType.ARRAY)
+                        .description("상품의 정렬 기준 목록"))
             ));
     }
 }

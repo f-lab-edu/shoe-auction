@@ -18,7 +18,7 @@ public class Cart {
     @GeneratedValue
     private Long id;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", orphanRemoval = true)
     private Set<CartProduct> wishList = new HashSet<>();
 
     public void addCartProducts(CartProduct cartItem) {

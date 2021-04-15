@@ -1,6 +1,7 @@
 package com.flab.shoeauction.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
@@ -15,7 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @AllArgsConstructor
@@ -62,7 +62,7 @@ public class UserDto {
                 .password(this.password)
                 .nicknameModifiedDate(LocalDateTime.now())
                 .phone(this.phone)
-                .userLevel(UserLevel.UNAUTH)
+                .userLevel(UserLevel.ADMIN)
                 .userStatus(UserStatus.NORMAL)
                 .build();
         }
@@ -204,7 +204,6 @@ public class UserDto {
     }
 
     @Getter
-    @Setter
     @NoArgsConstructor
     public static class UserSearchCondition {
 
@@ -263,6 +262,21 @@ public class UserDto {
         public UserBanRequest(Long id, UserStatus userStatus) {
             this.id = id;
             this.userStatus = userStatus;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class TradeUserInfo {
+
+        private AddressBook addressBook;
+        private Account account;
+
+        @Builder
+        public TradeUserInfo(AddressBook addressBook,
+            Account account) {
+            this.addressBook = addressBook;
+            this.account = account;
         }
     }
 

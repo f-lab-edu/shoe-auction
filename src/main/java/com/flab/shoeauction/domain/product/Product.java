@@ -1,21 +1,34 @@
 package com.flab.shoeauction.domain.product;
 
+import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoByTrade;
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeBidResponse;
 import com.flab.shoeauction.domain.BaseTimeEntity;
 import com.flab.shoeauction.domain.brand.Brand;
+import com.flab.shoeauction.domain.product.common.Currency;
+import com.flab.shoeauction.domain.product.common.SizeClassification;
+import com.flab.shoeauction.domain.product.common.SizeUnit;
 import com.flab.shoeauction.domain.trade.Trade;
+import com.flab.shoeauction.domain.trade.TradeStatus;
+import com.flab.shoeauction.domain.users.user.User;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +45,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@NamedEntityGraph()
 public class Product extends BaseTimeEntity {
 
     @Id
@@ -72,19 +86,15 @@ public class Product extends BaseTimeEntity {
 
     private String resizedImagePath;
 
-    /*
-     * 상품 조회 등의 Product를 사용 하는 비즈니스 로직은 대부분 Brand를 함께 사용한다.
-     * 그렇기에 어차피 함께 사용할 Brand에 지연로딩을 설정하는 것은 조회 효율만 낮출 뿐이다.
-     * 따라서 FetchType의 디폴트인 EAGER(즉시로딩)을 사용하여 조인쿼리로 조회하는 편이 좋다.
-     */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BRAND_ID")
     private Brand brand;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Trade> trades = new ArrayList<>();
 
     public ProductInfoResponse toProductInfoResponse() {
+
         return ProductInfoResponse.builder()
             .id(this.id)
             .nameKor(this.nameKor)
@@ -99,10 +109,72 @@ public class Product extends BaseTimeEntity {
             .minSize(this.minSize)
             .maxSize(this.maxSize)
             .sizeGap(this.sizeGap)
-            .brand(brand.toBrandInfo())
             .resizedImagePath(this.resizedImagePath)
+            .saleBids(getSaleBids())
+            .purchaseBids(getPurchaseBids())
+            .brand(brand.toBrandInfo())
             .build();
     }
+
+
+    public ProductInfoByTrade toProductInfoByTrade(User currentUser, double size) {
+        return ProductInfoByTrade.builder()
+            .id(this.id)
+            .nameKor(this.nameKor)
+            .nameEng(this.nameEng)
+            .modelNumber(this.modelNumber)
+            .color(this.color)
+            .brand(brand.toBrandInfo())
+            .immediatePurchasePrice(getLowestPrice(currentUser, size))
+            .immediateSalePrice(getHighestPrice(currentUser, size))
+            .build();
+    }
+
+    private TradeBidResponse getLowestPrice(User currentUser, double size) {
+        return trades.stream()
+            .filter(lowestPriceFilter(currentUser, size))
+            .sorted(Comparator.comparing(Trade::getPrice))
+            .map(Trade::toTradeBidResponse)
+            .findFirst()
+            .orElse(null);
+    }
+
+    private Predicate<Trade> lowestPriceFilter(User currentUser, double size) {
+        return v -> v.getStatus() == TradeStatus.BID && v.getBuyer() == null
+            && v.getProductSize() == size && v.getPublisherId() != currentUser.getId();
+    }
+
+    private TradeBidResponse getHighestPrice(User currentUser, double size) {
+        return trades.stream()
+            .filter(highestPriceFilter(currentUser, size))
+            .sorted(Comparator.comparing(Trade::getPrice).reversed())
+            .map(Trade::toTradeBidResponse)
+            .findFirst()
+            .orElse(null);
+    }
+
+    private Predicate<Trade> highestPriceFilter(User currentUser, double size) {
+        return v -> v.getStatus() == TradeStatus.BID && v.getSeller() == null
+            && v.getProductSize() == size && v.getPublisherId() != currentUser.getId();
+    }
+
+
+    private List<TradeBidResponse> getSaleBids() {
+        return getTrades().stream()
+            .filter(v -> v.getStatus() == TradeStatus.BID && v.getBuyer() == null)
+            .sorted(Comparator.comparing(Trade::getPrice))
+            .map(Trade::toTradeBidResponse)
+            .collect(Collectors.toList());
+    }
+
+    private List<TradeBidResponse> getPurchaseBids() {
+        return getTrades().stream()
+            .filter(v -> v.getStatus() == TradeStatus.BID && v.getSeller() == null)
+            .sorted(Comparator.comparing(Trade::getPrice).reversed())
+            .map(Trade::toTradeBidResponse)
+            .collect(Collectors.toList());
+    }
+
 
     public void update(SaveRequest updatedProduct) {
         this.nameKor = updatedProduct.getNameKor();

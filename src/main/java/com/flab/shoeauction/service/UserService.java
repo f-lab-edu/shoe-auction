@@ -2,8 +2,6 @@ package com.flab.shoeauction.service;
 
 import com.flab.shoeauction.controller.dto.AddressDto;
 import com.flab.shoeauction.controller.dto.AddressDto.SaveRequest;
-import com.flab.shoeauction.controller.dto.ProductDto.IdRequest;
-import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.domain.addressBook.Address;
@@ -11,15 +9,10 @@ import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.addressBook.AddressBookRepository;
 import com.flab.shoeauction.domain.addressBook.AddressRepository;
 import com.flab.shoeauction.domain.cart.Cart;
-import com.flab.shoeauction.domain.cart.CartProduct;
-import com.flab.shoeauction.domain.cart.CartProductRepository;
 import com.flab.shoeauction.domain.cart.CartRepository;
-import com.flab.shoeauction.domain.product.Product;
-import com.flab.shoeauction.domain.product.ProductRepository;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
-import com.flab.shoeauction.exception.user.DuplicateCartItemException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
@@ -28,7 +21,6 @@ import com.flab.shoeauction.exception.user.WrongPasswordException;
 import com.flab.shoeauction.service.certification.EmailCertificationService;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -43,9 +35,7 @@ public class UserService {
     private final EncryptionService encryptionService;
     private final AddressBookRepository addressBookRepository;
     private final EmailCertificationService emailCertificationService;
-    private final ProductRepository productRepository;
     private final CartRepository cartRepository;
-    private final CartProductRepository cartProductRepository;
     private final AddressRepository addressRepository;
 
     public boolean checkEmailDuplicate(String email) {
