@@ -1,6 +1,8 @@
 package com.flab.shoeauction.service.message;
 
-public interface MessageService <T>{
+public interface MessageService {
 
-    void send(T message);
+    void sendSaleCompletedMessage(String token);
+
+    void sendPurchaseCompletedMessage(String token);
 }
