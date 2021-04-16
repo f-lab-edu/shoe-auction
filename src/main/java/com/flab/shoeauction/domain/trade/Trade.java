@@ -127,4 +127,8 @@ public class Trade extends BaseTimeEntity {
     public void updateCancelReason(String cancelReason) {
         this.cancelReason = cancelReason;
     }
+
+    public void updateStatus(TradeStatus status){
+        this.status = status;
+    }
 }

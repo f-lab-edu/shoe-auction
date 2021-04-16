@@ -1,7 +1,11 @@
 package com.flab.shoeauction.service;
 
+import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_CONCLUSION;
+import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_WAREHOUSING;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -26,6 +30,7 @@ import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
+import com.flab.shoeauction.exception.user.NotAuthorizedException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -190,6 +195,24 @@ class TradeServiceTest {
             .build();
     }
 
+    private Trade createConcludedBuyersTrade() {
+        User buyer = createUser();
+        User seller = createAnotherUser();
+        Product product = createProduct();
+        Address address = new Address(1L, "우리집", "땡땡땡로 123", "123동 456호", "12345");
+        return Trade.builder()
+            .id(11L)
+            .publisher(buyer)
+            .seller(seller)
+            .buyer(buyer)
+            .product(product)
+            .status(TradeStatus.PRE_CONCLUSION)
+            .price(300000L)
+            .productSize(260.0)
+            .returnAddress(address)
+            .shippingAddress(null)
+            .build();
+    }
 
     @DisplayName("상품 거래 화면에 보여질 리소스들을 리턴한다.")
     @Test
@@ -378,5 +401,39 @@ class TradeServiceTest {
         tradeService.deleteTrade(changeRequest);
 
         verify(tradeRepository).deleteById(any());
+    }
+
+    @DisplayName("판매자가 상품 발송 후 입고 운송장 번호를 입력한다.")
+    @Test
+    public void updateReceivingTrackingNumber() {
+        Trade trade = createConcludedBuyersTrade();
+        User seller = trade.getSeller();
+        Long tradeId = trade.getId();
+        String email = trade.getSeller().getEmail();
+        String trackingNumber = "123456789";
+        given(tradeRepository.findById(tradeId)).willReturn(Optional.of(trade));
+        given(userRepository.findByEmail(email)).willReturn(Optional.ofNullable(seller));
+
+        tradeService.updateReceivingTrackingNumber(tradeId, email, trackingNumber);
+
+        assertThat(trade.getReceivingTrackingNumber()).isEqualTo(trackingNumber);
+        assertThat(trade.getStatus()).isEqualTo(PRE_WAREHOUSING);
+    }
+
+    @DisplayName("판매자가 아닌 유저가 입고 운송장 번호 입력을 시도 시 실패한다.")
+    @Test
+    public void failToUpdateReceivingTrackingNumberIfUserIsNotSeller() {
+        Trade trade = createConcludedBuyersTrade();
+        User wrongUser = createUser();
+        Long tradeId = trade.getId();
+        String email = wrongUser.getEmail();
+        String trackingNumber = "123456789";
+        given(tradeRepository.findById(tradeId)).willReturn(Optional.of(trade));
+        given(userRepository.findByEmail(email)).willReturn(Optional.of(wrongUser));
+
+        assertThrows(NotAuthorizedException.class,
+            () -> tradeService.updateReceivingTrackingNumber(tradeId, email, trackingNumber));
+        assertThat(trade.getReceivingTrackingNumber()).isNull();
+        assertThat(trade.getStatus()).isEqualTo(PRE_CONCLUSION);
     }
 }
