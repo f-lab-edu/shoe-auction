@@ -116,7 +116,7 @@ class TradeServiceTest {
             .seller(user)
             .buyer(null)
             .product(product)
-            .status(TradeStatus.BID)
+            .status(TradeStatus.PRE_CONCLUSION)
             .price(300000L)
             .productSize(260.0)
             .returnAddress(address)
@@ -129,7 +129,7 @@ class TradeServiceTest {
             .seller(null)
             .buyer(user)
             .product(product)
-            .status(TradeStatus.BID)
+            .status(TradeStatus.PRE_CONCLUSION)
             .price(200000L)
             .productSize(260.0)
             .returnAddress(null)
@@ -182,7 +182,7 @@ class TradeServiceTest {
             .seller(user)
             .buyer(null)
             .product(product)
-            .status(TradeStatus.BID)
+            .status(TradeStatus.PRE_CONCLUSION)
             .price(300000L)
             .productSize(260.0)
             .returnAddress(address)
@@ -291,7 +291,7 @@ class TradeServiceTest {
             .seller(anotherUser)
             .buyer(null)
             .product(product)
-            .status(TradeStatus.BID)
+            .status(TradeStatus.PRE_CONCLUSION)
             .price(300000L)
             .productSize(260.0)
             .returnAddress(address)
@@ -310,7 +310,7 @@ class TradeServiceTest {
         when(tradeRepository.findById(requestDto.getTradeId())).thenReturn(Optional.of(saleTrade));
         tradeService.immediatePurchase(email, requestDto);
 
-        assertThat(saleTrade.getStatus()).isEqualTo(TradeStatus.PROGRESS);
+        assertThat(saleTrade.getStatus()).isEqualTo(TradeStatus.PRE_SELLER_SHIPMENT);
         assertThat(saleTrade.getBuyer().getId()).isEqualTo(user.getId());
         assertThat(saleTrade.getShippingAddress().getId()).isEqualTo(address.getId());
     }
@@ -329,7 +329,7 @@ class TradeServiceTest {
             .seller(null)
             .buyer(anotherUser)
             .product(product)
-            .status(TradeStatus.BID)
+            .status(TradeStatus.PRE_CONCLUSION)
             .price(200000L)
             .productSize(260.0)
             .returnAddress(null)
@@ -349,7 +349,7 @@ class TradeServiceTest {
             .thenReturn(Optional.of(purchaseTrade));
         tradeService.immediatePurchase(email, requestDto);
 
-        assertThat(purchaseTrade.getStatus()).isEqualTo(TradeStatus.PROGRESS);
+        assertThat(purchaseTrade.getStatus()).isEqualTo(TradeStatus.PRE_SELLER_SHIPMENT);
         assertThat(purchaseTrade.getBuyer().getId()).isEqualTo(user.getId());
         assertThat(purchaseTrade.getShippingAddress().getId()).isEqualTo(address.getId());
     }
