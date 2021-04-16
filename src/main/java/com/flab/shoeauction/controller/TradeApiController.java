@@ -80,6 +80,12 @@ public class TradeApiController {
     @PatchMapping("{id}/receiving-tracking-number")
     public void updateReceivingTrackingNumber(@PathVariable Long id, @CurrentUser String email,
         @RequestBody String trackingNumber) {
-            tradeService.updateReceivingTrackingNumber(id, email, trackingNumber);
+        tradeService.updateReceivingTrackingNumber(id, email, trackingNumber);
+    }
+
+    @LoginCheck(authority = UserLevel.ADMIN)
+    @PatchMapping("{id}/warehousing")
+    public void confirmWarehousing(@PathVariable Long id) {
+        tradeService.confirmWarehousing(id);
     }
 }

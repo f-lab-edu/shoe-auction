@@ -1,5 +1,6 @@
 package com.flab.shoeauction.service;
 
+import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_INSPECTION;
 import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_WAREHOUSING;
 
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoByTrade;
@@ -130,5 +131,13 @@ public class TradeService {
 
         trade.updateReceivingTrackingNumber(trackingNumber);
         trade.updateStatus(PRE_WAREHOUSING);
+    }
+
+    // 관리자가 상품의 입고를 확인하고 상품을 입고 확인 처리(검수 대기로 변경)
+    @Transactional
+    public void confirmWarehousing(Long tradeId) {
+        Trade trade = tradeRepository.findById(tradeId).orElseThrow();
+
+        trade.updateStatus(PRE_INSPECTION);
     }
 }

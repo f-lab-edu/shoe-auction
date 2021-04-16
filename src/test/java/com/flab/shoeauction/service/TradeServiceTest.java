@@ -1,6 +1,7 @@
 package com.flab.shoeauction.service;
 
 import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_CONCLUSION;
+import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_INSPECTION;
 import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_WAREHOUSING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -435,5 +436,17 @@ class TradeServiceTest {
             () -> tradeService.updateReceivingTrackingNumber(tradeId, email, trackingNumber));
         assertThat(trade.getReceivingTrackingNumber()).isNull();
         assertThat(trade.getStatus()).isEqualTo(PRE_CONCLUSION);
+    }
+
+    @DisplayName("관리자가 상품의 입고를 확인하고 상품의 상태를 검수 대기로 변경한다.")
+    @Test
+    public void confirmWarehousing() {
+        Trade trade = createConcludedBuyersTrade();
+        Long tradeId = trade.getId();
+        given(tradeRepository.findById(tradeId)).willReturn(Optional.of(trade));
+
+        tradeService.confirmWarehousing(tradeId);
+
+        assertThat(trade.getStatus()).isEqualTo(PRE_INSPECTION);
     }
 }
