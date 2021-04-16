@@ -26,8 +26,6 @@ public class PaymentController {
     @PostMapping
     @ResponseBody
     public void payment(@CurrentUser String email, @RequestBody PointDto requestDto) {
-        System.out.println(email);
-        System.out.println(requestDto.getPoint());
         paymentService.charging(email, requestDto);
     }
 }
