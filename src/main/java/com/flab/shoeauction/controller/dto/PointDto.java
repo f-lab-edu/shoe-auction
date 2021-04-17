@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class PointDto {
-    private int point;
+    private Long chargeAmount;
 
     @Builder
-    public PointDto(int point) {
-        this.point = point;
+    public PointDto(Long chargeAmount) {
+        this.chargeAmount = chargeAmount;
     }
 }

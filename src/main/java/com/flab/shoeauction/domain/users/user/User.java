@@ -11,7 +11,6 @@ import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.cart.Cart;
 import com.flab.shoeauction.domain.cart.CartProduct;
 import com.flab.shoeauction.domain.users.common.Account;
-import com.flab.shoeauction.domain.users.common.Point;
 import com.flab.shoeauction.domain.users.common.UserBase;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
@@ -43,8 +42,7 @@ public class User extends UserBase {
     @Embedded
     private Account account;
 
-    @Embedded
-    private Point point;
+    private Long point;
 
     private LocalDateTime nicknameModifiedDate;
 
@@ -109,7 +107,8 @@ public class User extends UserBase {
     @Builder
     public User(Long id, String email, String password, UserLevel userLevel, String nickname,
         String phone,
-        LocalDateTime nicknameModifiedDate, AddressBook addressBook, UserStatus userStatus, Point point) {
+        LocalDateTime nicknameModifiedDate, AddressBook addressBook, UserStatus userStatus,
+        Long point) {
         super(id, email, password, userLevel);
         this.nickname = nickname;
         this.phone = phone;
@@ -185,7 +184,8 @@ public class User extends UserBase {
         return addressBook.findAddress(addressId);
     }
 
-    public void chargingPoint(int point) {
-        this.point.charging(point);
+    public void chargingPoint(Long chargeAmount) {
+        this.point += chargeAmount;
+
     }
 }

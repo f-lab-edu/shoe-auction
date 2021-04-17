@@ -3,7 +3,6 @@ package com.flab.shoeauction.controller.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.users.common.Account;
-import com.flab.shoeauction.domain.users.common.Point;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.domain.users.user.User;
@@ -65,7 +64,7 @@ public class UserDto {
                 .phone(this.phone)
                 .userLevel(UserLevel.ADMIN)
                 .userStatus(UserStatus.NORMAL)
-                .point(new Point(0, 0))
+                .point(0L)
                 .build();
         }
     }
