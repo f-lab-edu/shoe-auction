@@ -179,4 +179,8 @@ public class User extends UserBase {
     public Address findAddress(Long addressId) {
         return addressBook.findAddress(addressId);
     }
+
+    public boolean isCurrentEmail(String email) {
+        return this.email.equals(email);
+    }
 }

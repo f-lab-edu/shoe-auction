@@ -122,10 +122,8 @@ public class TradeService {
     @Transactional
     public void updateReceivingTrackingNumber(Long tradeId, String email, String trackingNumber) {
         Trade trade = tradeRepository.findById(tradeId).orElseThrow();
-        User seller = userRepository.findByEmail(email)
-            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
-        if (!trade.getSeller().getId().equals(seller.getId())) {
+        if (!trade.isSellersEmail(email)) {
             throw new NotAuthorizedException("해당 거래의 판매자만 접근 가능합니다.");
         }
 

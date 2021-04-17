@@ -408,12 +408,10 @@ class TradeServiceTest {
     @Test
     public void updateReceivingTrackingNumber() {
         Trade trade = createConcludedBuyersTrade();
-        User seller = trade.getSeller();
         Long tradeId = trade.getId();
         String email = trade.getSeller().getEmail();
         String trackingNumber = "123456789";
         given(tradeRepository.findById(tradeId)).willReturn(Optional.of(trade));
-        given(userRepository.findByEmail(email)).willReturn(Optional.ofNullable(seller));
 
         tradeService.updateReceivingTrackingNumber(tradeId, email, trackingNumber);
 
@@ -425,12 +423,10 @@ class TradeServiceTest {
     @Test
     public void failToUpdateReceivingTrackingNumberIfUserIsNotSeller() {
         Trade trade = createConcludedBuyersTrade();
-        User wrongUser = createUser();
         Long tradeId = trade.getId();
-        String email = wrongUser.getEmail();
+        String email = "wrong@email.com";
         String trackingNumber = "123456789";
         given(tradeRepository.findById(tradeId)).willReturn(Optional.of(trade));
-        given(userRepository.findByEmail(email)).willReturn(Optional.of(wrongUser));
 
         assertThrows(NotAuthorizedException.class,
             () -> tradeService.updateReceivingTrackingNumber(tradeId, email, trackingNumber));

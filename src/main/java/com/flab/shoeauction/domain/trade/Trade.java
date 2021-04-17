@@ -120,7 +120,7 @@ public class Trade extends BaseTimeEntity {
         this.forwardingTrackingNumber = trackingNumber;
     }
 
-    public void updateReturnTrackingNumber(String trackingNumber){
+    public void updateReturnTrackingNumber(String trackingNumber) {
         this.returnTrackingNumber = trackingNumber;
     }
 
@@ -128,7 +128,11 @@ public class Trade extends BaseTimeEntity {
         this.cancelReason = cancelReason;
     }
 
-    public void updateStatus(TradeStatus status){
+    public void updateStatus(TradeStatus status) {
         this.status = status;
+    }
+
+    public boolean isSellersEmail(String email) {
+        return seller.isCurrentEmail(email);
     }
 }
