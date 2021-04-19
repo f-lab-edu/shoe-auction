@@ -8,22 +8,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("payment")
 @RequiredArgsConstructor
 public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @GetMapping
+    @GetMapping("/view/payment")
     public String paymentPage() {
         return "payment_page";
     }
 
-    @PostMapping
+    @PostMapping("/payment")
     @ResponseBody
     public void payment(@CurrentUser String email, @RequestBody PointDto requestDto) {
         paymentService.charging(email, requestDto);
