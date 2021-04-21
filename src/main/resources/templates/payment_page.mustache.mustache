@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+  <meta charset="UTF-8">
+  <title>Shoe-auction</title>
+
+</head>
+<body>
+<input type="text" id="amount">
+<button id="charge">포인트 충전</button>
+
+</body>
+</html>
+
+<script>
+  $('#charge').click(function () {
+    var amount = document.getElementById('amount').value;
+    IMP.init('imp02405334');
+    IMP.request_pay({
+      pg: 'kakaopay',
+      pay_method: 'card',
+      merchant_uid: 'merchant_' + new Date().getTime(),
+      name: 'Shoe-auction point charging',
+      amount: amount,
+      buyer_email: 'test@test.com',
+      buyer_name: '정기혁',
+      buyer_tel: '010-1111-2222',
+      buyer_addr: '서울특별시 강남구 삼성동',
+      buyer_postcode: '123-456',
+    }, function (rsp) {
+      if (rsp.success) {
+        var result = {
+          "chargeAmount": amount
+        };
+        $.ajax({
+          type: 'POST',
+          url: "/payment",
+          data: JSON.stringify(result),
+          dataType: "json",
+          contentType: "application/json; charset=UTF-8"
+        });
+        var msg = '결제가 완료되었습니다.';
+        msg += '고유ID : ' + rsp.imp_uid;
+        msg += '상점 거래ID : ' + rsp.merchant_uid;
+        msg += '결제 금액 : ' + rsp.paid_amount;
+        msg += '카드 승인번호 : ' + rsp.apply_num;
+      } else {
+        var msg = '결제에 실패하였습니다.';
+        msg += '에러내용 : ' + rsp.error_msg;
+      }
+      alert(msg);
+    });
+  });
+</script>

@@ -42,6 +42,8 @@ public class User extends UserBase {
     @Embedded
     private Account account;
 
+    private Long point;
+
     private LocalDateTime nicknameModifiedDate;
 
     private UserStatus userStatus;
@@ -105,7 +107,8 @@ public class User extends UserBase {
     @Builder
     public User(Long id, String email, String password, UserLevel userLevel, String nickname,
         String phone,
-        LocalDateTime nicknameModifiedDate, AddressBook addressBook, UserStatus userStatus) {
+        LocalDateTime nicknameModifiedDate, AddressBook addressBook, UserStatus userStatus,
+        Long point) {
         super(id, email, password, userLevel);
         this.nickname = nickname;
         this.phone = phone;
@@ -113,6 +116,7 @@ public class User extends UserBase {
         this.nicknameModifiedDate = nicknameModifiedDate;
         this.addressBook = addressBook;
         this.userStatus = userStatus;
+        this.point = point;
     }
 
     public UserDetailsResponse toUserDetailsDto() {
@@ -178,5 +182,10 @@ public class User extends UserBase {
 
     public Address findAddress(Long addressId) {
         return addressBook.findAddress(addressId);
+    }
+
+    public void chargingPoint(Long chargeAmount) {
+        this.point += chargeAmount;
+
     }
 }
