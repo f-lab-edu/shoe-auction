@@ -184,8 +184,15 @@ public class User extends UserBase {
         return addressBook.findAddress(addressId);
     }
 
+<<<<<<< HEAD
     public void chargingPoint(Long chargeAmount) {
         this.point += chargeAmount;
 
     }
 }
+=======
+    public boolean isCurrentEmail(String email) {
+        return this.email.equals(email);
+    }
+}
+>>>>>>> 88a31152e2060a2447223634e16d215274d4ffa4

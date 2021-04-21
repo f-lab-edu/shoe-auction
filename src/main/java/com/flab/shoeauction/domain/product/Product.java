@@ -140,7 +140,7 @@ public class Product extends BaseTimeEntity {
     }
 
     private Predicate<Trade> lowestPriceFilter(User currentUser, double size) {
-        return v -> v.getStatus() == TradeStatus.BID && v.getBuyer() == null
+        return v -> v.getStatus() == TradeStatus.PRE_CONCLUSION && v.getBuyer() == null
             && v.getProductSize() == size && v.getPublisherId() != currentUser.getId();
     }
 
@@ -154,14 +154,14 @@ public class Product extends BaseTimeEntity {
     }
 
     private Predicate<Trade> highestPriceFilter(User currentUser, double size) {
-        return v -> v.getStatus() == TradeStatus.BID && v.getSeller() == null
+        return v -> v.getStatus() == TradeStatus.PRE_CONCLUSION && v.getSeller() == null
             && v.getProductSize() == size && v.getPublisherId() != currentUser.getId();
     }
 
 
     private List<TradeBidResponse> getSaleBids() {
         return getTrades().stream()
-            .filter(v -> v.getStatus() == TradeStatus.BID && v.getBuyer() == null)
+            .filter(v -> v.getStatus() == TradeStatus.PRE_CONCLUSION && v.getBuyer() == null)
             .sorted(Comparator.comparing(Trade::getPrice))
             .map(Trade::toTradeBidResponse)
             .collect(Collectors.toList());
@@ -169,7 +169,7 @@ public class Product extends BaseTimeEntity {
 
     private List<TradeBidResponse> getPurchaseBids() {
         return getTrades().stream()
-            .filter(v -> v.getStatus() == TradeStatus.BID && v.getSeller() == null)
+            .filter(v -> v.getStatus() == TradeStatus.PRE_CONCLUSION && v.getSeller() == null)
             .sorted(Comparator.comparing(Trade::getPrice).reversed())
             .map(Trade::toTradeBidResponse)
             .collect(Collectors.toList());

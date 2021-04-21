@@ -59,6 +59,14 @@ public class Trade extends BaseTimeEntity {
     @JoinColumn(name = "SHIPPING_ID")
     private Address shippingAddress;
 
+    private String receivingTrackingNumber;
+
+    private String forwardingTrackingNumber;
+
+    private String returnTrackingNumber;
+
+    private String cancelReason;
+
     @Builder
     public Trade(Long id, User publisher, User seller, User buyer,
         Product product, TradeStatus status, Long price, double productSize,
@@ -87,13 +95,13 @@ public class Trade extends BaseTimeEntity {
     public void makeImmediatePurchase(User buyer, Address shippingAddress) {
         this.shippingAddress = shippingAddress;
         this.buyer = buyer;
-        this.status = TradeStatus.PROGRESS;
+        this.status = TradeStatus.PRE_SELLER_SHIPMENT;
     }
 
     public void makeImmediateSale(User seller, Address returnAddress) {
         this.returnAddress = returnAddress;
         this.seller = seller;
-        this.status = TradeStatus.PROGRESS;
+        this.status = TradeStatus.PRE_SELLER_SHIPMENT;
     }
 
     public Long getPublisherId() {
@@ -102,5 +110,29 @@ public class Trade extends BaseTimeEntity {
 
     public void updatePrice(Long price) {
         this.price = price;
+    }
+
+    public void updateReceivingTrackingNumber(String trackingNumber) {
+        this.receivingTrackingNumber = trackingNumber;
+    }
+
+    public void updateForwardingTrackingNumber(String trackingNumber) {
+        this.forwardingTrackingNumber = trackingNumber;
+    }
+
+    public void updateReturnTrackingNumber(String trackingNumber) {
+        this.returnTrackingNumber = trackingNumber;
+    }
+
+    public void updateCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
+    }
+
+    public void updateStatus(TradeStatus status) {
+        this.status = status;
+    }
+
+    public boolean isSellersEmail(String email) {
+        return seller.isCurrentEmail(email);
     }
 }

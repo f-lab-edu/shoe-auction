@@ -1,7 +1,12 @@
 package com.flab.shoeauction.service;
 
+import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_CONCLUSION;
+import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_INSPECTION;
+import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_WAREHOUSING;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -26,6 +31,7 @@ import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
+import com.flab.shoeauction.exception.user.NotAuthorizedException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -116,7 +122,7 @@ class TradeServiceTest {
             .seller(user)
             .buyer(null)
             .product(product)
-            .status(TradeStatus.BID)
+            .status(TradeStatus.PRE_CONCLUSION)
             .price(300000L)
             .productSize(260.0)
             .returnAddress(address)
@@ -129,7 +135,7 @@ class TradeServiceTest {
             .seller(null)
             .buyer(user)
             .product(product)
-            .status(TradeStatus.BID)
+            .status(TradeStatus.PRE_CONCLUSION)
             .price(200000L)
             .productSize(260.0)
             .returnAddress(null)
@@ -182,7 +188,7 @@ class TradeServiceTest {
             .seller(user)
             .buyer(null)
             .product(product)
-            .status(TradeStatus.BID)
+            .status(TradeStatus.PRE_CONCLUSION)
             .price(300000L)
             .productSize(260.0)
             .returnAddress(address)
@@ -190,6 +196,24 @@ class TradeServiceTest {
             .build();
     }
 
+    private Trade createConcludedBuyersTrade() {
+        User buyer = createUser();
+        User seller = createAnotherUser();
+        Product product = createProduct();
+        Address address = new Address(1L, "우리집", "땡땡땡로 123", "123동 456호", "12345");
+        return Trade.builder()
+            .id(11L)
+            .publisher(buyer)
+            .seller(seller)
+            .buyer(buyer)
+            .product(product)
+            .status(TradeStatus.PRE_CONCLUSION)
+            .price(300000L)
+            .productSize(260.0)
+            .returnAddress(address)
+            .shippingAddress(null)
+            .build();
+    }
 
     @DisplayName("상품 거래 화면에 보여질 리소스들을 리턴한다.")
     @Test
@@ -291,7 +315,7 @@ class TradeServiceTest {
             .seller(anotherUser)
             .buyer(null)
             .product(product)
-            .status(TradeStatus.BID)
+            .status(TradeStatus.PRE_CONCLUSION)
             .price(300000L)
             .productSize(260.0)
             .returnAddress(address)
@@ -310,7 +334,7 @@ class TradeServiceTest {
         when(tradeRepository.findById(requestDto.getTradeId())).thenReturn(Optional.of(saleTrade));
         tradeService.immediatePurchase(email, requestDto);
 
-        assertThat(saleTrade.getStatus()).isEqualTo(TradeStatus.PROGRESS);
+        assertThat(saleTrade.getStatus()).isEqualTo(TradeStatus.PRE_SELLER_SHIPMENT);
         assertThat(saleTrade.getBuyer().getId()).isEqualTo(user.getId());
         assertThat(saleTrade.getShippingAddress().getId()).isEqualTo(address.getId());
     }
@@ -329,7 +353,7 @@ class TradeServiceTest {
             .seller(null)
             .buyer(anotherUser)
             .product(product)
-            .status(TradeStatus.BID)
+            .status(TradeStatus.PRE_CONCLUSION)
             .price(200000L)
             .productSize(260.0)
             .returnAddress(null)
@@ -349,7 +373,7 @@ class TradeServiceTest {
             .thenReturn(Optional.of(purchaseTrade));
         tradeService.immediatePurchase(email, requestDto);
 
-        assertThat(purchaseTrade.getStatus()).isEqualTo(TradeStatus.PROGRESS);
+        assertThat(purchaseTrade.getStatus()).isEqualTo(TradeStatus.PRE_SELLER_SHIPMENT);
         assertThat(purchaseTrade.getBuyer().getId()).isEqualTo(user.getId());
         assertThat(purchaseTrade.getShippingAddress().getId()).isEqualTo(address.getId());
     }
@@ -378,5 +402,47 @@ class TradeServiceTest {
         tradeService.deleteTrade(changeRequest);
 
         verify(tradeRepository).deleteById(any());
+    }
+
+    @DisplayName("판매자가 상품 발송 후 입고 운송장 번호를 입력한다.")
+    @Test
+    public void updateReceivingTrackingNumber() {
+        Trade trade = createConcludedBuyersTrade();
+        Long tradeId = trade.getId();
+        String email = trade.getSeller().getEmail();
+        String trackingNumber = "123456789";
+        given(tradeRepository.findById(tradeId)).willReturn(Optional.of(trade));
+
+        tradeService.updateReceivingTrackingNumber(tradeId, email, trackingNumber);
+
+        assertThat(trade.getReceivingTrackingNumber()).isEqualTo(trackingNumber);
+        assertThat(trade.getStatus()).isEqualTo(PRE_WAREHOUSING);
+    }
+
+    @DisplayName("판매자가 아닌 유저가 입고 운송장 번호 입력을 시도 시 실패한다.")
+    @Test
+    public void failToUpdateReceivingTrackingNumberIfUserIsNotSeller() {
+        Trade trade = createConcludedBuyersTrade();
+        Long tradeId = trade.getId();
+        String email = "wrong@email.com";
+        String trackingNumber = "123456789";
+        given(tradeRepository.findById(tradeId)).willReturn(Optional.of(trade));
+
+        assertThrows(NotAuthorizedException.class,
+            () -> tradeService.updateReceivingTrackingNumber(tradeId, email, trackingNumber));
+        assertThat(trade.getReceivingTrackingNumber()).isNull();
+        assertThat(trade.getStatus()).isEqualTo(PRE_CONCLUSION);
+    }
+
+    @DisplayName("관리자가 상품의 입고를 확인하고 상품의 상태를 검수 대기로 변경한다.")
+    @Test
+    public void confirmWarehousing() {
+        Trade trade = createConcludedBuyersTrade();
+        Long tradeId = trade.getId();
+        given(tradeRepository.findById(tradeId)).willReturn(Optional.of(trade));
+
+        tradeService.confirmWarehousing(tradeId);
+
+        assertThat(trade.getStatus()).isEqualTo(PRE_INSPECTION);
     }
 }
