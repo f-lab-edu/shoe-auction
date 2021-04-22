@@ -405,27 +405,6 @@ class TradeApiControllerTest {
             ));
     }
 
-    @DisplayName("등록한 입찰 상품의 가격을 수정한다.")
-    @Test
-    public void updateTradeInfo() throws Exception {
-        ChangeRequest requestDto = ChangeRequest.builder()
-            .tradeId(11L)
-            .price(180000L)
-            .build();
-
-        doNothing().when(tradeService).updateTrade(requestDto);
-
-        mockMvc.perform(patch("/trades")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(requestDto)))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andDo(document("trade/update", requestFields(
-                fieldWithPath("tradeId").type(JsonFieldType.NUMBER).description("Trade ID"),
-                fieldWithPath("price").type(JsonFieldType.NUMBER).description("수정할 가격")
-            )));
-    }
-
     @DisplayName("등록한 입찰 내역을 삭제한다.")
     @Test
     public void deleteTrade() throws Exception {

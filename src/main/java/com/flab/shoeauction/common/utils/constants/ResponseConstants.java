@@ -73,4 +73,9 @@ public class ResponseConstants {
     public static final ResponseEntity<String> IMAGE_TOO_LARGE =
         new ResponseEntity<>("허용된 용량을 초과한 이미지입니다.",
             HttpStatus.PAYLOAD_TOO_LARGE);
+
+    public static final ResponseEntity<String> PURCHASE_FAILED =
+        new ResponseEntity<>("입찰 가능 포인트 부족으로, 구매를 진행할 수 없습니다.",
+            HttpStatus.BAD_REQUEST);
+
 }

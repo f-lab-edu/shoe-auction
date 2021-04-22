@@ -378,21 +378,6 @@ class TradeServiceTest {
         assertThat(purchaseTrade.getShippingAddress().getId()).isEqualTo(address.getId());
     }
 
-    @DisplayName("입찰 가격을 수정한다.")
-    @Test
-    public void updateTrade() {
-        Trade trade = createTrade();
-        ChangeRequest changeRequest = ChangeRequest.builder()
-            .tradeId(11L)
-            .price(700000L)
-            .build();
-
-        when(tradeRepository.findById(changeRequest.getTradeId())).thenReturn(Optional.of(trade));
-        tradeService.updateTrade(changeRequest);
-
-        assertThat(trade.getPrice()).isEqualTo(changeRequest.getPrice());
-    }
-
     @DisplayName("입찰 내역을 삭제한다")
     @Test
     public void deleteTrade() {

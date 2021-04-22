@@ -65,12 +65,6 @@ public class TradeApiController {
     }
 
     @LoginCheck(authority = UserLevel.AUTH)
-    @PatchMapping
-    public void updateTradeInfo(@RequestBody ChangeRequest requestDto) {
-        tradeService.updateTrade(requestDto);
-    }
-
-    @LoginCheck(authority = UserLevel.AUTH)
     @DeleteMapping
     public void deleteTrade(@RequestBody ChangeRequest requestDto) {
         tradeService.deleteTrade(requestDto);

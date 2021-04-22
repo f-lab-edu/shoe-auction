@@ -72,28 +72,39 @@ public class TradeService {
     public void createPurchaseBid(String email, SaveRequest requestDto) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+
+        user.pointInspection(requestDto.getPrice());
+
         Product product = productRepository.findById(requestDto.getProductId()).orElseThrow();
         Address address = user.findAddress(requestDto.getAddressId());
 
         Trade trade = requestDto.toEntityByBuyer(user, product, address);
 
         tradeRepository.save(trade);
+
+        user.deductionOfPoints(requestDto.getPrice());
     }
 
+    //TODO : 물품 검수 시스템 구현 후 판매자 포인트 plus 로직 구현하기
     @Transactional
     @CacheEvict(value = "product", key = "#requestDto.productId")
     public void immediatePurchase(String email, ImmediateTradeRequest requestDto) {
         User buyer = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
+        Trade trade = tradeRepository.findById(requestDto.getTradeId()).orElseThrow();
+
+        buyer.pointInspection(trade.getPrice());
+
         Address shippingAddress = addressRepository.findById(requestDto.getAddressId())
             .orElseThrow();
 
-        Trade trade = tradeRepository.findById(requestDto.getTradeId()).orElseThrow();
-
         trade.makeImmediatePurchase(buyer, shippingAddress);
+
+        buyer.deductionOfPoints(trade.getPrice());
     }
 
+    //TODO : 물품 검수 시스템 구현 후 판매자 포인트 plus 로직 구현하기
     @Transactional
     @CacheEvict(value = "product", key = "#requestDto.productId")
     public void immediateSale(String email, ImmediateTradeRequest requestDto) {
@@ -108,14 +119,12 @@ public class TradeService {
     }
 
     @Transactional
-    public void updateTrade(ChangeRequest requestDto) {
-        Trade trade = tradeRepository.findById(requestDto.getTradeId()).orElseThrow();
-        trade.updatePrice(requestDto.getPrice());
-    }
-
-    @Transactional
     public void deleteTrade(ChangeRequest requestDto) {
-        tradeRepository.deleteById(requestDto.getTradeId());
+        Trade trade = tradeRepository.findById(requestDto.getTradeId()).orElseThrow();
+
+        trade.recoverBuyerPoints(trade.getPrice());
+
+        tradeRepository.deleteById(trade.getId());
     }
 
     // 판매자가 회사에 상품 발송 후 운송장 번호를 입력 시 입고 대기로 상태 변경

@@ -135,4 +135,8 @@ public class Trade extends BaseTimeEntity {
     public boolean isSellersEmail(String email) {
         return seller.isCurrentEmail(email);
     }
+
+    public void recoverBuyerPoints(Long price) {
+        buyer.chargingPoint(price);
+    }
 }
