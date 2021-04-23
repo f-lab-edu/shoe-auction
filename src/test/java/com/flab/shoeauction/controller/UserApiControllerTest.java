@@ -45,6 +45,7 @@ import com.flab.shoeauction.service.SessionLoginService;
 import com.flab.shoeauction.service.UserService;
 import com.flab.shoeauction.service.certification.EmailCertificationService;
 import com.flab.shoeauction.service.certification.SmsCertificationService;
+import com.flab.shoeauction.service.message.FCMService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -84,6 +85,9 @@ class UserApiControllerTest {
     @MockBean
     private SessionLoginService sessionLoginService;
 
+    @MockBean
+    private FCMService fcmService;
+
     private MockMvc mockMvc;
 
     @Autowired
@@ -98,8 +102,6 @@ class UserApiControllerTest {
             .apply(sharedHttpSession())
             .build();
     }
-
-
 
 
     @Test
@@ -345,6 +347,7 @@ class UserApiControllerTest {
         LoginRequest requestDto = LoginRequest.builder()
             .email("test@test.com")
             .password("test1234")
+            .token("abc123")
             .build();
 
         doNothing().when(sessionLoginService).login(requestDto);
@@ -357,7 +360,8 @@ class UserApiControllerTest {
             .andDo(document("users/login/successful", requestFields(
                 fieldWithPath("email").type(JsonFieldType.STRING)
                     .description("login ID (email)"),
-                fieldWithPath("password").type(JsonFieldType.STRING).description("password")
+                fieldWithPath("password").type(JsonFieldType.STRING).description("password"),
+                fieldWithPath("token").type(JsonFieldType.STRING).description("FCM token")
             )));
     }
 
@@ -367,6 +371,7 @@ class UserApiControllerTest {
         LoginRequest requestDto = LoginRequest.builder()
             .email("test@test.com")
             .password("test1234")
+            .token("abc123")
             .build();
 
         doThrow(new UserNotFoundException("아이디 또는 비밀번호가 일치하지 않습니다.")).when(sessionLoginService)
@@ -380,7 +385,8 @@ class UserApiControllerTest {
             .andDo(document("users/login/failure", requestFields(
                 fieldWithPath("email").type(JsonFieldType.STRING)
                     .description("login ID (email)"),
-                fieldWithPath("password").type(JsonFieldType.STRING).description("password")
+                fieldWithPath("password").type(JsonFieldType.STRING).description("password"),
+                fieldWithPath("token").type(JsonFieldType.STRING).description("FCM token")
             )));
     }
 
@@ -393,7 +399,6 @@ class UserApiControllerTest {
             .andDo(print())
             .andExpect(status().isOk())
             .andDo(document("users/logout"));
-
     }
 
     @Test

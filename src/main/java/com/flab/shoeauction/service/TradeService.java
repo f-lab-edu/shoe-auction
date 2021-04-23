@@ -19,6 +19,7 @@ import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
 import com.flab.shoeauction.exception.user.NotAuthorizedException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
+import com.flab.shoeauction.service.message.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class TradeService {
     private final ProductRepository productRepository;
     private final TradeRepository tradeRepository;
     private final AddressRepository addressRepository;
+    private final MessageService fcmService;
 
     public TradeResource getResourceForBid(String email, Long productId, double size) {
         User user = userRepository.findByEmail(email)
@@ -100,8 +102,9 @@ public class TradeService {
             .orElseThrow();
 
         trade.makeImmediatePurchase(buyer, shippingAddress);
-
         buyer.deductionOfPoints(trade.getPrice());
+
+        fcmService.sendSaleCompletedMessage(trade.getPublisher().getEmail());
     }
 
     //TODO : 물품 검수 시스템 구현 후 판매자 포인트 plus 로직 구현하기
@@ -116,6 +119,8 @@ public class TradeService {
         Trade trade = tradeRepository.findById(requestDto.getTradeId()).orElseThrow();
 
         trade.makeImmediateSale(seller, returnAddress);
+
+        fcmService.sendPurchaseCompletedMessage(trade.getPublisher().getEmail());
     }
 
     @Transactional

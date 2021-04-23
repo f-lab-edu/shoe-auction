@@ -33,6 +33,7 @@ import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
 import com.flab.shoeauction.exception.trade.LowPointException;
 import com.flab.shoeauction.exception.user.NotAuthorizedException;
+import com.flab.shoeauction.service.message.MessageService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -59,6 +60,9 @@ class TradeServiceTest {
 
     @Mock
     private AddressRepository addressRepository;
+
+    @Mock
+    private MessageService fcmService;
 
     @InjectMocks
     private TradeService tradeService;
