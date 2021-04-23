@@ -14,6 +14,7 @@ import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserBase;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
+import com.flab.shoeauction.exception.trade.LowPointException;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -191,5 +192,15 @@ public class User extends UserBase {
 
     public boolean isCurrentEmail(String email) {
         return this.email.equals(email);
+    }
+
+    public void pointInspection(Long price) {
+        if (this.point < price) {
+            throw new LowPointException("포인트 충전 후 이용해주세요.");
+        }
+    }
+
+    public void deductionOfPoints(Long price) {
+        this.point -= price;
     }
 }

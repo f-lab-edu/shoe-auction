@@ -31,6 +31,7 @@ import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
+import com.flab.shoeauction.exception.trade.LowPointException;
 import com.flab.shoeauction.exception.user.NotAuthorizedException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -73,6 +74,7 @@ class TradeServiceTest {
             .userLevel(UserLevel.ADMIN)
             .userStatus(UserStatus.NORMAL)
             .addressBook(new AddressBook())
+            .point(0L)
             .build();
     }
 
@@ -87,6 +89,7 @@ class TradeServiceTest {
             .userLevel(UserLevel.ADMIN)
             .userStatus(UserStatus.NORMAL)
             .addressBook(new AddressBook())
+            .point(0L)
             .build();
     }
 
@@ -279,7 +282,7 @@ class TradeServiceTest {
         tradeService.createSalesBid(email, requestDto);
     }
 
-    @DisplayName("구매 입찰을 생성한다.")
+    @DisplayName("구매 입찰 생성에 성공한다.")
     @Test
     public void createPurchasesBid() {
         TradeDto.SaveRequest requestDto = TradeDto.SaveRequest.builder()
@@ -290,6 +293,7 @@ class TradeServiceTest {
             .build();
         String email = "test123@test.com";
         User user = createUser();
+        user.chargingPoint(1000000L);
         Product product = createProduct();
         Address address = new Address(4L, "우리집", "땡땡땡로 123", "123동 456호", "12345");
         user.getAddressBook().addAddress(address);
@@ -299,11 +303,75 @@ class TradeServiceTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 
         tradeService.createPurchaseBid(email, requestDto);
+        assertThat(user.getPoint()).isEqualTo(1000000L - requestDto.getPrice());
     }
 
-    @DisplayName("물품을 즉시 구매한다.")
+    @DisplayName("포인트 부족으로 구매 입찰 생성에 실패한다.")
     @Test
-    public void immediateSales() {
+    public void createPurchasesBid_lowPoint() {
+        TradeDto.SaveRequest requestDto = TradeDto.SaveRequest.builder()
+            .price(180000L)
+            .productId(3L)
+            .addressId(4L)
+            .productSize(260.0)
+            .build();
+        String email = "test123@test.com";
+        User user = createUser();
+        Address address = new Address(4L, "우리집", "땡땡땡로 123", "123동 456호", "12345");
+        user.getAddressBook().addAddress(address);
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+
+        assertThrows(LowPointException.class,
+            () -> tradeService.createPurchaseBid(email, requestDto));
+    }
+
+
+
+    @DisplayName("물품 즉시 구매에 성공한다.")
+    @Test
+    public void immediatePurchase() {
+        Address address = new Address(4L, "우리집", "땡땡땡로 123", "123동 456호", "12345");
+        String email = "test123@test.com";
+        User user = createUser();
+        user.chargingPoint(1000000L);
+        User anotherUser = createAnotherUser();
+        Product product = createProduct();
+
+        Trade saleTrade = Trade.builder()
+            .publisher(anotherUser)
+            .seller(anotherUser)
+            .buyer(null)
+            .product(product)
+            .status(TradeStatus.PRE_CONCLUSION)
+            .price(300000L)
+            .productSize(260.0)
+            .returnAddress(address)
+            .shippingAddress(null)
+            .build();
+
+        ImmediateTradeRequest requestDto = ImmediateTradeRequest.builder()
+            .tradeId(5L)
+            .addressId(4L)
+            .productId(1L)
+            .build();
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        when(tradeRepository.findById(requestDto.getTradeId())).thenReturn(Optional.of(saleTrade));
+        when(addressRepository.findById(requestDto.getAddressId()))
+            .thenReturn(Optional.of(address));
+        tradeService.immediatePurchase(email, requestDto);
+
+
+        assertThat(saleTrade.getStatus()).isEqualTo(TradeStatus.PRE_SELLER_SHIPMENT);
+        assertThat(saleTrade.getBuyer().getId()).isEqualTo(user.getId());
+        assertThat(saleTrade.getShippingAddress().getId()).isEqualTo(address.getId());
+        assertThat(user.getPoint()).isEqualTo(1000000L - saleTrade.getPrice());
+    }
+
+    @DisplayName("포인트 부족으로 물품 즉시 구매에 실패한다.")
+    @Test
+    public void immediatePurchase_lowPoint() {
         Address address = new Address(4L, "우리집", "땡땡땡로 123", "123동 456호", "12345");
         String email = "test123@test.com";
         User user = createUser();
@@ -329,19 +397,15 @@ class TradeServiceTest {
             .build();
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-        when(addressRepository.findById(requestDto.getAddressId()))
-            .thenReturn(Optional.of(address));
         when(tradeRepository.findById(requestDto.getTradeId())).thenReturn(Optional.of(saleTrade));
-        tradeService.immediatePurchase(email, requestDto);
 
-        assertThat(saleTrade.getStatus()).isEqualTo(TradeStatus.PRE_SELLER_SHIPMENT);
-        assertThat(saleTrade.getBuyer().getId()).isEqualTo(user.getId());
-        assertThat(saleTrade.getShippingAddress().getId()).isEqualTo(address.getId());
+        assertThrows(LowPointException.class,
+            () -> tradeService.immediatePurchase(email, requestDto));
     }
 
-    @DisplayName("물품을 즉시 판매한다..")
+    @DisplayName("물품을 즉시 판매한다.")
     @Test
-    public void immediatePurchase() {
+    public void immediateSales() {
         Address address = new Address(4L, "우리집", "땡땡땡로 123", "123동 456호", "12345");
         String email = "test123@test.com";
         User user = createUser();
@@ -371,36 +435,45 @@ class TradeServiceTest {
             .thenReturn(Optional.of(address));
         when(tradeRepository.findById(requestDto.getTradeId()))
             .thenReturn(Optional.of(purchaseTrade));
-        tradeService.immediatePurchase(email, requestDto);
+        tradeService.immediateSale(email, requestDto);
 
         assertThat(purchaseTrade.getStatus()).isEqualTo(TradeStatus.PRE_SELLER_SHIPMENT);
-        assertThat(purchaseTrade.getBuyer().getId()).isEqualTo(user.getId());
+        assertThat(purchaseTrade.getSeller().getId()).isEqualTo(user.getId());
         assertThat(purchaseTrade.getShippingAddress().getId()).isEqualTo(address.getId());
-    }
-
-    @DisplayName("입찰 가격을 수정한다.")
-    @Test
-    public void updateTrade() {
-        Trade trade = createTrade();
-        ChangeRequest changeRequest = ChangeRequest.builder()
-            .tradeId(11L)
-            .price(700000L)
-            .build();
-
-        when(tradeRepository.findById(changeRequest.getTradeId())).thenReturn(Optional.of(trade));
-        tradeService.updateTrade(changeRequest);
-
-        assertThat(trade.getPrice()).isEqualTo(changeRequest.getPrice());
     }
 
     @DisplayName("입찰 내역을 삭제한다")
     @Test
     public void deleteTrade() {
+        Address address = new Address(4L, "우리집", "땡땡땡로 123", "123동 456호", "12345");
+        User anotherUser = createAnotherUser();
+        Product product = createProduct();
+        Long nowPoint = 10000L;
+        anotherUser.chargingPoint(nowPoint);
+
+        Trade purchaseTrade = Trade.builder()
+            .id(11L)
+            .publisher(anotherUser)
+            .seller(null)
+            .buyer(anotherUser)
+            .product(product)
+            .status(TradeStatus.PRE_CONCLUSION)
+            .price(200000L)
+            .productSize(260.0)
+            .returnAddress(null)
+            .shippingAddress(address)
+            .build();
+
         ChangeRequest changeRequest = ChangeRequest.builder()
             .tradeId(11L)
             .build();
+
+        when(tradeRepository.findById(changeRequest.getTradeId())).thenReturn(
+            Optional.ofNullable(purchaseTrade));
+
         tradeService.deleteTrade(changeRequest);
 
+        assertThat(anotherUser.getPoint()).isEqualTo(nowPoint + purchaseTrade.getPrice());
         verify(tradeRepository).deleteById(any());
     }
 

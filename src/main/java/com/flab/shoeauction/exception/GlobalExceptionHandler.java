@@ -13,6 +13,7 @@ import static com.flab.shoeauction.common.utils.constants.ResponseConstants.IMAG
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.IMAGE_TOO_LARGE;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.NOT_AUTHORIZED;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.PRODUCT_NOT_FOUND;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.PURCHASE_FAILED;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.TOKEN_EXPIRED;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.UNAUTHORIZED_USER;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.USER_NOT_FOUND;
@@ -24,6 +25,7 @@ import com.flab.shoeauction.exception.file.IllegalMimeTypeException;
 import com.flab.shoeauction.exception.file.ImageRoadFailedException;
 import com.flab.shoeauction.exception.product.DuplicateModelNumberException;
 import com.flab.shoeauction.exception.product.ProductNotFoundException;
+import com.flab.shoeauction.exception.trade.LowPointException;
 import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException;
 import com.flab.shoeauction.exception.user.DuplicateCartItemException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
@@ -178,5 +180,11 @@ public class GlobalExceptionHandler {
         DuplicateCartItemException ex) {
         log.debug("해당 상품은 이미 위시리스트에 등록되어 있는 상품입니다.", ex);
         return DUPLICATION_CART_ITEM;
+    }
+
+    @ExceptionHandler(LowPointException.class)
+    public final ResponseEntity<String> handleLowPointException(LowPointException ex) {
+        log.debug("입찰 가능 포인트 부족으로, 구매를 진행할 수 없습니다.", ex);
+        return PURCHASE_FAILED;
     }
 }

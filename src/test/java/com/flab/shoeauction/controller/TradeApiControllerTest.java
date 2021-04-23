@@ -11,7 +11,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -403,27 +402,6 @@ class TradeApiControllerTest {
                         .description("Product ID")
                 )
             ));
-    }
-
-    @DisplayName("등록한 입찰 상품의 가격을 수정한다.")
-    @Test
-    public void updateTradeInfo() throws Exception {
-        ChangeRequest requestDto = ChangeRequest.builder()
-            .tradeId(11L)
-            .price(180000L)
-            .build();
-
-        doNothing().when(tradeService).updateTrade(requestDto);
-
-        mockMvc.perform(patch("/trades")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(requestDto)))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andDo(document("trade/update", requestFields(
-                fieldWithPath("tradeId").type(JsonFieldType.NUMBER).description("Trade ID"),
-                fieldWithPath("price").type(JsonFieldType.NUMBER).description("수정할 가격")
-            )));
     }
 
     @DisplayName("등록한 입찰 내역을 삭제한다.")
