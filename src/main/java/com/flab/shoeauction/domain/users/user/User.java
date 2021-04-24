@@ -1,5 +1,6 @@
 package com.flab.shoeauction.domain.users.user;
 
+import com.flab.shoeauction.controller.dto.PointDto.PointHistoryDto;
 import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
 import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
@@ -10,6 +11,8 @@ import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.cart.Cart;
 import com.flab.shoeauction.domain.cart.CartProduct;
+import com.flab.shoeauction.domain.point.Point;
+import com.flab.shoeauction.domain.point.PointDivision;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserBase;
 import com.flab.shoeauction.domain.users.common.UserLevel;
@@ -17,12 +20,15 @@ import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.exception.trade.LowPointException;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -48,6 +54,9 @@ public class User extends UserBase {
     private LocalDateTime nicknameModifiedDate;
 
     private UserStatus userStatus;
+
+    @OneToMany(mappedBy = "user")
+    private List<Point> pointBreakdown = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "ADDRESSBOOK_ID")
@@ -203,4 +212,21 @@ public class User extends UserBase {
     public void deductionOfPoints(Long price) {
         this.point -= price;
     }
+
+    public List<PointHistoryDto> getDeductionHistory() {
+        return pointBreakdown.stream()
+            .filter(p -> p.getDivision().equals(PointDivision.WITHDRAW) || p.getDivision()
+                .equals(PointDivision.PURCHASE_DEDUCTION))
+            .map(Point::toPointHistoryDto)
+            .collect(Collectors.toList());
+    }
+
+    public List<PointHistoryDto> getChargingHistory() {
+        return pointBreakdown.stream()
+            .filter(p -> p.getDivision().equals(PointDivision.CHARGE) || p.getDivision()
+                .equals(PointDivision.SALES_REVENUE))
+            .map(Point::toPointHistoryDto)
+            .collect(Collectors.toList());
+    }
+
 }
