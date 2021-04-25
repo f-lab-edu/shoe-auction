@@ -122,8 +122,6 @@ public class TradeService {
     public void deleteTrade(ChangeRequest requestDto) {
         Trade trade = tradeRepository.findById(requestDto.getTradeId()).orElseThrow();
 
-        trade.recoverBuyerPoints(trade.getPrice());
-
         tradeRepository.deleteById(trade.getId());
     }
 
