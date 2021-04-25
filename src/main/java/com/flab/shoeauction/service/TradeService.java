@@ -1,6 +1,7 @@
 package com.flab.shoeauction.service;
 
 import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_INSPECTION;
+import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_SHIPMENT;
 import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_WAREHOUSING;
 
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoByTrade;
@@ -151,5 +152,26 @@ public class TradeService {
         Trade trade = tradeRepository.findById(tradeId).orElseThrow();
 
         trade.updateStatus(PRE_INSPECTION);
+    }
+
+    @Transactional
+    public void inspectionSuccessful(Long tradeId) {
+        Trade trade = tradeRepository.findById(tradeId).orElseThrow();
+
+        trade.updateStatus(PRE_SHIPMENT);
+    }
+
+    @Transactional
+    public void inspectionFailed(Long tradeId, String reason) {
+        Trade trade = tradeRepository.findById(tradeId).orElseThrow();
+
+        trade.cancelBecauseOfInspection(reason);
+    }
+
+    @Transactional
+    public void updateReturnTrackingNumber(Long tradeId, String trackingNumber) {
+        Trade trade = tradeRepository.findById(tradeId).orElseThrow();
+
+        trade.updateReturnTrackingNumber(trackingNumber);
     }
 }
