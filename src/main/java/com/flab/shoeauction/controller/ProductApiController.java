@@ -41,7 +41,7 @@ public class ProductApiController {
     @LoginCheck(authority = UserLevel.ADMIN)
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void createProduct(@Valid @RequestBody SaveRequest requestDto,
+    public void createProduct(@Valid @RequestPart SaveRequest requestDto,
         @RequestPart(required = false) MultipartFile productImage) {
         brandService.checkBrandExist(requestDto.getBrand());
         productService.saveProduct(requestDto, productImage);
