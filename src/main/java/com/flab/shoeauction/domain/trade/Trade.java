@@ -139,4 +139,8 @@ public class Trade extends BaseTimeEntity {
     public void recoverBuyerPoints(Long price) {
         buyer.chargingPoint(price);
     }
+
+    public boolean isPurchaseBid() {
+        return buyer != null;
+    }
 }

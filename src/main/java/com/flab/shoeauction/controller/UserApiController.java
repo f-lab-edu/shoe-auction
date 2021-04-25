@@ -63,7 +63,7 @@ public class UserApiController {
     public ResponseEntity<Void> createUser(
         @Valid @RequestBody com.flab.shoeauction.controller.dto.UserDto.SaveRequest requestDto) {
         userService.save(requestDto);
-        emailCertificationService.sendEmailForEmailCheck(requestDto.getEmail());
+//        emailCertificationService.sendEmailForEmailCheck(requestDto.getEmail());
         return CREATED;
     }
 
