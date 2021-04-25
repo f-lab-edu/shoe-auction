@@ -3,6 +3,7 @@ package com.flab.shoeauction.controller.dto;
 import com.flab.shoeauction.domain.point.Point;
 import com.flab.shoeauction.domain.point.PointDivision;
 import com.flab.shoeauction.domain.users.user.User;
+import com.flab.shoeauction.service.encrytion.EncryptionService;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,11 +34,18 @@ public class PointDto {
     @Getter
     @NoArgsConstructor
     public static class WithdrawalRequest {
+
         private Long withdrawalAmount;
+        private String password;
+
+        public void passwordEncryption(EncryptionService encryptionService) {
+            this.password = encryptionService.encrypt(password);
+        }
 
         @Builder
-        public WithdrawalRequest(Long withdrawalAmount) {
+        public WithdrawalRequest(Long withdrawalAmount, String password) {
             this.withdrawalAmount = withdrawalAmount;
+            this.password = password;
         }
 
         public Point toEntity(User user) {
@@ -52,6 +60,7 @@ public class PointDto {
     @Getter
     @NoArgsConstructor
     public static class PointHistoryDto {
+
         private LocalDateTime time;
         private Long amount;
         private PointDivision division;
