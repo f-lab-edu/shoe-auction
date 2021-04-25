@@ -20,6 +20,7 @@ import com.flab.shoeauction.service.SessionLoginService;
 import com.flab.shoeauction.service.UserService;
 import com.flab.shoeauction.service.certification.EmailCertificationService;
 import com.flab.shoeauction.service.certification.SmsCertificationService;
+import com.flab.shoeauction.service.message.FCMService;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,8 @@ public class UserApiController {
     private final SmsCertificationService smsCertificationService;
 
     private final EmailCertificationService emailCertificationService;
+
+    private final FCMService fcmService;
 
     @GetMapping("/user-emails/{email}/exists")
     public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email) {
@@ -89,12 +92,14 @@ public class UserApiController {
     @PostMapping("/login")
     public void login(@RequestBody LoginRequest loginRequest) {
         sessionLoginService.login(loginRequest);
+        fcmService.saveToken(loginRequest);
     }
 
     @LoginCheck
     @DeleteMapping("/logout")
-    public void logout() {
+    public void logout(@CurrentUser String email) {
         sessionLoginService.logout();
+        fcmService.deleteToken(email);
     }
 
     @GetMapping("/my-infos")

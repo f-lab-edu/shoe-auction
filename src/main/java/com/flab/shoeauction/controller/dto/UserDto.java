@@ -99,18 +99,16 @@ public class UserDto {
 
     }
 
+
     @Getter
+    @Builder
+    @AllArgsConstructor
     @NoArgsConstructor
     public static class LoginRequest {
 
         private String email;
         private String password;
-
-        @Builder
-        public LoginRequest(String email, String password) {
-            this.email = email;
-            this.password = password;
-        }
+        private String token;
 
         public void passwordEncryption(EncryptionService encryptionService) {
             this.password = encryptionService.encrypt(password);
