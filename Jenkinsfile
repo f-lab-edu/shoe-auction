@@ -11,6 +11,7 @@ pipeline {
                   echo 'Git Checkout Success!'
               }
     }
+
     stage('Test') {
         steps {
             sh 'gradle test'
@@ -27,7 +28,7 @@ pipeline {
 
   post {
     success {
-         slackSend (channel: SLACK_CHANNEL, color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+         slackSend (channel: SLACK_CHANNEL, color: '#00FF00', message: "SUCCESSFUL!: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
          }
 
     failure {
