@@ -187,7 +187,6 @@ public class User extends UserBase {
 
     public void chargingPoint(Long chargeAmount) {
         this.point += chargeAmount;
-
     }
 
     public boolean isCurrentEmail(String email) {

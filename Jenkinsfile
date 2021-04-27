@@ -11,6 +11,7 @@ pipeline {
                   echo 'Git Checkout Success!'
               }
     }
+
     stage('Test') {
         steps {
             sh 'gradle test'
