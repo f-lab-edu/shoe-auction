@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
-@RequestMapping("point")
+@RequestMapping("points")
 public class PointApiController {
 
     private final PointService pointService;
@@ -26,34 +27,24 @@ public class PointApiController {
         return pointService.getUserPoint(email);
     }
 
-
-    @GetMapping("/view/payment")
-    public String paymentPage() {
-        return "payment_page";
-    }
-
     @PostMapping("/payment")
-    @ResponseBody
     public void payment(@CurrentUser String email, @RequestBody ChargeRequest requestDto) {
         pointService.charging(email, requestDto);
     }
 
     @PostMapping("/withdrawal")
-    @ResponseBody
     public void withdrawal(@CurrentUser String email, @RequestBody WithdrawalRequest requestDto) {
         pointService.withdrawal(email, requestDto);
     }
 
-    @GetMapping("/deduction-history")
+    @GetMapping("/deduction-details")
     @ResponseBody
     public List<PointHistoryDto> deductionHistory(@CurrentUser String email) {
         return pointService.getDeductionHistory(email);
     }
 
-    @GetMapping("/charging-history")
-    @ResponseBody
+    @GetMapping("/charging-details")
     public List<PointHistoryDto> chargingHistory(@CurrentUser String email) {
         return pointService.getChargingHistory(email);
     }
-
 }
