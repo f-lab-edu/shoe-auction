@@ -175,4 +175,9 @@ public class TradeService {
 
         trade.updateReturnTrackingNumber(trackingNumber);
     }
+
+    @Transactional
+    public boolean hasUsersProgressingTrade(User user) {
+        return tradeRepository.existsProgressingByUser(user);
+    }
 }

@@ -202,4 +202,8 @@ public class User extends UserBase {
     public void deductionOfPoints(Long price) {
         this.point -= price;
     }
+
+    public boolean hasRemainingPoints() {
+        return point > 0;
+    }
 }

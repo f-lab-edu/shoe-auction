@@ -13,7 +13,9 @@ import static com.flab.shoeauction.common.utils.constants.ResponseConstants.IMAG
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.IMAGE_TOO_LARGE;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.NOT_AUTHORIZED;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.PRODUCT_NOT_FOUND;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.PROGRESSING_TRADE;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.PURCHASE_FAILED;
+import static com.flab.shoeauction.common.utils.constants.ResponseConstants.REMAINING_POINT;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.TOKEN_EXPIRED;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.UNAUTHORIZED_USER;
 import static com.flab.shoeauction.common.utils.constants.ResponseConstants.USER_NOT_FOUND;
@@ -30,6 +32,8 @@ import com.flab.shoeauction.exception.user.AuthenticationNumberMismatchException
 import com.flab.shoeauction.exception.user.DuplicateCartItemException;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
+import com.flab.shoeauction.exception.user.HasProgressingTradeException;
+import com.flab.shoeauction.exception.user.HasRemainingPointException;
 import com.flab.shoeauction.exception.user.NotAuthorizedException;
 import com.flab.shoeauction.exception.user.TokenExpiredException;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
@@ -108,6 +112,24 @@ public class GlobalExceptionHandler {
         log.debug("Wrong password ::  {}, detection time={} ", request.getDescription(false),
             LocalDateTime.now(), ex);
         return WRONG_PASSWORD;
+    }
+
+    @ExceptionHandler(HasRemainingPointException.class)
+    public final ResponseEntity<String> handleHasRemainingPointException(
+        HasRemainingPointException ex, WebRequest request) {
+        log.debug("Has Remaining Point ::  {}, detection time={} ",
+            request.getDescription(false),
+            LocalDateTime.now(), ex);
+        return REMAINING_POINT;
+    }
+
+    @ExceptionHandler(HasProgressingTradeException.class)
+    public final ResponseEntity<String> handleHasProgressingTradeException(
+        HasProgressingTradeException ex, WebRequest request) {
+        log.debug("Has Progressing Trade ::  {}, detection time={} ",
+            request.getDescription(false),
+            LocalDateTime.now(), ex);
+        return PROGRESSING_TRADE;
     }
 
     @ExceptionHandler(DuplicateBrandNameException.class)
