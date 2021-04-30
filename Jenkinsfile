@@ -4,6 +4,7 @@ pipeline {
         PATH = "/opt/gradle/gradle-6.3/bin:$PATH"
         SLACK_CHANNEL = '#jenkins-notification'
     }
+
   stages {
     stage('Git Checkout') {
               steps {

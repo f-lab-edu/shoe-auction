@@ -30,6 +30,7 @@ public class Trade extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PUBLISHER_ID")
+
     private User publisher;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -140,13 +141,15 @@ public class Trade extends BaseTimeEntity {
         buyer.chargingPoint(price);
     }
 
-    public void cancelBecauseOfInspection(String reason) {
+    public boolean isPurchaseBid() {
+        return buyer != null;
+    }
+  
+     public void cancelBecauseOfInspection(String reason) {
         this.cancelReason = reason;
         this.status = TradeStatus.CANCEL;
         buyer.chargingPoint(price);
     }
 
-    public boolean isPurchaseBid() {
-        return buyer != null;
-    }
+  
 }

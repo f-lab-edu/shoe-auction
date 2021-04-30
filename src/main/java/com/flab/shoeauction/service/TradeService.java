@@ -133,7 +133,6 @@ public class TradeService {
 
         tradeRepository.deleteById(trade.getId());
     }
-
     // 판매자가 회사에 상품 발송 후 운송장 번호를 입력 시 입고 대기로 상태 변경
     @Transactional
     public void updateReceivingTrackingNumber(Long tradeId, String email, String trackingNumber) {
