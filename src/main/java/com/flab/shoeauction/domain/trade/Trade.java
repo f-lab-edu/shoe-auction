@@ -144,4 +144,12 @@ public class Trade extends BaseTimeEntity {
     public boolean isPurchaseBid() {
         return buyer != null;
     }
+  
+     public void cancelBecauseOfInspection(String reason) {
+        this.cancelReason = reason;
+        this.status = TradeStatus.CANCEL;
+        buyer.chargingPoint(price);
+    }
+
+  
 }

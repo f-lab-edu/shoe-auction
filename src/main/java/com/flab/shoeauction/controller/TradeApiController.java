@@ -82,4 +82,23 @@ public class TradeApiController {
     public void confirmWarehousing(@PathVariable Long id) {
         tradeService.confirmWarehousing(id);
     }
+
+    @LoginCheck(authority = UserLevel.ADMIN)
+    @PatchMapping("{id}/inspection-successful")
+    public void inspectionSuccessful(@PathVariable Long id) {
+        tradeService.inspectionSuccessful(id);
+    }
+
+    @LoginCheck(authority = UserLevel.ADMIN)
+    @PatchMapping("{id}/inspection-failed")
+    public void inspectionFailed(@PathVariable Long id, @RequestBody String reason) {
+        tradeService.inspectionFailed(id, reason);
+    }
+
+    @LoginCheck(authority = UserLevel.ADMIN)
+    @PatchMapping("{id}/return-tracking-number")
+    public void updateReturnTrackingNumber(@PathVariable Long id,
+        @RequestBody String trackingNumber) {
+        tradeService.updateReturnTrackingNumber(id, trackingNumber);
+    }
 }

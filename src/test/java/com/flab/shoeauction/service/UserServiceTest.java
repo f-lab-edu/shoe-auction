@@ -2,6 +2,7 @@ package com.flab.shoeauction.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
@@ -12,6 +13,7 @@ import com.flab.shoeauction.controller.dto.AddressDto;
 import com.flab.shoeauction.controller.dto.UserDto;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
+import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.addressBook.AddressRepository;
@@ -20,6 +22,8 @@ import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
+import com.flab.shoeauction.exception.user.HasProgressingTradeException;
+import com.flab.shoeauction.exception.user.HasRemainingPointException;
 import com.flab.shoeauction.exception.user.UnableToChangeNicknameException;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
@@ -50,6 +54,8 @@ class UserServiceTest {
     EncryptionService encryptionService;
     @Mock
     AddressRepository addressRepository;
+    @Mock
+    TradeService tradeService;
 
     @InjectMocks
     UserService userService;
@@ -64,6 +70,9 @@ class UserServiceTest {
         return saveRequest;
     }
 
+    private User createUser() {
+        return createUserDto().toEntity();
+    }
 
 
     @Test
@@ -204,7 +213,7 @@ class UserServiceTest {
     @Test
     @DisplayName("주소록 수정 -주소록에 등록된 주소들 중 하나를 선택하여 수정한다.")
     public void updateAddressBook() {
-        Address address = new Address(1L,"우리집", "땡땡땡로 123", "123동 456호", "12345");
+        Address address = new Address(1L, "우리집", "땡땡땡로 123", "123동 456호", "12345");
         AddressDto.SaveRequest requestDto = AddressDto.SaveRequest.builder()
             .id(1L)
             .addressName("새 집")
@@ -279,9 +288,11 @@ class UserServiceTest {
 
         assertThat(addressList.size()).isEqualTo(1);
         assertThat(addressList.get(0).getAddressName()).isEqualTo(requestDto.getAddressName());
-        assertThat(addressList.get(0).getDetailedAddress()).isEqualTo(requestDto.getDetailedAddress());
+        assertThat(addressList.get(0).getDetailedAddress())
+            .isEqualTo(requestDto.getDetailedAddress());
         assertThat(addressList.get(0).getPostalCode()).isEqualTo(requestDto.getPostalCode());
-        assertThat(addressList.get(0).getRoadNameAddress()).isEqualTo(requestDto.getRoadNameAddress());
+        assertThat(addressList.get(0).getRoadNameAddress())
+            .isEqualTo(requestDto.getRoadNameAddress());
         verify(userRepository, atLeastOnce()).findByEmail(user.getEmail());
     }
 
@@ -347,12 +358,12 @@ class UserServiceTest {
     @Test
     @DisplayName("비밀번호가 일치하여 회원 탈퇴 성공한다.")
     public void deleteSuccess() {
-        UserDto.SaveRequest saveRequest = createUserDto();
-        String email = saveRequest.getEmail();
-        String password = saveRequest.getPassword();
-
-        when(userRepository.existsByEmailAndPassword(email, encryptionService.encrypt(password)))
-            .thenReturn(true);
+        User user = createUser();
+        String email = user.getEmail();
+        String password = user.getPassword();
+        given(userRepository.findByEmail(email)).willReturn(Optional.of(user));
+        given(userRepository.existsByEmailAndPassword(any(), any())).willReturn(true);
+        given(tradeService.hasUsersProgressingTrade(user)).willReturn(false);
 
         userService.delete(email, password);
 
@@ -361,18 +372,44 @@ class UserServiceTest {
 
     @Test
     @DisplayName("비밀번호가 일치하지 않아 회원 탈퇴 실패한다.")
-    public void deleteFailure() {
-        UserDto.SaveRequest saveRequest = createUserDto();
-        String email = saveRequest.getEmail();
-        String password = saveRequest.getPassword();
-
-        when(userRepository.existsByEmailAndPassword(email, encryptionService.encrypt(password)))
-            .thenReturn(false);
+    public void failToWithdrawalIfMismatchingPassword() {
+        User user = createUser();
+        String email = user.getEmail();
+        String password = user.getPassword();
+        given(userRepository.findByEmail(email)).willReturn(Optional.of(user));
+        given(userRepository.existsByEmailAndPassword(any(), any())).willReturn(false);
 
         assertThrows(WrongPasswordException.class, () -> userService.delete(email, password));
 
         verify(userRepository, never()).deleteByEmail(email);
     }
 
+    @Test
+    @DisplayName("잔여 포인트가 존재하여 회원 탈퇴에 실패한다.")
+    public void failToWithdrawalIfHasRemainingPoints() {
+        User user = createUser();
+        String email = user.getEmail();
+        String password = user.getPassword();
+        user.chargingPoint(999999L);
+        given(userRepository.findByEmail(email)).willReturn(Optional.of(user));
+        given(userRepository.existsByEmailAndPassword(any(), any())).willReturn(true);
+        given(tradeService.hasUsersProgressingTrade(user)).willReturn(false);
 
+        assertThrows(HasRemainingPointException.class, () -> userService.delete(email, password));
+        verify(userRepository, never()).deleteByEmail(email);
+    }
+
+    @Test
+    @DisplayName("진행중인 거래가 존재하여 회원 탈퇴에 실패한다.")
+    public void failToWithdrawalIfHasProgressingTrade() {
+        User user = createUser();
+        String email = user.getEmail();
+        String password = user.getPassword();
+        given(userRepository.findByEmail(email)).willReturn(Optional.of(user));
+        given(userRepository.existsByEmailAndPassword(any(), any())).willReturn(true);
+        given(tradeService.hasUsersProgressingTrade(user)).willReturn(true);
+
+        assertThrows(HasProgressingTradeException.class, () -> userService.delete(email, password));
+        verify(userRepository, never()).deleteByEmail(email);
+    }
 }

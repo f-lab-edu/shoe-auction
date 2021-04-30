@@ -15,6 +15,8 @@ import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
 import com.flab.shoeauction.exception.user.DuplicateEmailException;
 import com.flab.shoeauction.exception.user.DuplicateNicknameException;
+import com.flab.shoeauction.exception.user.HasProgressingTradeException;
+import com.flab.shoeauction.exception.user.HasRemainingPointException;
 import com.flab.shoeauction.exception.user.UnauthenticatedUserException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.exception.user.WrongPasswordException;
@@ -37,6 +39,7 @@ public class UserService {
     private final EmailCertificationService emailCertificationService;
     private final CartRepository cartRepository;
     private final AddressRepository addressRepository;
+    private final TradeService tradeService;
 
     public boolean checkEmailDuplicate(String email) {
         return userRepository.existsByEmail(email);
@@ -126,7 +129,7 @@ public class UserService {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
-        if(user.getAddressBook() == null) {
+        if (user.getAddressBook() == null) {
             AddressBook addressBook = addressBookRepository.save(new AddressBook());
             user.createAddressBook(addressBook);
         }
@@ -157,7 +160,8 @@ public class UserService {
     }
 
     @Transactional
-    public void updateNickname(String email, com.flab.shoeauction.controller.dto.UserDto.SaveRequest requestDto) {
+    public void updateNickname(String email,
+        com.flab.shoeauction.controller.dto.UserDto.SaveRequest requestDto) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
@@ -169,9 +173,19 @@ public class UserService {
 
     @Transactional
     public void delete(String email, String password) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+
         if (!userRepository.existsByEmailAndPassword(email, encryptionService.encrypt(password))) {
             throw new WrongPasswordException();
         }
+        if (tradeService.hasUsersProgressingTrade(user)) {
+            throw new HasProgressingTradeException("진행중인 거래를 마친 후 탈퇴가 가능합니다.");
+        }
+        if (user.hasRemainingPoints()) {
+            throw new HasRemainingPointException("잔여 포인트를 출금 후 탈퇴가 가능합니다.");
+        }
+
         userRepository.deleteByEmail(email);
     }
 

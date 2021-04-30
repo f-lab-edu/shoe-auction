@@ -38,6 +38,12 @@ public class ResponseConstants {
     public static final ResponseEntity<String> WRONG_PASSWORD =
         new ResponseEntity<>("비밀번호를 확인해주세요.", HttpStatus.UNAUTHORIZED);
 
+    public static final ResponseEntity<String> REMAINING_POINT =
+        new ResponseEntity<>("잔여 포인트 출금 후 탈퇴가 가능합니다.", HttpStatus.BAD_REQUEST);
+
+    public static final ResponseEntity<String> PROGRESSING_TRADE =
+        new ResponseEntity<>("진행중인 거래를 마친 후 탈퇴가 가능합니다.", HttpStatus.BAD_REQUEST);
+
     public static final ResponseEntity<String> DUPLICATION_BRAND_NAME =
         new ResponseEntity<>("이미 존재하는 브랜드명입니다.", HttpStatus.CONFLICT);
 

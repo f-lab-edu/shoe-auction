@@ -12,28 +12,28 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class EmailCertificationNumberDao implements EmailCertificationDao {
 
-    private final StringRedisTemplate stringRedisTemplate;
+    private final StringRedisTemplate redisTemplate;
 
     @Override
     public void createEmail(String email, String certificationNumber) {
-        stringRedisTemplate.opsForValue()
+        redisTemplate.opsForValue()
             .set(PREFIX_CERTIFICATION + email, certificationNumber,
                 Duration.ofSeconds(LIMIT_TIME_CERTIFICATION_NUMBER));
     }
 
     @Override
     public String getEmailCertification(String email) {
-        return stringRedisTemplate.opsForValue().get(PREFIX_CERTIFICATION + email);
+        return redisTemplate.opsForValue().get(PREFIX_CERTIFICATION + email);
     }
 
     @Override
     public void removeEmailCertification(String email) {
-        stringRedisTemplate.delete(PREFIX_CERTIFICATION + email);
+        redisTemplate.delete(PREFIX_CERTIFICATION + email);
     }
 
     @Override
     public boolean hasKey(String email) {
-        return stringRedisTemplate.hasKey(PREFIX_CERTIFICATION + email);
+        return redisTemplate.hasKey(PREFIX_CERTIFICATION + email);
     }
 }
 

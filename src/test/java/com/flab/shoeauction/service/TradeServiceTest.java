@@ -1,7 +1,9 @@
 package com.flab.shoeauction.service;
 
+import static com.flab.shoeauction.domain.trade.TradeStatus.CANCEL;
 import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_CONCLUSION;
 import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_INSPECTION;
+import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_SHIPMENT;
 import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_WAREHOUSING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,6 +35,7 @@ import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
 import com.flab.shoeauction.exception.trade.LowPointException;
 import com.flab.shoeauction.exception.user.NotAuthorizedException;
+import com.flab.shoeauction.service.message.MessageService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -59,6 +62,9 @@ class TradeServiceTest {
 
     @Mock
     private AddressRepository addressRepository;
+
+    @Mock
+    private MessageService fcmService;
 
     @InjectMocks
     private TradeService tradeService;
@@ -327,7 +333,6 @@ class TradeServiceTest {
     }
 
 
-
     @DisplayName("물품 즉시 구매에 성공한다.")
     @Test
     public void immediatePurchase() {
@@ -361,7 +366,6 @@ class TradeServiceTest {
         when(addressRepository.findById(requestDto.getAddressId()))
             .thenReturn(Optional.of(address));
         tradeService.immediatePurchase(email, requestDto);
-
 
         assertThat(saleTrade.getStatus()).isEqualTo(TradeStatus.PRE_SELLER_SHIPMENT);
         assertThat(saleTrade.getBuyer().getId()).isEqualTo(user.getId());
@@ -517,5 +521,47 @@ class TradeServiceTest {
         tradeService.confirmWarehousing(tradeId);
 
         assertThat(trade.getStatus()).isEqualTo(PRE_INSPECTION);
+    }
+
+    @DisplayName("특정 상품의 검수 결과를 적합으로 처리한다.")
+    @Test
+    public void inspectionSuccessful() {
+        Trade trade = createConcludedBuyersTrade();
+        Long tradeId = trade.getId();
+        given(tradeRepository.findById(tradeId)).willReturn(Optional.of(trade));
+
+        tradeService.inspectionSuccessful(tradeId);
+
+        assertThat(trade.getStatus()).isEqualTo(PRE_SHIPMENT);
+    }
+
+    @DisplayName("특정 상품의 검수 결과를 부적합으로 처리한다.")
+    @Test
+    public void inspectionFailed() {
+        Trade trade = createConcludedBuyersTrade();
+        Long tradeId = trade.getId();
+        User buyer = trade.getBuyer();
+        Long buyersPoint = buyer.getPoint();
+        String reason = "가죽 스크래치 및 박음질 불량";
+        given(tradeRepository.findById(tradeId)).willReturn(Optional.of(trade));
+
+        tradeService.inspectionFailed(tradeId, reason);
+
+        assertThat(trade.getStatus()).isEqualTo(CANCEL);
+        assertThat(trade.getCancelReason()).isEqualTo(reason);
+        assertThat(buyer.getPoint()).isEqualTo(buyersPoint + trade.getPrice());
+    }
+
+    @DisplayName("부적합 처리된 상품을 반송하고 반송 운송장 번호를 입력한다.")
+    @Test
+    public void updateReturnTrackingNumber() {
+        Trade trade = createConcludedBuyersTrade();
+        Long tradeId = trade.getId();
+        String trackingNumber = "987654321";
+        given(tradeRepository.findById(tradeId)).willReturn(Optional.of(trade));
+
+        tradeService.updateReturnTrackingNumber(tradeId, trackingNumber);
+
+        assertThat(trade.getReturnTrackingNumber()).isEqualTo(trackingNumber);
     }
 }

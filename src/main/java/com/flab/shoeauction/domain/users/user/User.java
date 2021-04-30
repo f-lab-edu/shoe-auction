@@ -196,7 +196,6 @@ public class User extends UserBase {
 
     public void chargingPoint(Long chargeAmount) {
         this.point += chargeAmount;
-
     }
 
     public boolean isCurrentEmail(String email) {
@@ -213,6 +212,7 @@ public class User extends UserBase {
         this.point -= price;
     }
 
+
     public List<PointHistoryDto> getDeductionHistory() {
         return pointBreakdown.stream()
             .filter(p -> p.getDivision().equals(PointDivision.WITHDRAW) || p.getDivision()
@@ -227,6 +227,11 @@ public class User extends UserBase {
                 .equals(PointDivision.SALES_REVENUE))
             .map(Point::toPointHistoryDto)
             .collect(Collectors.toList());
+    }
+
+
+    public boolean hasRemainingPoints() {
+        return point > 0;
     }
 
 }

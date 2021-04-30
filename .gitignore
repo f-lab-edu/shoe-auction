@@ -14,4 +14,3 @@ out/
 
 src/main/resources/application*.yml
 src/main/resources/*.json
-
