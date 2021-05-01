@@ -24,9 +24,6 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-/*
-*
-*/
 @RequiredArgsConstructor
 @Configuration
 @EnableTransactionManagement
@@ -76,7 +73,7 @@ public class RoutingDataSourceConfig {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         em.setDataSource(dataSource);
-        em.setPackagesToScan(new String[]{"com.flab.shoeauction.domain"});
+        em.setPackagesToScan("com.flab.shoeauction.domain");
         em.setPersistenceUnitName("master");
 
         Map<String, Object> properties = new HashMap<>();

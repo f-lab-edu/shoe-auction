@@ -36,6 +36,7 @@ public class TradeService {
     private final AddressRepository addressRepository;
     private final MessageService fcmService;
 
+    @Transactional(readOnly = true)
     public TradeResource getResourceForBid(String email, Long productId, double size) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
@@ -44,7 +45,6 @@ public class TradeService {
             .orElseThrow();
 
         return makeTradeResource(user, product, size);
-
     }
 
     private TradeResource makeTradeResource(User user, Product product, double size) {

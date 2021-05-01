@@ -42,6 +42,7 @@ public class ProductService {
         productRepository.save(requestDto.toEntity());
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(value = "product", key = "#id")
     public ProductInfoResponse getProductInfo(Long id) {
         return productRepository.findById(id).orElseThrow(
@@ -49,6 +50,7 @@ public class ProductService {
             .toProductInfoResponse();
     }
 
+    @Transactional(readOnly = true)
     public Page<ThumbnailResponse> findProducts(SearchCondition condition,
         Pageable pageable) {
         return productRepository.findAllBySearchCondition(condition, pageable);
@@ -94,7 +96,8 @@ public class ProductService {
         savedProduct.update(updatedProduct);
     }
 
-    private void checkDuplicateUpdatedModelNumber(String modelNumber, String updatedModelNumber) {
+    @Transactional(readOnly = true)
+    public void checkDuplicateUpdatedModelNumber(String modelNumber, String updatedModelNumber) {
         if (modelNumber.equals(updatedModelNumber)) {
             return;
         } else if (!productRepository.existsByModelNumber(updatedModelNumber)) {
