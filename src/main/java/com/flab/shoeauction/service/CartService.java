@@ -39,6 +39,7 @@ public class CartService {
     }
 
 
+    @Transactional(readOnly = true)
     public Set<WishItemResponse> getWishList(String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));

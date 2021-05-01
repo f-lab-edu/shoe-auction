@@ -27,11 +27,13 @@ public class BrandService {
 
     private final AwsS3Service awsS3Service;
 
+    @Transactional(readOnly = true)
     public BrandInfo getBrandInfo(Long id) {
         return brandRepository.findById(id).orElseThrow(() -> new BrandNotFoundException())
             .toBrandInfo();
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(value = "brands")
     public List<BrandInfo> getBrandInfos() {
         return brandRepository.findAll().stream()
@@ -105,6 +107,7 @@ public class BrandService {
             (savedImagePath != null && brandImage != null));
     }
 
+    @Transactional(readOnly = true)
     public void checkBrandExist(BrandInfo productsBrand) {
         Optional<Brand> savedBrand = brandRepository.findById(productsBrand.getId());
         if (savedBrand.isEmpty() || !isSameName(savedBrand.get(), productsBrand)) {
@@ -112,7 +115,8 @@ public class BrandService {
         }
     }
 
-    private boolean checkDuplicateName(SaveRequest requestDto) {
+    @Transactional(readOnly = true)
+    public boolean checkDuplicateName(SaveRequest requestDto) {
         if (brandRepository.existsByNameKor(requestDto.getNameKor())) {
             return true;
         } else if (brandRepository.existsByNameEng(requestDto.getNameEng())) {
@@ -121,7 +125,8 @@ public class BrandService {
         return false;
     }
 
-    private void checkDuplicateUpdatedNameKor(String nameKor, String updatedNameKor) {
+    @Transactional(readOnly = true)
+    public void checkDuplicateUpdatedNameKor(String nameKor, String updatedNameKor) {
         if (nameKor.equals(updatedNameKor)) {
             return;
         } else if (!brandRepository.existsByNameKor(updatedNameKor)) {
@@ -130,7 +135,8 @@ public class BrandService {
         throw new DuplicateBrandNameException();
     }
 
-    private void checkDuplicateUpdatedNameEng(String nameEng, String updatedNameEng) {
+    @Transactional(readOnly = true)
+    public void checkDuplicateUpdatedNameEng(String nameEng, String updatedNameEng) {
         if (nameEng.equals(updatedNameEng)) {
             return;
         } else if (!brandRepository.existsByNameEng(updatedNameEng)) {

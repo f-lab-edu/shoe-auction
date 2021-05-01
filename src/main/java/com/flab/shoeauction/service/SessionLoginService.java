@@ -14,6 +14,7 @@ import com.flab.shoeauction.service.encrytion.EncryptionService;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class SessionLoginService {
     private final UserRepository userRepository;
     private final EncryptionService encryptionService;
 
+    @Transactional(readOnly = true)
     public void existByEmailAndPassword(LoginRequest loginRequest) {
         loginRequest.passwordEncryption(encryptionService);
         String email = loginRequest.getEmail();
@@ -32,6 +34,7 @@ public class SessionLoginService {
         }
     }
 
+    @Transactional(readOnly = true)
     public void login(LoginRequest loginRequest) {
         existByEmailAndPassword(loginRequest);
         String email = loginRequest.getEmail();
@@ -48,7 +51,7 @@ public class SessionLoginService {
     }
 
     private void banCheck(User user) {
-        if(user.isBan()) {
+        if (user.isBan()) {
             throw new NotAuthorizedException("관리자에 의해 이용이 정지된 사용자 입니다.");
         }
     }
@@ -66,6 +69,7 @@ public class SessionLoginService {
     }
 
 
+    @Transactional(readOnly = true)
     public UserInfoDto getCurrentUser(String email) {
         return userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.")).toUserInfoDto();

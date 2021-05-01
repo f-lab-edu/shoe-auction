@@ -41,10 +41,12 @@ public class UserService {
     private final AddressRepository addressRepository;
     private final TradeService tradeService;
 
+    @Transactional(readOnly = true)
     public boolean checkEmailDuplicate(String email) {
         return userRepository.existsByEmail(email);
     }
 
+    @Transactional(readOnly = true)
     public boolean checkNicknameDuplicate(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
@@ -69,6 +71,7 @@ public class UserService {
     }
 
 
+    @Transactional(readOnly = true)
     public FindUserResponse getUserResource(String email) {
         return userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 email 입니다.")).toFindUserDto();
@@ -107,6 +110,7 @@ public class UserService {
         user.updateAccount(account);
     }
 
+    @Transactional(readOnly = true)
     public Account getAccount(String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
@@ -115,6 +119,7 @@ public class UserService {
 
     }
 
+    @Transactional(readOnly = true)
     public List<Address> getAddressBook(String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
