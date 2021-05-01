@@ -13,7 +13,6 @@ import com.flab.shoeauction.controller.dto.AddressDto;
 import com.flab.shoeauction.controller.dto.UserDto;
 import com.flab.shoeauction.controller.dto.UserDto.ChangePasswordRequest;
 import com.flab.shoeauction.controller.dto.UserDto.FindUserResponse;
-import com.flab.shoeauction.controller.dto.UserDto.SaveRequest;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.addressBook.AddressRepository;

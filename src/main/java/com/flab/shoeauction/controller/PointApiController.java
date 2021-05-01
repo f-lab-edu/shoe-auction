@@ -7,7 +7,6 @@ import com.flab.shoeauction.controller.dto.PointDto.WithdrawalRequest;
 import com.flab.shoeauction.service.PointService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +26,7 @@ public class PointApiController {
         return pointService.getUserPoint(email);
     }
 
-    @PostMapping("/payment")
+    @PostMapping("/charging")
     public void payment(@CurrentUser String email, @RequestBody ChargeRequest requestDto) {
         pointService.charging(email, requestDto);
     }

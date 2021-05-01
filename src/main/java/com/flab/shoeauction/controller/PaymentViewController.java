@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PaymentViewController {
 
-    @GetMapping("/points/charge")
+    @GetMapping("/view/points/charge")
     public String paymentPage() {
         return "payment_page";
     }

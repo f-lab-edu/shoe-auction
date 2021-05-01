@@ -114,11 +114,13 @@ public class User extends UserBase {
         this.userLevel = UserLevel.AUTH;
     }
 
+
+
     @Builder
     public User(Long id, String email, String password, UserLevel userLevel, String nickname,
         String phone,
         LocalDateTime nicknameModifiedDate, AddressBook addressBook, UserStatus userStatus,
-        Long point) {
+        Long point, List<Point> pointBreakdown) {
         super(id, email, password, userLevel);
         this.nickname = nickname;
         this.phone = phone;
@@ -127,6 +129,7 @@ public class User extends UserBase {
         this.addressBook = addressBook;
         this.userStatus = userStatus;
         this.point = point;
+        this.pointBreakdown = pointBreakdown;
     }
 
     public UserDetailsResponse toUserDetailsDto() {
