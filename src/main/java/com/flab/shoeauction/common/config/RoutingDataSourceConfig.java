@@ -1,5 +1,8 @@
 package com.flab.shoeauction.common.config;
 
+import static com.flab.shoeauction.common.utils.constants.DataSourceConstants.MASTER;
+import static com.flab.shoeauction.common.utils.constants.DataSourceConstants.SLAVE;
+
 import com.flab.shoeauction.common.db.DynamicRoutingDataSource;
 import com.zaxxer.hikari.HikariDataSource;
 import java.util.HashMap;
@@ -52,8 +55,8 @@ public class RoutingDataSourceConfig {
 
         Map<Object, Object> dataSourceMap = new HashMap<>();
 
-        dataSourceMap.put("master", master);
-        dataSourceMap.put("slave", slave);
+        dataSourceMap.put(MASTER, master);
+        dataSourceMap.put(SLAVE, slave);
 
         routingDataSource.setTargetDataSources(dataSourceMap);
         routingDataSource.setDefaultTargetDataSource(master);
@@ -74,13 +77,13 @@ public class RoutingDataSourceConfig {
         em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         em.setDataSource(dataSource);
         em.setPackagesToScan("com.flab.shoeauction.domain");
-        em.setPersistenceUnitName("master");
 
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.physical_naming_strategy",
             SpringPhysicalNamingStrategy.class.getName());
         properties.put("hibernate.implicit_naming_strategy",
             SpringImplicitNamingStrategy.class.getName());
+        properties.put("hibernate.hbm2ddl.auto", env.getProperty("spring.jpa.hibernate.ddl-auto"));
         em.setJpaPropertyMap(properties);
 
         return em;
