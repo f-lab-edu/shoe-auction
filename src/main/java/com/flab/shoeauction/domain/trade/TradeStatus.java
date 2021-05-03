@@ -7,7 +7,6 @@ package com.flab.shoeauction.domain.trade;
  *     PRE_INSPECTION: 검수 대기
  *     PRE_SHIPMENT: 구매자 발송 대기
  *     SHIPPING: 배송중(회사 -> 구매자)
- *     SHIPMENT_COMPLETE: 배송 완료
  *     TRADE_COMPLETE: 거래 완료
  *     CANCEL: 취소(판매자가 기간 내 상품 미발송 및 검수 탈락)
  */
@@ -19,7 +18,6 @@ public enum TradeStatus {
     PRE_INSPECTION,
     PRE_SHIPMENT,
     SHIPPING,
-    SHIPMENT_COMPLETE,
     TRADE_COMPLETE,
     CANCEL
 }

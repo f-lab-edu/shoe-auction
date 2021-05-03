@@ -133,6 +133,7 @@ public class TradeService {
 
         tradeRepository.deleteById(trade.getId());
     }
+
     // 판매자가 회사에 상품 발송 후 운송장 번호를 입력 시 입고 대기로 상태 변경
     @Transactional
     public void updateReceivingTrackingNumber(Long tradeId, String email, String trackingNumber) {
@@ -178,5 +179,23 @@ public class TradeService {
     @Transactional
     public boolean hasUsersProgressingTrade(User user) {
         return tradeRepository.existsProgressingByUser(user);
+    }
+
+    @Transactional
+    public void updateForwardingTrackingNumber(Long tradeId, String trackingNumber) {
+        Trade trade = tradeRepository.findById(tradeId).orElseThrow();
+
+        trade.updateStatusShipping(trackingNumber);
+    }
+
+    @Transactional
+    public void confirmPurchase(Long tradeId, String email) {
+        Trade trade = tradeRepository.findById(tradeId).orElseThrow();
+
+        if (!trade.isBuyersEmail(email)) {
+            throw new NotAuthorizedException("해당 거래의 구매자만 접근 가능합니다.");
+        }
+
+        trade.endTrade();
     }
 }

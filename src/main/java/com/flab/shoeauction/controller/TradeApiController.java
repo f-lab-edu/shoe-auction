@@ -101,4 +101,17 @@ public class TradeApiController {
         @RequestBody String trackingNumber) {
         tradeService.updateReturnTrackingNumber(id, trackingNumber);
     }
+
+    @LoginCheck(authority = UserLevel.ADMIN)
+    @PatchMapping("{id}/forwarding-Tracking-Number")
+    public void updateForwardingTrackingNumber(@PathVariable Long id,
+        @RequestBody String trackingNumber) {
+        tradeService.updateForwardingTrackingNumber(id, trackingNumber);
+    }
+
+    @LoginCheck(authority = UserLevel.AUTH)
+    @PatchMapping("{id}/purchase-confirmation")
+    public void ConfirmPurchase(@PathVariable Long id, @CurrentUser String email) {
+        tradeService.confirmPurchase(id, email);
+    }
 }

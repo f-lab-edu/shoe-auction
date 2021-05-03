@@ -117,10 +117,6 @@ public class Trade extends BaseTimeEntity {
         this.receivingTrackingNumber = trackingNumber;
     }
 
-    public void updateForwardingTrackingNumber(String trackingNumber) {
-        this.forwardingTrackingNumber = trackingNumber;
-    }
-
     public void updateReturnTrackingNumber(String trackingNumber) {
         this.returnTrackingNumber = trackingNumber;
     }
@@ -137,6 +133,10 @@ public class Trade extends BaseTimeEntity {
         return seller.isCurrentEmail(email);
     }
 
+    public boolean isBuyersEmail(String email) {
+        return buyer.isCurrentEmail(email);
+    }
+
     public void recoverBuyerPoints(Long price) {
         buyer.chargingPoint(price);
     }
@@ -144,12 +144,20 @@ public class Trade extends BaseTimeEntity {
     public boolean isPurchaseBid() {
         return buyer != null;
     }
-  
-     public void cancelBecauseOfInspection(String reason) {
+
+    public void cancelBecauseOfInspection(String reason) {
         this.cancelReason = reason;
         this.status = TradeStatus.CANCEL;
         buyer.chargingPoint(price);
     }
 
-  
+    public void updateStatusShipping(String trackingNumber) {
+        this.forwardingTrackingNumber = trackingNumber;
+        this.status = TradeStatus.SHIPPING;
+    }
+
+    public void endTrade() {
+        this.status = TradeStatus.TRADE_COMPLETE;
+        seller.chargingPoint(this.price);
+    }
 }
