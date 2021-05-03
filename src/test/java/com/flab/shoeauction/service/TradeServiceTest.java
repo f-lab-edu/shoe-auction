@@ -68,6 +68,9 @@ class TradeServiceTest {
     @Mock
     private MessageService fcmService;
 
+    @Mock
+    private PointService pointService;
+
     @InjectMocks
     private TradeService tradeService;
 
@@ -311,6 +314,7 @@ class TradeServiceTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 
         tradeService.createPurchaseBid(email, requestDto);
+
         assertThat(user.getPoint()).isEqualTo(1000000L - requestDto.getPrice());
     }
 
