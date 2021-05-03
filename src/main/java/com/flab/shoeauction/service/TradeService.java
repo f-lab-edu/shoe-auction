@@ -35,6 +35,7 @@ public class TradeService {
     private final TradeRepository tradeRepository;
     private final AddressRepository addressRepository;
     private final MessageService fcmService;
+    private final PointService pointService;
 
     @Transactional(readOnly = true)
     public TradeResource getResourceForBid(String email, Long productId, double size) {
@@ -86,6 +87,7 @@ public class TradeService {
         tradeRepository.save(trade);
 
         user.deductionOfPoints(requestDto.getPrice());
+        pointService.purchasePointPayment(user, trade.getPrice());
     }
 
     //TODO : 물품 검수 시스템 구현 후 판매자 포인트 plus 로직 구현하기
@@ -104,6 +106,7 @@ public class TradeService {
 
         trade.makeImmediatePurchase(buyer, shippingAddress);
         buyer.deductionOfPoints(trade.getPrice());
+        pointService.purchasePointPayment(buyer, trade.getPrice());
 
         fcmService.sendSaleCompletedMessage(trade.getPublisher().getEmail());
     }
@@ -129,6 +132,7 @@ public class TradeService {
         Trade trade = tradeRepository.findById(requestDto.getTradeId()).orElseThrow();
         if (trade.isPurchaseBid()) {
             trade.recoverBuyerPoints(trade.getPrice());
+            pointService.purchasePointReturn(trade.getBuyer(), trade.getPrice());
         }
 
         tradeRepository.deleteById(trade.getId());
@@ -167,6 +171,8 @@ public class TradeService {
         Trade trade = tradeRepository.findById(tradeId).orElseThrow();
 
         trade.cancelBecauseOfInspection(reason);
+
+        pointService.purchasePointReturn(trade.getBuyer(), trade.getPrice());
     }
 
     @Transactional
@@ -197,5 +203,6 @@ public class TradeService {
         }
 
         trade.endTrade();
+        pointService.salesPointReceive(trade.getSeller(), trade.getPrice());
     }
 }

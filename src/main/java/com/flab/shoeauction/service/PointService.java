@@ -3,6 +3,8 @@ package com.flab.shoeauction.service;
 import com.flab.shoeauction.controller.dto.PointDto.ChargeRequest;
 import com.flab.shoeauction.controller.dto.PointDto.PointHistoryDto;
 import com.flab.shoeauction.controller.dto.PointDto.WithdrawalRequest;
+import com.flab.shoeauction.domain.point.Point;
+import com.flab.shoeauction.domain.point.PointDivision;
 import com.flab.shoeauction.domain.point.PointRepository;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.domain.users.user.UserRepository;
@@ -45,12 +47,45 @@ public class PointService {
         user.deductionOfPoints(requestDto.getWithdrawalAmount());
     }
 
-    private void isMatchPassword(String email, WithdrawalRequest requestDto) {
+    @Transactional
+    public void purchasePointPayment(User user, Long price) {
+        Point point = Point.builder()
+            .user(user)
+            .amount(price)
+            .division(PointDivision.PURCHASE_DEDUCTION)
+            .build();
+
+        pointRepository.save(point);
+    }
+
+    @Transactional
+    public void purchasePointReturn(User user, Long price) {
+        Point point = Point.builder()
+            .user(user)
+            .amount(price)
+            .division(PointDivision.RETURN)
+            .build();
+
+        pointRepository.save(point);
+    }
+
+    @Transactional
+    public void salesPointReceive(User user, Long price) {
+        Point point = Point.builder()
+            .user(user)
+            .amount(price)
+            .division(PointDivision.SALES_REVENUE)
+            .build();
+    }
+
+    @Transactional(readOnly = true)
+    public void isMatchPassword(String email, WithdrawalRequest requestDto) {
         if (!userRepository.existsByEmailAndPassword(email, requestDto.getPassword())) {
             throw new UserNotFoundException("아이디 또는 비밀번호가 일치하지 않습니다.");
         }
     }
 
+    @Transactional(readOnly = true)
     public List<PointHistoryDto> getDeductionHistory(String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
@@ -58,6 +93,7 @@ public class PointService {
         return user.getDeductionHistory();
     }
 
+    @Transactional(readOnly = true)
     public List<PointHistoryDto> getChargingHistory(String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
@@ -65,6 +101,7 @@ public class PointService {
         return user.getChargingHistory();
     }
 
+    @Transactional(readOnly = true)
     public Long getUserPoint(String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
