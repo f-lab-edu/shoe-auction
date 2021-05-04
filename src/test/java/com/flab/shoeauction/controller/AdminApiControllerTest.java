@@ -167,8 +167,7 @@ class AdminApiControllerTest {
                 ),
                 responseFields(
                     fieldWithPath("content.[].id").type(JsonFieldType.NUMBER).description("ID"),
-                    fieldWithPath("content.[].email").type(JsonFieldType.STRING)
-                        .description("email"),
+                    fieldWithPath("content.[].email").type(JsonFieldType.STRING).description("email"),
                     fieldWithPath("content.[].userLevel").ignored(),
                     fieldWithPath("pageable.offset").ignored(),
                     fieldWithPath("pageable.pageSize").ignored(),

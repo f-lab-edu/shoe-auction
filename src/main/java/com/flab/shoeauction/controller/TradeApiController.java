@@ -5,10 +5,14 @@ import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.controller.dto.TradeDto;
 import com.flab.shoeauction.controller.dto.TradeDto.ChangeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.ImmediateTradeRequest;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeInfoResponse;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeResource;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeSearchCondition;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.service.TradeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -100,5 +104,11 @@ public class TradeApiController {
     public void updateReturnTrackingNumber(@PathVariable Long id,
         @RequestBody String trackingNumber) {
         tradeService.updateReturnTrackingNumber(id, trackingNumber);
+    }
+
+    @LoginCheck(authority = UserLevel.ADMIN)
+    @GetMapping
+    public Page<TradeInfoResponse> getTradeInfos(TradeSearchCondition tradeSearchCondition, Pageable pageable) {
+        return tradeService.getTradeInfos(tradeSearchCondition, pageable);
     }
 }

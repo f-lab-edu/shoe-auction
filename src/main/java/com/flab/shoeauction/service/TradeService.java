@@ -8,7 +8,9 @@ import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoByTrade;
 import com.flab.shoeauction.controller.dto.TradeDto.ChangeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.ImmediateTradeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.SaveRequest;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeInfoResponse;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeResource;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeSearchCondition;
 import com.flab.shoeauction.controller.dto.UserDto.TradeUserInfo;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressRepository;
@@ -23,6 +25,8 @@ import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.message.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -133,6 +137,7 @@ public class TradeService {
 
         tradeRepository.deleteById(trade.getId());
     }
+
     // 판매자가 회사에 상품 발송 후 운송장 번호를 입력 시 입고 대기로 상태 변경
     @Transactional
     public void updateReceivingTrackingNumber(Long tradeId, String email, String trackingNumber) {
@@ -178,5 +183,11 @@ public class TradeService {
     @Transactional
     public boolean hasUsersProgressingTrade(User user) {
         return tradeRepository.existsProgressingByUser(user);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<TradeInfoResponse> getTradeInfos(TradeSearchCondition tradeSearchCondition,
+        Pageable pageable) {
+        return tradeRepository.searchByTradeStatusAndTradeId(tradeSearchCondition, pageable);
     }
 }

@@ -119,4 +119,34 @@ public class TradeDto {
             this.productId = productId;
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class TradeInfoResponse {
+
+        private Long id;
+        private TradeStatus status;
+        private String email;
+
+        @Builder
+        public TradeInfoResponse(Long id, TradeStatus status, String email) {
+            this.id = id;
+            this.status = status;
+            this.email = email;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class TradeSearchCondition {
+        private Long tradeId;
+        private TradeStatus tradeStatus;
+
+        @Builder
+        public TradeSearchCondition(Long tradeId, TradeStatus tradeStatus) {
+            this.tradeId = tradeId;
+            this.tradeStatus = tradeStatus;
+        }
+    }
+
 }

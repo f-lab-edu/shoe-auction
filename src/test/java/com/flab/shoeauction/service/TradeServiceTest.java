@@ -17,7 +17,9 @@ import com.flab.shoeauction.controller.dto.ProductDto;
 import com.flab.shoeauction.controller.dto.TradeDto;
 import com.flab.shoeauction.controller.dto.TradeDto.ChangeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.ImmediateTradeRequest;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeInfoResponse;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeResource;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeSearchCondition;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.addressBook.AddressRepository;
@@ -41,12 +43,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 class TradeServiceTest {
@@ -222,6 +229,40 @@ class TradeServiceTest {
             .returnAddress(address)
             .shippingAddress(null)
             .build();
+    }
+
+    private List<TradeInfoResponse> createTradeInfoList() {
+
+        List<TradeInfoResponse> list = new ArrayList<>();
+        Long id = 1L;
+        String email = id + "test.com";
+        for (int i = 0; i < 5; i++) {
+
+            TradeInfoResponse tradeInfoResponse = TradeInfoResponse.builder()
+                .id(id++)
+                .email(email)
+                .status(PRE_CONCLUSION)
+                .build();
+
+            list.add(tradeInfoResponse);
+
+            TradeInfoResponse tradeInfoResponse2 = TradeInfoResponse.builder()
+                .id(id++)
+                .email(email)
+                .status(PRE_INSPECTION)
+                .build();
+
+            list.add(tradeInfoResponse2);
+
+            TradeInfoResponse tradeInfoResponse3 = TradeInfoResponse.builder()
+                .id(id++)
+                .email(email)
+                .status(CANCEL)
+                .build();
+
+            list.add(tradeInfoResponse3);
+        }
+        return list;
     }
 
     @DisplayName("상품 거래 화면에 보여질 리소스들을 리턴한다.")
@@ -564,4 +605,58 @@ class TradeServiceTest {
 
         assertThat(trade.getReturnTrackingNumber()).isEqualTo(trackingNumber);
     }
+
+    @DisplayName("관리자가 모든 Trade를 조회한다.")
+    @Test
+    public void getTradeInfos() {
+        List<TradeInfoResponse> tradeInfoList = createTradeInfoList();
+
+        TradeSearchCondition tradeSearchCondition = TradeSearchCondition
+            .builder()
+            .tradeStatus(null)
+            .tradeId(null)
+            .build();
+
+        Pageable pageable = PageRequest.of(0, 10);
+        long total = tradeInfoList.size();
+
+        Page<TradeInfoResponse> result = new PageImpl<>(tradeInfoList, pageable, total);
+        given(tradeRepository.searchByTradeStatusAndTradeId(tradeSearchCondition, pageable))
+            .willReturn(result);
+
+        Page<TradeInfoResponse> tradeInfos = tradeService
+            .getTradeInfos(tradeSearchCondition, pageable);
+
+        System.out.println(tradeInfoList.size());
+        assertThat(tradeInfos.getContent().size()).isEqualTo(tradeInfoList.size());
+    }
+
+    @DisplayName("관리자가 Status로 Trade를 조회한다.")
+    @Test
+    public void getTradeInfosToSearchStatus() {
+        List<TradeInfoResponse> tradeInfoListByStatus = createTradeInfoList().stream()
+            .filter(t -> t.getStatus().equals(PRE_CONCLUSION))
+            .collect(Collectors.toList());
+
+        TradeSearchCondition tradeSearchCondition = TradeSearchCondition
+            .builder()
+            .tradeStatus(PRE_CONCLUSION)
+            .tradeId(null)
+            .build();
+
+        Pageable pageable = PageRequest.of(0, 10);
+        long total = tradeInfoListByStatus.size();
+
+        Page<TradeInfoResponse> result = new PageImpl<>(tradeInfoListByStatus, pageable, total);
+
+        given(tradeRepository.searchByTradeStatusAndTradeId(tradeSearchCondition, pageable))
+            .willReturn(result);
+
+        Page<TradeInfoResponse> tradeInfos = tradeService
+            .getTradeInfos(tradeSearchCondition, pageable);
+
+        assertThat(tradeInfos.getContent().size()).isEqualTo(tradeInfoListByStatus.size());
+    }
+
+
 }
