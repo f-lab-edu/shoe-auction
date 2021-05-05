@@ -78,8 +78,7 @@ public class PointService {
             .build();
     }
 
-    @Transactional(readOnly = true)
-    public void isMatchPassword(String email, WithdrawalRequest requestDto) {
+    private void isMatchPassword(String email, WithdrawalRequest requestDto) {
         if (!userRepository.existsByEmailAndPassword(email, requestDto.getPassword())) {
             throw new UserNotFoundException("아이디 또는 비밀번호가 일치하지 않습니다.");
         }
