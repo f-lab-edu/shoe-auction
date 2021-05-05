@@ -726,6 +726,174 @@ include::{snippets}/brands/get/http-request.adoc[]
 
 include::{snippets}/brands/get/http-response.adoc[]
 
+---
+
+=== 8. 거래 기능
+
+---
+
+==== 거래 등록 정보 조회
+
+**curl**
+
+include::{snippets}/trade/getResource/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/trade/getResource/path-parameters.adoc[]
+
+**request-fields**
+
+include::{snippets}/trade/getResource/request-parameters.adoc[]
+
+**example request**
+
+include::{snippets}/trade/getResource/http-request.adoc[]
+
+---
+
+==== 판매 입찰 등록
+
+**curl**
+
+include::{snippets}/trade/sell/bid/curl-request.adoc[]
+
+**request-fields**
+
+include::{snippets}/trade/sell/bid/request-fields.adoc[]
+
+**example request**
+
+include::{snippets}/trade/sell/bid/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/trade/sell/bid/http-response.adoc[]
+
+---
+
+==== 구매 입찰 등록
+
+**curl**
+
+include::{snippets}/trade/buy/bid/curl-request.adoc[]
+
+**request-fields**
+
+include::{snippets}/trade/buy/bid/request-fields.adoc[]
+
+**example request**
+
+include::{snippets}/trade/buy/bid/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/trade/buy/bid/http-response.adoc[]
+
+---
+
+==== 즉시 판매
+
+**curl**
+
+include::{snippets}/trade/sell/immediately/curl-request.adoc[]
+
+**request-fields**
+
+include::{snippets}/trade/sell/immediately/request-fields.adoc[]
+
+**example request**
+
+include::{snippets}/trade/sell/immediately/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/trade/sell/immediately/http-response.adoc[]
+
+---
+
+==== 즉시 구매
+
+**curl**
+
+include::{snippets}/trade/buy/immediately/curl-request.adoc[]
+
+**request-fields**
+
+include::{snippets}/trade/buy/immediately/request-fields.adoc[]
+
+**example request**
+
+include::{snippets}/trade/buy/immediately/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/trade/buy/immediately/http-response.adoc[]
+
+---
+
+==== 거래 삭제
+
+**curl**
+
+include::{snippets}/trade/delete/curl-request.adoc[]
+
+**request-fields**
+
+include::{snippets}/trade/delete/request-fields.adoc[]
+
+**example request**
+
+include::{snippets}/trade/delete/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/trade/delete/http-response.adoc[]
+
+---
+
+==== 입고 운송장 번호 입력
+
+**curl**
+
+include::{snippets}/trade/update/receiving-tracking-number/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/trade/update/receiving-tracking-number/path-parameters.adoc[]
+
+**request-fields**
+
+include::{snippets}/trade/update/receiving-tracking-number/request-fields.adoc[]
+
+**example request**
+
+include::{snippets}/trade/update/receiving-tracking-number/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/trade/update/receiving-tracking-number/http-response.adoc[]
+
+---
+
+==== 거래 완료
+
+**curl**
+
+include::{snippets}/trade/confirm/purchase/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/trade/confirm/purchase/path-parameters.adoc[]
+
+**example request**
+
+include::{snippets}/trade/confirm/purchase/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/trade/confirm/purchase/http-response.adoc[]
+
 == ADMIN
 
 ---
@@ -899,5 +1067,113 @@ include::{snippets}/products/delete/http-request.adoc[]
 **Example response**
 
 include::{snippets}/products/delete/http-response.adoc[]
+
+---
+
+=== 4. 거래 관리
+
+---
+
+==== 입고 확인
+
+**curl**
+
+include::{snippets}/trade/confirm/warehousing/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/trade/confirm/warehousing/path-parameters.adoc[]
+
+**example request**
+
+include::{snippets}/trade/confirm/warehousing/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/trade/confirm/warehousing/http-response.adoc[]
+
+---
+
+==== 검수 적합 처리
+
+**curl**
+
+include::{snippets}/trade/inspection/successful/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/trade/inspection/successful/path-parameters.adoc[]
+
+**example request**
+
+include::{snippets}/trade/inspection/successful/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/trade/inspection/successful/http-response.adoc[]
+
+---
+
+==== 검수 부적합 처리
+
+**curl**
+
+include::{snippets}/trade/inspection/failed/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/trade/inspection/failed/path-parameters.adoc[]
+
+**request-fields**
+
+include::{snippets}/trade/inspection/failed/request-fields.adoc[]
+
+**example request**
+
+include::{snippets}/trade/inspection/failed/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/trade/inspection/failed/http-response.adoc[]
+
+---
+
+==== 반품 운송장 번호 입력
+
+**curl**
+
+include::{snippets}/trade/update/return-tracking-number/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/trade/update/return-tracking-number/path-parameters.adoc[]
+
+**example request**
+
+include::{snippets}/trade/update/return-tracking-number/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/trade/update/return-tracking-number/http-response.adoc[]
+
+---
+
+==== 출고 운송장 번호 입력
+
+**curl**
+
+include::{snippets}/trade/update/forwarding-tracking-number/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/trade/update/forwarding-tracking-number/path-parameters.adoc[]
+
+**example request**
+
+include::{snippets}/trade/update/forwarding-tracking-number/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/trade/update/forwarding-tracking-number/http-response.adoc[]
 
 ---
