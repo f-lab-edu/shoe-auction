@@ -5,6 +5,8 @@ import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.controller.dto.TradeDto;
 import com.flab.shoeauction.controller.dto.TradeDto.ChangeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.ImmediateTradeRequest;
+import com.flab.shoeauction.controller.dto.TradeDto.ReasonRequest;
+import com.flab.shoeauction.controller.dto.TradeDto.TrackingNumberRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeResource;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.service.TradeService;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("trades")
+@RequestMapping("/trades")
 @RequiredArgsConstructor
 public class TradeApiController {
 
@@ -71,46 +73,46 @@ public class TradeApiController {
     }
 
     @LoginCheck(authority = UserLevel.AUTH)
-    @PatchMapping("{id}/receiving-tracking-number")
+    @PatchMapping("/{id}/receiving-tracking-number")
     public void updateReceivingTrackingNumber(@PathVariable Long id, @CurrentUser String email,
-        @RequestBody String trackingNumber) {
-        tradeService.updateReceivingTrackingNumber(id, email, trackingNumber);
+        @RequestBody TrackingNumberRequest requestDto) {
+        tradeService.updateReceivingTrackingNumber(id, email, requestDto.getTrackingNumber());
     }
 
     @LoginCheck(authority = UserLevel.ADMIN)
-    @PatchMapping("{id}/warehousing")
+    @PatchMapping("/{id}/warehousing")
     public void confirmWarehousing(@PathVariable Long id) {
         tradeService.confirmWarehousing(id);
     }
 
     @LoginCheck(authority = UserLevel.ADMIN)
-    @PatchMapping("{id}/inspection-successful")
+    @PatchMapping("/{id}/inspection-successful")
     public void inspectionSuccessful(@PathVariable Long id) {
         tradeService.inspectionSuccessful(id);
     }
 
     @LoginCheck(authority = UserLevel.ADMIN)
-    @PatchMapping("{id}/inspection-failed")
-    public void inspectionFailed(@PathVariable Long id, @RequestBody String reason) {
-        tradeService.inspectionFailed(id, reason);
+    @PatchMapping("/{id}/inspection-failed")
+    public void inspectionFailed(@PathVariable Long id, @RequestBody ReasonRequest requestDto) {
+        tradeService.inspectionFailed(id, requestDto.getReason());
     }
 
     @LoginCheck(authority = UserLevel.ADMIN)
-    @PatchMapping("{id}/return-tracking-number")
+    @PatchMapping("/{id}/return-tracking-number")
     public void updateReturnTrackingNumber(@PathVariable Long id,
-        @RequestBody String trackingNumber) {
-        tradeService.updateReturnTrackingNumber(id, trackingNumber);
+        @RequestBody TrackingNumberRequest requestDto) {
+        tradeService.updateReturnTrackingNumber(id, requestDto.getTrackingNumber());
     }
 
     @LoginCheck(authority = UserLevel.ADMIN)
-    @PatchMapping("{id}/forwarding-Tracking-Number")
+    @PatchMapping("/{id}/forwarding-tracking-number")
     public void updateForwardingTrackingNumber(@PathVariable Long id,
-        @RequestBody String trackingNumber) {
-        tradeService.updateForwardingTrackingNumber(id, trackingNumber);
+        @RequestBody TrackingNumberRequest requestDto) {
+        tradeService.updateForwardingTrackingNumber(id, requestDto.getTrackingNumber());
     }
 
     @LoginCheck(authority = UserLevel.AUTH)
-    @PatchMapping("{id}/purchase-confirmation")
+    @PatchMapping("/{id}/purchase-confirmation")
     public void ConfirmPurchase(@PathVariable Long id, @CurrentUser String email) {
         tradeService.confirmPurchase(id, email);
     }
