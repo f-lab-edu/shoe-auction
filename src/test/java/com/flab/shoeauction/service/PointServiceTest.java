@@ -59,7 +59,18 @@ class PointServiceTest {
     }
 
     private List<Point> createPointBreakDownMockData() {
-        User tempUser = null;
+        User tempUser = User.builder()
+            .id(10L)
+            .email("tempUser@test.com")
+            .password("test1234")
+            .phone("01033335555")
+            .nickname("임시유저")
+            .nicknameModifiedDate(LocalDateTime.now())
+            .userLevel(UserLevel.AUTH)
+            .userStatus(UserStatus.NORMAL)
+            .addressBook(new AddressBook())
+            .point(50000L)
+            .build();
 
         List<Point> pointBreakDownMockDataList = new ArrayList<>();
 
