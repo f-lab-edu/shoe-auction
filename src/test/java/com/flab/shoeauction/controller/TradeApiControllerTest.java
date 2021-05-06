@@ -1,5 +1,9 @@
 package com.flab.shoeauction.controller;
 
+import static com.flab.shoeauction.domain.trade.TradeStatus.CANCEL;
+import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_CONCLUSION;
+import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_INSPECTION;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -7,6 +11,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -25,6 +30,7 @@ import com.flab.shoeauction.controller.dto.TradeDto.ChangeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.ImmediateTradeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeBidResponse;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeResource;
+import com.flab.shoeauction.controller.dto.UserDto.TradeInfoResponse;
 import com.flab.shoeauction.controller.dto.UserDto.TradeUserInfo;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
@@ -33,7 +39,6 @@ import com.flab.shoeauction.domain.product.common.Currency;
 import com.flab.shoeauction.domain.product.common.SizeClassification;
 import com.flab.shoeauction.domain.product.common.SizeUnit;
 import com.flab.shoeauction.domain.trade.Trade;
-import com.flab.shoeauction.domain.trade.TradeStatus;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
@@ -44,6 +49,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,6 +57,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -147,7 +157,7 @@ class TradeApiControllerTest {
             .seller(user)
             .buyer(null)
             .product(product)
-            .status(TradeStatus.PRE_CONCLUSION)
+            .status(PRE_CONCLUSION)
             .price(300000L)
             .productSize(260.0)
             .returnAddress(address)
@@ -160,7 +170,7 @@ class TradeApiControllerTest {
             .seller(null)
             .buyer(user)
             .product(product)
-            .status(TradeStatus.PRE_CONCLUSION)
+            .status(PRE_CONCLUSION)
             .price(200000L)
             .productSize(260.0)
             .returnAddress(null)
@@ -213,7 +223,7 @@ class TradeApiControllerTest {
             .seller(user)
             .buyer(null)
             .product(product)
-            .status(TradeStatus.PRE_CONCLUSION)
+            .status(PRE_CONCLUSION)
             .price(300000L)
             .productSize(260.0)
             .returnAddress(address)
@@ -261,6 +271,40 @@ class TradeApiControllerTest {
             .productInfoByTrade(productInfoByTrade)
             .tradeUserInfo(tradeUserInfo)
             .build();
+    }
+
+    private List<TradeInfoResponse> createTradeInfoList() {
+
+        List<TradeInfoResponse> list = new ArrayList<>();
+        Long id = 1L;
+        String email = id + "@test.com";
+        for (int i = 0; i < 5; i++) {
+
+            TradeInfoResponse tradeInfoResponse = TradeInfoResponse.builder()
+                .id(id++)
+                .email(email)
+                .status(PRE_CONCLUSION)
+                .build();
+
+            list.add(tradeInfoResponse);
+
+            TradeInfoResponse tradeInfoResponse2 = TradeInfoResponse.builder()
+                .id(id++)
+                .email(email)
+                .status(PRE_INSPECTION)
+                .build();
+
+            list.add(tradeInfoResponse2);
+
+            TradeInfoResponse tradeInfoResponse3 = TradeInfoResponse.builder()
+                .id(id++)
+                .email(email)
+                .status(CANCEL)
+                .build();
+
+            list.add(tradeInfoResponse3);
+        }
+        return list;
     }
 
 
@@ -423,4 +467,56 @@ class TradeApiControllerTest {
                 fieldWithPath("price").ignored()
             )));
     }
+
+    @DisplayName("관리자가 TradeStatus별로 Trade를 조회한다.")
+    @Test
+    public void getTradeInfos() throws Exception {
+        List<TradeInfoResponse> tradeInfoListByStatus = createTradeInfoList().stream()
+            .filter(t -> t.getStatus().equals(PRE_CONCLUSION))
+            .collect(Collectors.toList());
+        long total = tradeInfoListByStatus.size();
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Page<TradeInfoResponse> result = new PageImpl<>(tradeInfoListByStatus, pageable, total);
+
+        given(tradeService.getTradeInfos(any(), any())).willReturn(result);
+
+        mockMvc.perform(get("/trades?tradeStatus=PRE_CONCLUSION")
+            .accept(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("trade/search",
+                requestParameters(
+                    parameterWithName("tradeStatus").description("거래 진행 상태")
+                ),
+                responseFields(
+                    fieldWithPath("content.[].id").type(JsonFieldType.NUMBER)
+                        .description("Trade ID[PK]"),
+                    fieldWithPath("content.[].status").type(JsonFieldType.STRING)
+                        .description("Trade 진행 상태"),
+                    fieldWithPath("content.[].email").type(JsonFieldType.STRING)
+                        .description("판매자 email"),
+                    fieldWithPath("pageable.offset").ignored(),
+                    fieldWithPath("pageable.pageSize").ignored(),
+                    fieldWithPath("pageable.pageNumber").ignored(),
+                    fieldWithPath("pageable.paged").ignored(),
+                    fieldWithPath("pageable.unpaged").ignored(),
+                    fieldWithPath("pageable.sort.sorted").ignored(),
+                    fieldWithPath("pageable.sort.unsorted").ignored(),
+                    fieldWithPath("pageable.sort.empty").ignored(),
+                    fieldWithPath("sort.empty").ignored(),
+                    fieldWithPath("sort.sorted").ignored(),
+                    fieldWithPath("sort.unsorted").ignored(),
+                    fieldWithPath("totalPages").ignored(),
+                    fieldWithPath("size").ignored(),
+                    fieldWithPath("number").ignored(),
+                    fieldWithPath("first").ignored(),
+                    fieldWithPath("last").ignored(),
+                    fieldWithPath("numberOfElements").ignored(),
+                    fieldWithPath("empty").ignored(),
+                    fieldWithPath("totalElements").ignored()
+                )));
+    }
+
+
 }

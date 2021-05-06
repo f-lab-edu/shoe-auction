@@ -2,6 +2,7 @@ package com.flab.shoeauction.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
+import com.flab.shoeauction.domain.trade.TradeStatus;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
@@ -277,6 +278,35 @@ public class UserDto {
             Account account) {
             this.addressBook = addressBook;
             this.account = account;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class TradeInfoResponse {
+
+        private Long id;
+        private TradeStatus status;
+        private String email;
+
+        @Builder
+        public TradeInfoResponse(Long id, TradeStatus status, String email) {
+            this.id = id;
+            this.status = status;
+            this.email = email;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class TradeSearchCondition {
+        private Long tradeId;
+        private TradeStatus tradeStatus;
+
+        @Builder
+        public TradeSearchCondition(Long tradeId, TradeStatus tradeStatus) {
+            this.tradeId = tradeId;
+            this.tradeStatus = tradeStatus;
         }
     }
 

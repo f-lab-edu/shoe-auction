@@ -9,6 +9,8 @@ import com.flab.shoeauction.controller.dto.TradeDto.ChangeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.ImmediateTradeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeResource;
+import com.flab.shoeauction.controller.dto.UserDto.TradeInfoResponse;
+import com.flab.shoeauction.controller.dto.UserDto.TradeSearchCondition;
 import com.flab.shoeauction.controller.dto.UserDto.TradeUserInfo;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressRepository;
@@ -23,6 +25,8 @@ import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.message.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -178,5 +182,11 @@ public class TradeService {
     @Transactional
     public boolean hasUsersProgressingTrade(User user) {
         return tradeRepository.existsProgressingByUser(user);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<TradeInfoResponse> getTradeInfos(TradeSearchCondition tradeSearchCondition,
+        Pageable pageable) {
+        return tradeRepository.searchByTradeStatusAndTradeId(tradeSearchCondition, pageable);
     }
 }
