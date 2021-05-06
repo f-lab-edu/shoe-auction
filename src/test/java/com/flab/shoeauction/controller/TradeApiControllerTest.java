@@ -9,6 +9,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -28,6 +29,8 @@ import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoByTrade;
 import com.flab.shoeauction.controller.dto.TradeDto;
 import com.flab.shoeauction.controller.dto.TradeDto.ChangeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.ImmediateTradeRequest;
+import com.flab.shoeauction.controller.dto.TradeDto.ReasonRequest;
+import com.flab.shoeauction.controller.dto.TradeDto.TrackingNumberRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeBidResponse;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeResource;
 import com.flab.shoeauction.controller.dto.UserDto.TradeInfoResponse;
@@ -518,5 +521,167 @@ class TradeApiControllerTest {
                 )));
     }
 
+    @DisplayName("거래의 구매자가 입고 운송장 번호를 입력한다.")
+    @Test
+    public void updateReceivingTrackingNumber() throws Exception {
+        Long id = 1L;
+        String email = "abcd123@email.com";
+        TrackingNumberRequest requestDto =
+            TrackingNumberRequest.builder()
+                .trackingNumber("1234567890")
+                .build();
 
+        doNothing().when(tradeService)
+            .updateReceivingTrackingNumber(id, email, requestDto.getTrackingNumber());
+
+        mockMvc.perform(patch("/trades/{id}/receiving-tracking-number", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(requestDto)))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andDo(document("trade/update/receiving-tracking-number",
+                pathParameters(
+                    parameterWithName("id").description("운송장을 등록할 거래 ID")
+                ),
+                requestFields(
+                    fieldWithPath("trackingNumber").type(JsonFieldType.STRING)
+                        .description("등록할 입고 운송장 번호")
+                )
+            ));
+    }
+
+    @DisplayName("관리자가 특정 거래의 입고를 확인한다.")
+    @Test
+    public void confirmWarehousing() throws Exception {
+        Long id = 1L;
+
+        doNothing().when(tradeService).confirmWarehousing(id);
+
+        mockMvc.perform(patch("/trades/{id}/warehousing", id))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andDo(document("trade/confirm/warehousing",
+                pathParameters(
+                    parameterWithName("id").description("입고 완료 처리할 거래 ID")
+                )
+            ));
+    }
+
+    @DisplayName("관리자가 특정 거래를 검수를 완료 처리한다.")
+    @Test
+    public void inspectionSuccessful() throws Exception {
+        Long id = 1L;
+
+        doNothing().when(tradeService).inspectionSuccessful(id);
+
+        mockMvc.perform(patch("/trades/{id}/inspection-successful", id))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andDo(document("trade/inspection/successful",
+                pathParameters(
+                    parameterWithName("id").description("검수 완료 처리할 거래 ID ")
+                )
+            ));
+    }
+
+    @DisplayName("관리자가 특정 거래의 검수를 부적합 처리한다.")
+    @Test
+    public void inspectionFailed() throws Exception {
+        Long id = 1L;
+        ReasonRequest requestDto =
+            ReasonRequest.builder()
+                .reason("가죽 손상")
+                .build();
+
+        doNothing().when(tradeService).inspectionFailed(id, requestDto.getReason());
+
+        mockMvc.perform(
+            patch("/trades/{id}/inspection-failed", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDto)))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andDo(document("trade/inspection/failed",
+                pathParameters(
+                    parameterWithName("id").description("검수 부적합 처리할 거래 ID ")
+                ),
+                requestFields(
+                    fieldWithPath("reason").description("검수 부적합 사유").type(JsonFieldType.STRING)
+                )
+            ));
+    }
+
+    @DisplayName("관리자가 특정 거래의 반품 운송장 번호를 입력한다.")
+    @Test
+    public void updateReturnTrackingNumber() throws Exception {
+        Long id = 1L;
+        TrackingNumberRequest requestDto =
+            TrackingNumberRequest.builder()
+                .trackingNumber("1234567890")
+                .build();
+
+        doNothing().when(tradeService)
+            .updateReturnTrackingNumber(id, requestDto.getTrackingNumber());
+
+        mockMvc.perform(patch("/trades/{id}/return-tracking-number", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(requestDto)))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andDo(document("trade/update/return-tracking-number",
+                pathParameters(
+                    parameterWithName("id").description("운송장을 등록할 거래 ID")
+                ),
+                requestFields(
+                    fieldWithPath("trackingNumber").type(JsonFieldType.STRING)
+                        .description("등록할 반품 운송장 번호")
+                )
+            ));
+    }
+
+    @DisplayName("관리자가 특정 거래의 출고 운송장 번호를 입력한다.")
+    @Test
+    public void updateForwardingTrackingNumber() throws Exception {
+        Long id = 1L;
+        TrackingNumberRequest requestDto =
+            TrackingNumberRequest.builder()
+                .trackingNumber("1234567890")
+                .build();
+
+        doNothing().when(tradeService)
+            .updateForwardingTrackingNumber(id, requestDto.getTrackingNumber());
+
+        mockMvc.perform(patch("/trades/{id}/forwarding-tracking-number", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(requestDto)))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andDo(document("trade/update/forwarding-tracking-number",
+                pathParameters(
+                    parameterWithName("id").description("운송장을 등록할 거래 ID")
+                ),
+                requestFields(
+                    fieldWithPath("trackingNumber").type(JsonFieldType.STRING)
+                        .description("등록할 출고 운송장 번호")
+                )
+            ));
+    }
+
+    @DisplayName("거래의 구매자가 거래를 완료 처리한다.")
+    @Test
+    public void ConfirmPurchase() throws Exception {
+        Long id = 1L;
+        String email = "user123@email.com";
+
+        doNothing().when(tradeService).confirmPurchase(id, email);
+
+        mockMvc.perform(patch("/trades/{id}/purchase-confirmation", id))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andDo(document("trade/confirm/purchase",
+                pathParameters(
+                    parameterWithName("id").description("거래 완료 처리할 거래 ID")
+                )
+            ));
+    }
 }

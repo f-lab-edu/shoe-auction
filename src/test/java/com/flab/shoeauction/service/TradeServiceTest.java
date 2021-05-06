@@ -5,6 +5,8 @@ import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_CONCLUSION;
 import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_INSPECTION;
 import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_SHIPMENT;
 import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_WAREHOUSING;
+import static com.flab.shoeauction.domain.trade.TradeStatus.SHIPPING;
+import static com.flab.shoeauction.domain.trade.TradeStatus.TRADE_COMPLETE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -72,6 +74,9 @@ class TradeServiceTest {
 
     @Mock
     private MessageService fcmService;
+
+    @Mock
+    private PointService pointService;
 
     @InjectMocks
     private TradeService tradeService;
@@ -248,7 +253,6 @@ class TradeServiceTest {
     }
 
 
-
     @DisplayName("상품 거래 화면에 보여질 리소스들을 리턴한다.")
     @Test
     public void getResourceForTrade() {
@@ -334,6 +338,7 @@ class TradeServiceTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 
         tradeService.createPurchaseBid(email, requestDto);
+
         assertThat(user.getPoint()).isEqualTo(1000000L - requestDto.getPrice());
     }
 
@@ -640,5 +645,36 @@ class TradeServiceTest {
             .getTradeInfos(tradeSearchCondition, pageable);
 
         assertThat(tradeInfos.getContent().size()).isEqualTo(tradeInfoListByStatus.size());
+    }
+
+
+    @DisplayName("관리자가 상품 출고 후 운송장 번호를 입력한다.")
+    @Test
+    public void updateForwardingTrackingNumber() {
+        Trade trade = createConcludedBuyersTrade();
+        Long tradeId = trade.getId();
+        String trackingNumber = "192837465";
+        given(tradeRepository.findById(tradeId)).willReturn(Optional.of(trade));
+
+        tradeService.updateForwardingTrackingNumber(tradeId, trackingNumber);
+
+        assertThat(trade.getForwardingTrackingNumber()).isEqualTo(trackingNumber);
+        assertThat(trade.getStatus()).isEqualTo(SHIPPING);
+    }
+
+    @DisplayName("구매자의 구매 확정 요청이 성공한다.")
+    @Test
+    public void confirmPurchase() {
+        Trade trade = createConcludedBuyersTrade();
+        Long tradeId = trade.getId();
+        Long tradePrice = trade.getPrice();
+        String email = trade.getBuyer().getEmail();
+        Long preSellerPoint = trade.getSeller().getPoint();
+        given(tradeRepository.findById(tradeId)).willReturn(Optional.of(trade));
+
+        tradeService.confirmPurchase(tradeId, email);
+
+        assertThat(trade.getStatus()).isEqualTo(TRADE_COMPLETE);
+        assertThat(trade.getSeller().getPoint()).isEqualTo(preSellerPoint + tradePrice);
     }
 }

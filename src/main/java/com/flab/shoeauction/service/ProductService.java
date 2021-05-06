@@ -96,8 +96,7 @@ public class ProductService {
         savedProduct.update(updatedProduct);
     }
 
-    @Transactional(readOnly = true)
-    public void checkDuplicateUpdatedModelNumber(String modelNumber, String updatedModelNumber) {
+    private void checkDuplicateUpdatedModelNumber(String modelNumber, String updatedModelNumber) {
         if (modelNumber.equals(updatedModelNumber)) {
             return;
         } else if (!productRepository.existsByModelNumber(updatedModelNumber)) {

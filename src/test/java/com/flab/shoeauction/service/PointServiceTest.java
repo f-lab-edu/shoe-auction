@@ -3,6 +3,8 @@ package com.flab.shoeauction.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.flab.shoeauction.controller.dto.PointDto.ChargeRequest;
@@ -170,6 +172,39 @@ class PointServiceTest {
         pointService.withdrawal(email, withdrawalRequest);
 
         assertThat(user.getPoint()).isEqualTo(nowPoint - withdrawalRequest.getWithdrawalAmount());
+    }
+
+    @DisplayName("구매자의 포인트 지출 기록이 생성된다.")
+    @Test
+    public void purchasePointPayment() {
+        User buyer = createUser();
+        Long price = 198000L;
+
+        pointService.purchasePointPayment(buyer, price);
+
+        verify(pointRepository, times(1)).save(any());
+    }
+
+    @DisplayName("구매자의 지출되었던 포인트 반환 기록이 생성된다.")
+    @Test
+    public void purchasePointReturn() {
+        User buyer = createUser();
+        Long price = 198000L;
+
+        pointService.purchasePointPayment(buyer, price);
+
+        verify(pointRepository, times(1)).save(any());
+    }
+
+    @DisplayName("판매자에게 포인트 지급 기록이 생성된다.")
+    @Test
+    public void salesPointReceive() {
+        User seller = createUser();
+        Long price = 198000L;
+
+        pointService.purchasePointPayment(seller, price);
+
+        verify(pointRepository, times(1)).save(any());
     }
 
     @DisplayName("포인트 차감 전체(구매/출금) 내역을 조회한다.")

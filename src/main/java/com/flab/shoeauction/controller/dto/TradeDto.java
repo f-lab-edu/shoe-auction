@@ -49,6 +49,7 @@ public class TradeDto {
     @Getter
     @NoArgsConstructor
     public static class ChangeRequest {
+
         private Long tradeId;
         private Long price;
 
@@ -117,6 +118,30 @@ public class TradeDto {
             this.tradeId = tradeId;
             this.addressId = addressId;
             this.productId = productId;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class TrackingNumberRequest {
+
+        private String trackingNumber;
+
+        @Builder
+        public TrackingNumberRequest(String trackingNumber) {
+            this.trackingNumber = trackingNumber;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class ReasonRequest {
+
+        private String reason;
+
+        @Builder
+        public ReasonRequest(String reason) {
+            this.reason = reason;
         }
     }
 }

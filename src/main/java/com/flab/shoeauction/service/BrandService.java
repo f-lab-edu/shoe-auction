@@ -115,8 +115,7 @@ public class BrandService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public boolean checkDuplicateName(SaveRequest requestDto) {
+    private boolean checkDuplicateName(SaveRequest requestDto) {
         if (brandRepository.existsByNameKor(requestDto.getNameKor())) {
             return true;
         } else if (brandRepository.existsByNameEng(requestDto.getNameEng())) {
@@ -125,8 +124,7 @@ public class BrandService {
         return false;
     }
 
-    @Transactional(readOnly = true)
-    public void checkDuplicateUpdatedNameKor(String nameKor, String updatedNameKor) {
+    private void checkDuplicateUpdatedNameKor(String nameKor, String updatedNameKor) {
         if (nameKor.equals(updatedNameKor)) {
             return;
         } else if (!brandRepository.existsByNameKor(updatedNameKor)) {
@@ -135,8 +133,7 @@ public class BrandService {
         throw new DuplicateBrandNameException();
     }
 
-    @Transactional(readOnly = true)
-    public void checkDuplicateUpdatedNameEng(String nameEng, String updatedNameEng) {
+    private void checkDuplicateUpdatedNameEng(String nameEng, String updatedNameEng) {
         if (nameEng.equals(updatedNameEng)) {
             return;
         } else if (!brandRepository.existsByNameEng(updatedNameEng)) {
