@@ -21,14 +21,27 @@ pipeline {
         }
       }
 
-    stage('Deploy)' {
-        steps {
-         script {
-          sh "ssh root root@10.41.5.38 -T sh < /root/app/step1/deploy.sh"
-         }
-      }
-    }
-  }
+   stage('Deploy') {
+               steps([$class: 'BapSshPromotionPublisherPlugin']) {
+                   sshPublisher(
+                       continueOnError: false, failOnError: true,
+                       publishers: [
+                           sshPublisherDesc(
+                               configName: "shoe-auction-deploy",
+                               verbose: true,
+                               transfers: [
+                                   sshTransfer(
+                                       sourceFiles: "",
+                                       removePrefix: "",
+                                       remoteDirectory: "",
+                                       execCommand: "sh /root/app/step1/deploy.sh" //원격지에서 실행할 커맨드
+                                  )
+                               ]
+                           )
+                       ]
+                   )
+               }
+           }
 
   post {
     success {
