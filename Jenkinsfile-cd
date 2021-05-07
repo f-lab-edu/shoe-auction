@@ -34,8 +34,8 @@ pipeline {
                                        sourceFiles: "",
                                        removePrefix: "",
                                        remoteDirectory: "",
-                                       execCommand: "sh /root/app/step1/deploy.sh" //원격지에서 실행할 커맨드
-                                  )
+                                       execCommand: "sh ~/app/step1/deploy.sh"
+                                   )
                                ]
                            )
                        ]
