@@ -27,7 +27,7 @@ pipeline {
                                       sourceFiles: "",
                                       removePrefix: "",
                                       remoteDirectory: "",
-                                      execCommand: "sh ~/app/step1/deploy.sh"
+                                      execCommand: "sh /root/app/step1/deploy.sh"
                                   )
                               ]
                           )
