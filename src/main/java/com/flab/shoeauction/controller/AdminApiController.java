@@ -30,6 +30,11 @@ public class AdminApiController {
         return adminService.findUsers(requestDto, pageable);
     }
 
+    @GetMapping("/temp")
+    public String temp() {
+        return "TEST";
+    }
+
     @LoginCheck(authority = UserLevel.ADMIN)
     @GetMapping("/users/{id}")
     public UserDetailsResponse getUserDetails(@PathVariable Long id) {
