@@ -14,7 +14,20 @@ pipeline {
               }
     }
 
+    stage('Test') {
+        steps {
+            sh 'gradle test'
+            echo 'test success'
+        }
+      }
 
+    stage('Deploy)' {
+        steps {
+         script {
+          sh "ssh root root@10.41.5.38 -T sh < /root/app/step1/deploy.sh"
+         }
+      }
+    }
   }
 
   post {
