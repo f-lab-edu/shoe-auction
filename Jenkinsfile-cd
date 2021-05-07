@@ -21,27 +21,7 @@ pipeline {
         }
       }
 
-   stage('Deploy') {
-               steps([$class: 'BapSshPromotionPublisherPlugin']) {
-                   sshPublisher(
-                       continueOnError: false, failOnError: true,
-                       publishers: [
-                           sshPublisherDesc(
-                               configName: "shoe-auction-deploy",
-                               verbose: true,
-                               transfers: [
-                                   sshTransfer(
-                                       sourceFiles: "",
-                                       removePrefix: "",
-                                       remoteDirectory: "",
-                                       execCommand: "sh ~/app/step1/deploy.sh"
-                                   )
-                               ]
-                           )
-                       ]
-                   )
-               }
-           }
+
 
   post {
     success {
