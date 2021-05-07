@@ -14,20 +14,7 @@ pipeline {
               }
     }
 
-    stage('Test') {
-        steps {
-            sh 'gradle test'
-            echo 'test success'
-        }
-      }
 
-    stage('Deploy)' {
-        steps {
-         script {
-          sh "ssh root -p 8080 root@106.10.51.20 -T sh < /root/app/step1/deploy.sh"
-         }
-      }
-    }
   }
 
   post {
