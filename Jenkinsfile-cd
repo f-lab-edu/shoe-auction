@@ -5,6 +5,7 @@ pipeline {
         SLACK_CHANNEL = '#jenkins-notification'
     }
 
+
   stages {
     stage('Git Checkout') {
               steps {
