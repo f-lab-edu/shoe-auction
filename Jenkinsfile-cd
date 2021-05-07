@@ -13,18 +13,7 @@ pipeline {
               }
     }
 
-    stage('Test') {
-        steps {
-            sh 'gradle test'
-            echo 'test success'
-        }
-      }
-    stage('Build') {
-      steps {
-           sh 'gradle clean build --exclude-task test --exclude-task asciidoctor'
-           echo 'build success'
-      }
-    }
+
       stage('Deploy') {
               steps([$class: 'BapSshPromotionPublisherPlugin']) {
                   sshPublisher(
