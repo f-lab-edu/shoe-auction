@@ -25,8 +25,28 @@ pipeline {
            echo 'build success'
       }
     }
-  }
-
+      stage('Deploy') {
+              steps([$class: 'BapSshPromotionPublisherPlugin']) {
+                  sshPublisher(
+                      continueOnError: false, failOnError: true,
+                      publishers: [
+                          sshPublisherDesc(
+                              configName: "shoe-auction-deploy",
+                              verbose: true,
+                              transfers: [
+                                  sshTransfer(
+                                      sourceFiles: "",
+                                      removePrefix: "",
+                                      remoteDirectory: "",
+                                      execCommand: "sh ~/app/step1/deploy.sh"
+                                  )
+                              ]
+                          )
+                      ]
+                  )
+              }
+          }
+}
   post {
     success {
          slackSend (channel: SLACK_CHANNEL, color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
