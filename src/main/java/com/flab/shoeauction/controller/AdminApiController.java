@@ -32,7 +32,7 @@ public class AdminApiController {
 
     @GetMapping("/temp")
     public String temp() {
-        return "KIM MOON SUB!";
+        return "FINAL TEST";
     }
 
     @LoginCheck(authority = UserLevel.ADMIN)
