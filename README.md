@@ -13,7 +13,7 @@
 - 이유와 타당한 근거에 따른 기술 사용
 
 ## Shoe-auction 서버 구조
-![shoe-auction 서버](https://user-images.githubusercontent.com/39195377/117577150-94010a80-b123-11eb-96bf-5d9ebd199d2b.PNG)  
+![shoe-auction 서버](https://user-images.githubusercontent.com/39195377/117577214-da566980-b123-11eb-9596-40308316dc8b.PNG)
 
 
 ## 사용 기술
