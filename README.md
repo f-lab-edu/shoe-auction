@@ -12,6 +12,10 @@
 - 프로젝트 진행 과정에서 코드리뷰를 통한 코드의 정확성 및 품질향상
 - 이유와 타당한 근거에 따른 기술 사용
 
+## Shoe-auction 서버 구조
+![shoe-auction 서버](https://user-images.githubusercontent.com/39195377/117577150-94010a80-b123-11eb-96bf-5d9ebd199d2b.PNG)  
+
+
 ## 사용 기술
 ![적용기술](https://user-images.githubusercontent.com/39195377/111874691-b4410280-89d9-11eb-80b3-aaa96dc94cfa.PNG)
 
