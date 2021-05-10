@@ -1,7 +1,6 @@
 package com.flab.shoeauction.controller;
 
 import com.flab.shoeauction.common.annotation.LoginCheck;
-import com.flab.shoeauction.controller.dto.AdminDto;
 import com.flab.shoeauction.controller.dto.UserDto.UserBanRequest;
 import com.flab.shoeauction.controller.dto.UserDto.UserDetailsResponse;
 import com.flab.shoeauction.controller.dto.UserDto.UserListResponse;
