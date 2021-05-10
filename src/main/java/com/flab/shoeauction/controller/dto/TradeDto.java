@@ -7,6 +7,7 @@ import com.flab.shoeauction.domain.product.Product;
 import com.flab.shoeauction.domain.trade.Trade;
 import com.flab.shoeauction.domain.trade.TradeStatus;
 import com.flab.shoeauction.domain.users.user.User;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class TradeDto {
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class TradeResource {
 
         private TradeUserInfo tradeUserInfo;
@@ -29,7 +30,7 @@ public class TradeDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class TradeBidResponse {
 
         private Long tradeId;
@@ -47,7 +48,7 @@ public class TradeDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ChangeRequest {
 
         private Long tradeId;
@@ -61,7 +62,7 @@ public class TradeDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class SaveRequest {
 
         private Long price;
@@ -106,7 +107,7 @@ public class TradeDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ImmediateTradeRequest {
 
         private Long tradeId;
@@ -122,7 +123,7 @@ public class TradeDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class TrackingNumberRequest {
 
         private String trackingNumber;
@@ -134,7 +135,7 @@ public class TradeDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ReasonRequest {
 
         private String reason;

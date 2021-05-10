@@ -13,18 +13,16 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
-@Builder
 public class UserDto {
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class SaveRequest {
 
         @NotBlank(message = "닉네임을 입력해주세요.")
@@ -71,7 +69,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class SmsCertificationRequest {
 
         private String phone;
@@ -86,7 +84,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class EmailCertificationRequest {
 
         private String email;
@@ -104,7 +102,7 @@ public class UserDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class LoginRequest {
 
         private String email;
@@ -117,7 +115,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class UserInfoDto {
 
         private String email;
@@ -150,7 +148,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ChangePasswordRequest {
 
         private String email;
@@ -177,7 +175,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class PasswordRequest {
 
         private String password;
@@ -189,7 +187,6 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor
     public static class UserListResponse {
 
         private Long id;
@@ -205,7 +202,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class UserSearchCondition {
 
         private Long id;
@@ -221,7 +218,6 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor
     public static class UserDetailsResponse {
 
         private Long id;
@@ -253,7 +249,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class UserBanRequest {
 
         private Long id;
@@ -267,7 +263,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class TradeUserInfo {
 
         private AddressBook addressBook;
@@ -282,7 +278,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class TradeInfoResponse {
 
         private Long id;
@@ -298,7 +294,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class TradeSearchCondition {
         private Long tradeId;
         private TradeStatus tradeStatus;
@@ -309,6 +305,4 @@ public class UserDto {
             this.tradeStatus = tradeStatus;
         }
     }
-
-
 }

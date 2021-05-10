@@ -40,7 +40,7 @@ public class AddressDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class IdRequest {
         private Long id;
 

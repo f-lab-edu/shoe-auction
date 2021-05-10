@@ -14,6 +14,7 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +24,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class ProductDto {
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Builder
     @AllArgsConstructor
     public static class SaveRequest {
@@ -112,7 +113,7 @@ public class ProductDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     @Builder
     public static class ProductInfoResponse {
@@ -138,7 +139,7 @@ public class ProductDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     @Builder
     public static class ProductInfoByTrade {
@@ -166,7 +167,7 @@ public class ProductDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class WishItemResponse {
 
         private Long id;
@@ -189,7 +190,7 @@ public class ProductDto {
 
     @Getter
     @Builder
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class ThumbnailResponse {
 
@@ -203,7 +204,7 @@ public class ProductDto {
 
     @Builder
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class SearchCondition {
 

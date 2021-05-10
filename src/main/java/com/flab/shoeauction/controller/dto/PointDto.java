@@ -5,6 +5,7 @@ import com.flab.shoeauction.domain.point.PointDivision;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class PointDto {
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ChargeRequest {
 
         private Long chargeAmount;
@@ -32,7 +33,7 @@ public class PointDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class WithdrawalRequest {
 
         private Long withdrawalAmount;
@@ -58,7 +59,7 @@ public class PointDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class PointHistoryDto {
 
         private LocalDateTime time;

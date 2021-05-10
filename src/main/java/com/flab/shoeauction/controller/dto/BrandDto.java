@@ -2,6 +2,7 @@ package com.flab.shoeauction.controller.dto;
 
 import com.flab.shoeauction.domain.brand.Brand;
 import javax.validation.constraints.NotBlank;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +12,7 @@ public class BrandDto {
 
     @Getter
     @Builder
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class SaveRequest {
 
@@ -44,7 +45,7 @@ public class BrandDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     @Builder
     public static class BrandInfo {
