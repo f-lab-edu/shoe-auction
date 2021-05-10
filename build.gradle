@@ -42,17 +42,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-json'
     implementation group: 'org.msgpack', name: 'jackson-dataformat-msgpack', version: '0.8.22'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
-
     compile('org.springframework.boot:spring-boot-starter-mustache')
     compile group: 'org.springframework.session', name: 'spring-session-data-redis', version: '2.4.2'
-
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-
     implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.964'
-    runtimeOnly group: 'org.springframework.cloud', name: 'spring-cloud-dependencies', version: 'Hoxton.SR10', ext: 'pom'
-
     implementation group: 'org.apache.tika', name: 'tika-parsers', version: '1.25'
-
     implementation 'com.google.firebase:firebase-admin:7.1.1'
 }
 

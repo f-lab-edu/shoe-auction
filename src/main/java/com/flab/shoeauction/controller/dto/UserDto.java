@@ -1,6 +1,5 @@
 package com.flab.shoeauction.controller.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.trade.TradeStatus;
 import com.flab.shoeauction.domain.users.common.Account;
@@ -187,6 +186,7 @@ public class UserDto {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class UserListResponse {
 
         private Long id;
@@ -202,7 +202,6 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class UserSearchCondition {
 
         private Long id;
@@ -225,9 +224,7 @@ public class UserDto {
         private String nickname;
         private String phone;
         private Account account;
-        @JsonFormat
         private LocalDateTime modifiedDate;
-        @JsonFormat
         private LocalDateTime createDate;
         private UserLevel userLevel;
         private UserStatus userStatus;
@@ -278,7 +275,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class TradeInfoResponse {
 
         private Long id;

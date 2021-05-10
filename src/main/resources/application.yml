@@ -2,4 +2,4 @@
 # format_sql : query의 출력 내용을 서식에 맞게 가독성을 향상시켜 출
 spring:
   profiles:
-    active: dev
+    active: local
