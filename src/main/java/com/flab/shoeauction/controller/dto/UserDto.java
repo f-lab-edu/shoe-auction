@@ -1,5 +1,6 @@
 package com.flab.shoeauction.controller.dto;
 
+import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.trade.TradeStatus;
 import com.flab.shoeauction.domain.users.common.Account;
@@ -8,6 +9,7 @@ import com.flab.shoeauction.domain.users.common.UserStatus;
 import com.flab.shoeauction.domain.users.user.User;
 import com.flab.shoeauction.service.encrytion.EncryptionService;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -263,11 +265,11 @@ public class UserDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class TradeUserInfo {
 
-        private AddressBook addressBook;
+        private List<Address> addressBook;
         private Account account;
 
         @Builder
-        public TradeUserInfo(AddressBook addressBook,
+        public TradeUserInfo(List<Address> addressBook,
             Account account) {
             this.addressBook = addressBook;
             this.account = account;

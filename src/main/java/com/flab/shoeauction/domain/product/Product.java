@@ -86,7 +86,7 @@ public class Product extends BaseTimeEntity {
 
     private String resizedImagePath;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "BRAND_ID")
     private Brand brand;
 

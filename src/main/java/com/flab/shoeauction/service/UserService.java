@@ -65,7 +65,7 @@ public class UserService {
         createRequiredInformation(user);
     }
 
-    public void createRequiredInformation(User user) {
+    private void createRequiredInformation(User user) {
         user.createCart(cartRepository.save(new Cart()));
         user.createAddressBook(addressBookRepository.save(new AddressBook()));
     }
@@ -206,6 +206,4 @@ public class UserService {
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
         user.updateUserLevel();
     }
-
-
 }

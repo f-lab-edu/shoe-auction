@@ -46,6 +46,7 @@ public class TradeService {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
 
+
         Product product = productRepository.findById(productId)
             .orElseThrow();
 
@@ -55,6 +56,8 @@ public class TradeService {
     private TradeResource makeTradeResource(User user, Product product, double size) {
         ProductInfoByTrade productInfoByTrade = product.toProductInfoByTrade(user, size);
         TradeUserInfo tradeUserInfo = user.createTradeUserInfo();
+
+
 
         return TradeResource.builder()
             .tradeUserInfo(tradeUserInfo)
@@ -67,6 +70,7 @@ public class TradeService {
     public void createSalesBid(String email, SaveRequest requestDto) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+
         Product product = productRepository.findById(requestDto.getProductId()).orElseThrow();
         Address address = user.findAddress(requestDto.getAddressId());
 

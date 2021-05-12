@@ -27,6 +27,7 @@ public abstract class UserBase extends BaseTimeEntity {
     @Column(name = "USER_ID")
     private Long id;
 
+    @Column(unique = true)
     protected String email;
 
     protected String password;

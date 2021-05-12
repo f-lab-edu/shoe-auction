@@ -238,7 +238,7 @@ class TradeApiControllerTest {
         TradeUserInfo tradeUserInfo = TradeUserInfo
             .builder()
             .account(new Account("카카오뱅크", "123456789", "루루삐"))
-            .addressBook(new AddressBook())
+            .addressBook(new AddressBook().getAddressList())
             .build();
 
         TradeBidResponse immediatePurchasePrice = TradeBidResponse

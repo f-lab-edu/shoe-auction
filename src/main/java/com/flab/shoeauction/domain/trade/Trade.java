@@ -30,7 +30,6 @@ public class Trade extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PUBLISHER_ID")
-
     private User publisher;
 
     @ManyToOne(fetch = FetchType.LAZY)

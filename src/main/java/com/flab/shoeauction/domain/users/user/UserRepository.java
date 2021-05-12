@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long>, AdminRepository {
 
-    @EntityGraph(attributePaths = {"addressBook"})
+    @EntityGraph(attributePaths = {"addressBook", "cart"})
     Optional<User> findByEmail(String email);
 
     boolean existsByEmail(String email);

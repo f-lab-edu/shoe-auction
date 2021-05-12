@@ -34,7 +34,7 @@ public class AddressBook {
 
     public Address findAddress(Long addressId) {
         return addressList.stream()
-            .filter(address -> address.getId() == addressId)
+            .filter(address -> address.getId().equals(addressId))
             .findAny()
             .orElseThrow();
     }

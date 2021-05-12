@@ -172,6 +172,7 @@ public class User extends UserBase {
 
 
     public Set<WishItemResponse> getWishList() {
+
         return cart.getWishList()
             .stream()
             .map(CartProduct::toWishItemDto)
@@ -186,9 +187,14 @@ public class User extends UserBase {
     }
 
     public TradeUserInfo createTradeUserInfo() {
+
+        List<Address> addressList = addressBook.getAddressList()
+            .stream()
+            .collect(Collectors.toList());
+
         return TradeUserInfo.builder()
             .account(this.account)
-            .addressBook(this.addressBook)
+            .addressBook(addressList)
             .build();
 
     }

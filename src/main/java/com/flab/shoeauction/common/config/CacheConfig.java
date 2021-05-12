@@ -2,6 +2,8 @@ package com.flab.shoeauction.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.flab.shoeauction.common.properties.CacheProperties;
 import java.time.Duration;
@@ -63,9 +65,16 @@ public class CacheConfig {
      * 따라서 적절한 ObjectMapper를 Serializer에 전달하여 직렬화 및 역직렬화를 정상화 시켰다.
      */
     private ObjectMapper objectMapper() {
+
+        PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator
+            .builder()
+            .allowIfSubType(Object.class)
+            .build();
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         mapper.registerModule(new JavaTimeModule());
+        mapper.activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL);
         return mapper;
     }
 
