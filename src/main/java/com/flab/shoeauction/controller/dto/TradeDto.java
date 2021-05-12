@@ -145,4 +145,44 @@ public class TradeDto {
             this.reason = reason;
         }
     }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class TradeSearchCondition {
+
+        private Long tradeId;
+        private String seller;
+        private String buyer;
+
+        @Builder
+        public TradeSearchCondition(Long tradeId, String seller, String buyer) {
+            this.tradeId = tradeId;
+            this.seller = seller;
+            this.buyer = buyer;
+        }
+
+        public boolean isSearchBySeller() {
+            return (this.getBuyer() == null && this.getTradeId() == null
+                && this.getSeller() != null);
+        }
+
+        public boolean isSearchByBuyer() {
+            return (this.getSeller() == null && this.getTradeId() == null
+                && this.getBuyer() != null);
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class TradeInfoResponse {
+
+        private Long id;
+        private TradeStatus status;
+
+        @Builder
+        public TradeInfoResponse(Long id, TradeStatus status) {
+            this.id = id;
+            this.status = status;
+        }
+    }
 }
