@@ -46,11 +46,11 @@ public class SearchTradeRepositoryImpl implements SearchTradeRepository {
         Pageable pageable) {
 
         if (searchRequest.isSearchBySeller()) {
-            return searchBySellerEmail(searchRequest.getSeller(), pageable);
+            return searchBySellerEmail(searchRequest.getSellersEmail(), pageable);
         }
 
         if (searchRequest.isSearchByBuyer()) {
-            return searchByBuyerEmail(searchRequest.getBuyer(), pageable);
+            return searchByBuyerEmail(searchRequest.getBuyersEmail(), pageable);
         }
 
         return searchByTradeId(searchRequest.getTradeId(), pageable);

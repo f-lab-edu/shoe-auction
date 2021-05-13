@@ -151,24 +151,24 @@ public class TradeDto {
     public static class TradeSearchCondition {
 
         private Long tradeId;
-        private String seller;
-        private String buyer;
+        private String sellersEmail;
+        private String buyersEmail;
 
         @Builder
-        public TradeSearchCondition(Long tradeId, String seller, String buyer) {
+        public TradeSearchCondition(Long tradeId, String sellersEmail, String buyersEmail) {
             this.tradeId = tradeId;
-            this.seller = seller;
-            this.buyer = buyer;
+            this.sellersEmail = sellersEmail;
+            this.buyersEmail = buyersEmail;
         }
 
         public boolean isSearchBySeller() {
-            return (this.getBuyer() == null && this.getTradeId() == null
-                && this.getSeller() != null);
+            return (this.getBuyersEmail() == null && this.getTradeId() == null
+                && this.getSellersEmail() != null);
         }
 
         public boolean isSearchByBuyer() {
-            return (this.getSeller() == null && this.getTradeId() == null
-                && this.getBuyer() != null);
+            return (this.getSellersEmail() == null && this.getTradeId() == null
+                && this.getBuyersEmail() != null);
         }
     }
 

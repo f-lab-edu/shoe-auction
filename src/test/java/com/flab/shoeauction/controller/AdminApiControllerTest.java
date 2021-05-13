@@ -109,7 +109,8 @@ class AdminApiControllerTest {
             .andExpect(jsonPath("$.content.[0].userLevel").value("AUTH"))
             .andExpect(jsonPath("$.content.[1].id").value(list.get(1).getId()))
             .andExpect(jsonPath("$.content.[1].email").value(list.get(1).getEmail()))
-            .andExpect(jsonPath("$.content.[1].userLevel").value("AUTH"))
+            .andExpect(jsonPath("$.content.[1].us"
+                + "erLevel").value("AUTH"))
             .andDo(print())
             .andDo(document("admin/get/findAll",
                 responseFields(

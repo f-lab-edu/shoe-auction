@@ -3,6 +3,7 @@ package com.flab.shoeauction.controller;
 import static com.flab.shoeauction.domain.trade.TradeStatus.CANCEL;
 import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_CONCLUSION;
 import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_INSPECTION;
+import static com.flab.shoeauction.domain.trade.TradeStatus.TRADE_COMPLETE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
@@ -32,8 +33,9 @@ import com.flab.shoeauction.controller.dto.TradeDto.ImmediateTradeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.ReasonRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.TrackingNumberRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeBidResponse;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeInfoResponse;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeResource;
-import com.flab.shoeauction.controller.dto.UserDto.TradeInfoResponse;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeSearchCondition;
 import com.flab.shoeauction.controller.dto.UserDto.TradeUserInfo;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
@@ -42,6 +44,7 @@ import com.flab.shoeauction.domain.product.common.Currency;
 import com.flab.shoeauction.domain.product.common.SizeClassification;
 import com.flab.shoeauction.domain.product.common.SizeUnit;
 import com.flab.shoeauction.domain.trade.Trade;
+import com.flab.shoeauction.domain.trade.TradeStatus;
 import com.flab.shoeauction.domain.users.common.Account;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.domain.users.common.UserStatus;
@@ -72,6 +75,8 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith(RestDocumentationExtension.class)
@@ -148,19 +153,22 @@ class TradeApiControllerTest {
             .build();
     }
 
+
     private List<Trade> createTrades() {
 
         User user = createUser();
+        User anotherUser = createAnotherUser();
         Address address = new Address(1L, "우리집", "땡땡땡로 123", "123동 456호", "12345");
         Product product = createProductDto().toEntity();
         List<Trade> list = new ArrayList<>();
 
         Trade sale = Trade.builder()
+            .id(2L)
             .publisher(user)
             .seller(user)
-            .buyer(null)
+            .buyer(anotherUser)
             .product(product)
-            .status(PRE_CONCLUSION)
+            .status(TRADE_COMPLETE)
             .price(300000L)
             .productSize(260.0)
             .returnAddress(address)
@@ -169,11 +177,50 @@ class TradeApiControllerTest {
         list.add(sale);
 
         Trade purchase = Trade.builder()
+            .id(3L)
+            .publisher(user)
+            .seller(anotherUser)
+            .buyer(user)
+            .product(product)
+            .status(TRADE_COMPLETE)
+            .price(200000L)
+            .productSize(260.0)
+            .returnAddress(null)
+            .shippingAddress(address)
+            .build();
+        list.add(purchase);
+        return list;
+    }
+
+    private List<Trade> createTradesInBidStatus() {
+
+        User user = createUser();
+        User anotherUser = createAnotherUser();
+        Address address = new Address(1L, "우리집", "땡땡땡로 123", "123동 456호", "12345");
+        Product product = createProductDto().toEntity();
+        List<Trade> list = new ArrayList<>();
+
+        Trade sale = Trade.builder()
+            .id(2L)
+            .publisher(user)
+            .seller(user)
+            .buyer(null)
+            .product(product)
+            .status(TradeStatus.PRE_CONCLUSION)
+            .price(300000L)
+            .productSize(260.0)
+            .returnAddress(address)
+            .shippingAddress(null)
+            .build();
+        list.add(sale);
+
+        Trade purchase = Trade.builder()
+            .id(3L)
             .publisher(user)
             .seller(null)
             .buyer(user)
             .product(product)
-            .status(PRE_CONCLUSION)
+            .status(TradeStatus.PRE_CONCLUSION)
             .price(200000L)
             .productSize(260.0)
             .returnAddress(null)
@@ -285,7 +332,6 @@ class TradeApiControllerTest {
 
             TradeInfoResponse tradeInfoResponse = TradeInfoResponse.builder()
                 .id(id++)
-                .email(email)
                 .status(PRE_CONCLUSION)
                 .build();
 
@@ -293,7 +339,6 @@ class TradeApiControllerTest {
 
             TradeInfoResponse tradeInfoResponse2 = TradeInfoResponse.builder()
                 .id(id++)
-                .email(email)
                 .status(PRE_INSPECTION)
                 .build();
 
@@ -301,13 +346,38 @@ class TradeApiControllerTest {
 
             TradeInfoResponse tradeInfoResponse3 = TradeInfoResponse.builder()
                 .id(id++)
-                .email(email)
                 .status(CANCEL)
                 .build();
 
             list.add(tradeInfoResponse3);
         }
         return list;
+    }
+
+    private List<TradeInfoResponse> createTradeInfoSearchBySellerEmail(
+        TradeSearchCondition tradeSearchCondition) {
+        List<Trade> trades = createTrades();
+        List<TradeInfoResponse> listSearchedBySellerEmail = new ArrayList<>();
+
+        List<Long> tradeIds = trades.stream()
+            .filter(s -> s.getSeller().getEmail().equals(tradeSearchCondition.getSellersEmail()))
+            .map(Trade::getId)
+            .collect(Collectors.toList());
+
+        List<TradeStatus> tradeStatuses = trades.stream()
+            .filter(s -> s.getSeller().getEmail().equals(tradeSearchCondition.getSellersEmail()))
+            .map(Trade::getStatus)
+            .collect(Collectors.toList());
+
+        int length = tradeIds.size();
+
+        for (int count = 0; count < length; count++) {
+            listSearchedBySellerEmail.add(TradeInfoResponse.builder()
+                .id(tradeIds.get(count))
+                .status(tradeStatuses.get(count))
+                .build());
+        }
+        return listSearchedBySellerEmail;
     }
 
 
@@ -471,34 +541,41 @@ class TradeApiControllerTest {
             )));
     }
 
-    @DisplayName("관리자가 TradeStatus별로 Trade를 조회한다.")
+
+    @DisplayName("관리자가 Seller의 Email로 Trade를 조회한다.")
     @Test
     public void getTradeInfos() throws Exception {
-        List<TradeInfoResponse> tradeInfoListByStatus = createTradeInfoList().stream()
-            .filter(t -> t.getStatus().equals(PRE_CONCLUSION))
-            .collect(Collectors.toList());
-        long total = tradeInfoListByStatus.size();
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("sellersEmail", "test123@test.com");
+
+        TradeSearchCondition tradeSearchCondition = TradeSearchCondition
+            .builder()
+            .tradeId(null)
+            .buyersEmail(null)
+            .sellersEmail("test123@test.com")
+            .build();
+
+        List<TradeInfoResponse> tradeInfoSearchBySellerEmails = createTradeInfoSearchBySellerEmail(
+            tradeSearchCondition);
+
+        long total = tradeInfoSearchBySellerEmails.size();
         Pageable pageable = PageRequest.of(0, 10);
+        Page<TradeInfoResponse> result = new PageImpl<>(tradeInfoSearchBySellerEmails, pageable,
+            total);
 
-        Page<TradeInfoResponse> result = new PageImpl<>(tradeInfoListByStatus, pageable, total);
+        given(tradeService.getTradeInfos(any(), any()))
+            .willReturn(result);
 
-        given(tradeService.getTradeInfos(any(), any())).willReturn(result);
-
-        mockMvc.perform(get("/trades?tradeStatus=PRE_CONCLUSION")
-            .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/trades")
+            .params(params)
+            .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isOk())
             .andDo(document("trade/search",
-                requestParameters(
-                    parameterWithName("tradeStatus").description("거래 진행 상태")
-                ),
                 responseFields(
-                    fieldWithPath("content.[].id").type(JsonFieldType.NUMBER)
-                        .description("Trade ID[PK]"),
+                    fieldWithPath("content.[].id").type(JsonFieldType.NUMBER).description("ID"),
                     fieldWithPath("content.[].status").type(JsonFieldType.STRING)
-                        .description("Trade 진행 상태"),
-                    fieldWithPath("content.[].email").type(JsonFieldType.STRING)
-                        .description("판매자 email"),
+                        .description("email"),
                     fieldWithPath("pageable.offset").ignored(),
                     fieldWithPath("pageable.pageSize").ignored(),
                     fieldWithPath("pageable.pageNumber").ignored(),
@@ -518,7 +595,9 @@ class TradeApiControllerTest {
                     fieldWithPath("numberOfElements").ignored(),
                     fieldWithPath("empty").ignored(),
                     fieldWithPath("totalElements").ignored()
-                )));
+                )
+            ));
+
     }
 
     @DisplayName("거래의 구매자가 입고 운송장 번호를 입력한다.")
