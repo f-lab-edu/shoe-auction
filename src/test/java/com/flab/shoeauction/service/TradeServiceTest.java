@@ -19,9 +19,9 @@ import com.flab.shoeauction.controller.dto.ProductDto;
 import com.flab.shoeauction.controller.dto.TradeDto;
 import com.flab.shoeauction.controller.dto.TradeDto.ChangeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.ImmediateTradeRequest;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeInfoResponse;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeResource;
-import com.flab.shoeauction.controller.dto.UserDto.TradeInfoResponse;
-import com.flab.shoeauction.controller.dto.UserDto.TradeSearchCondition;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeSearchCondition;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.addressBook.AddressBook;
 import com.flab.shoeauction.domain.addressBook.AddressRepository;
@@ -134,11 +134,51 @@ class TradeServiceTest {
     private List<Trade> createTrades() {
 
         User user = createUser();
+        User anotherUser = createAnotherUser();
         Address address = new Address(1L, "우리집", "땡땡땡로 123", "123동 456호", "12345");
         Product product = createProductDto().toEntity();
         List<Trade> list = new ArrayList<>();
 
         Trade sale = Trade.builder()
+            .id(2L)
+            .publisher(user)
+            .seller(user)
+            .buyer(anotherUser)
+            .product(product)
+            .status(TRADE_COMPLETE)
+            .price(300000L)
+            .productSize(260.0)
+            .returnAddress(address)
+            .shippingAddress(null)
+            .build();
+        list.add(sale);
+
+        Trade purchase = Trade.builder()
+            .id(3L)
+            .publisher(user)
+            .seller(anotherUser)
+            .buyer(user)
+            .product(product)
+            .status(TRADE_COMPLETE)
+            .price(200000L)
+            .productSize(260.0)
+            .returnAddress(null)
+            .shippingAddress(address)
+            .build();
+        list.add(purchase);
+        return list;
+    }
+
+    private List<Trade> createTradesInBidStatus() {
+
+        User user = createUser();
+        User anotherUser = createAnotherUser();
+        Address address = new Address(1L, "우리집", "땡땡땡로 123", "123동 456호", "12345");
+        Product product = createProductDto().toEntity();
+        List<Trade> list = new ArrayList<>();
+
+        Trade sale = Trade.builder()
+            .id(2L)
             .publisher(user)
             .seller(user)
             .buyer(null)
@@ -152,6 +192,7 @@ class TradeServiceTest {
         list.add(sale);
 
         Trade purchase = Trade.builder()
+            .id(3L)
             .publisher(user)
             .seller(null)
             .buyer(user)
@@ -195,7 +236,7 @@ class TradeServiceTest {
             .brand(createBrandInfo().toEntity())
             .resizedImagePath(
                 "https://shoeauction-brands-resized.s3.ap-northeast-2.amazonaws.com/brand.png")
-            .trades(createTrades())
+            .trades(createTradesInBidStatus())
             .build();
     }
 
@@ -227,7 +268,6 @@ class TradeServiceTest {
 
             TradeInfoResponse tradeInfoResponse = TradeInfoResponse.builder()
                 .id(id++)
-                .email(email)
                 .status(PRE_CONCLUSION)
                 .build();
 
@@ -235,7 +275,6 @@ class TradeServiceTest {
 
             TradeInfoResponse tradeInfoResponse2 = TradeInfoResponse.builder()
                 .id(id++)
-                .email(email)
                 .status(PRE_INSPECTION)
                 .build();
 
@@ -243,7 +282,6 @@ class TradeServiceTest {
 
             TradeInfoResponse tradeInfoResponse3 = TradeInfoResponse.builder()
                 .id(id++)
-                .email(email)
                 .status(CANCEL)
                 .build();
 
@@ -251,6 +289,33 @@ class TradeServiceTest {
         }
         return list;
     }
+
+    private List<TradeInfoResponse> createTradeInfoSearchBySellerEmail(
+        TradeSearchCondition tradeSearchCondition) {
+        List<Trade> trades = createTrades();
+        List<TradeInfoResponse> listSearchedBySellerEmail = new ArrayList<>();
+
+        List<Long> tradeIds = trades.stream()
+            .filter(s -> s.getSeller().getEmail().equals(tradeSearchCondition.getSellersEmail()))
+            .map(Trade::getId)
+            .collect(Collectors.toList());
+
+        List<TradeStatus> tradeStatuses = trades.stream()
+            .filter(s -> s.getSeller().getEmail().equals(tradeSearchCondition.getSellersEmail()))
+            .map(Trade::getStatus)
+            .collect(Collectors.toList());
+
+        int length = tradeIds.size();
+
+        for (int count = 0; count < length; count++) {
+            listSearchedBySellerEmail.add(TradeInfoResponse.builder()
+                .id(tradeIds.get(count))
+                .status(tradeStatuses.get(count))
+                .build());
+        }
+        return listSearchedBySellerEmail;
+    }
+
 
 
     @DisplayName("상품 거래 화면에 보여질 리소스들을 리턴한다.")
@@ -602,8 +667,9 @@ class TradeServiceTest {
 
         TradeSearchCondition tradeSearchCondition = TradeSearchCondition
             .builder()
-            .tradeStatus(null)
             .tradeId(null)
+            .buyersEmail(null)
+            .sellersEmail(null)
             .build();
 
         Pageable pageable = PageRequest.of(0, 10);
@@ -616,37 +682,37 @@ class TradeServiceTest {
         Page<TradeInfoResponse> tradeInfos = tradeService
             .getTradeInfos(tradeSearchCondition, pageable);
 
-        System.out.println(tradeInfoList.size());
         assertThat(tradeInfos.getContent().size()).isEqualTo(tradeInfoList.size());
     }
 
-    @DisplayName("관리자가 Status로 Trade를 조회한다.")
-    @Test
-    public void getTradeInfosToSearchStatus() {
-        List<TradeInfoResponse> tradeInfoListByStatus = createTradeInfoList().stream()
-            .filter(t -> t.getStatus().equals(PRE_CONCLUSION))
-            .collect(Collectors.toList());
 
+    @DisplayName("관리자가 seller의 email로 Trade를 조회한다.")
+    @Test
+    public void getTradeInfosSearchBySellersEmail() {
         TradeSearchCondition tradeSearchCondition = TradeSearchCondition
             .builder()
-            .tradeStatus(PRE_CONCLUSION)
             .tradeId(null)
+            .buyersEmail(null)
+            .sellersEmail("test123@test.com")
             .build();
 
+        List<TradeInfoResponse> tradeInfos = createTradeInfoSearchBySellerEmail(
+            tradeSearchCondition);
+        long total = tradeInfos.size();
         Pageable pageable = PageRequest.of(0, 10);
-        long total = tradeInfoListByStatus.size();
 
-        Page<TradeInfoResponse> result = new PageImpl<>(tradeInfoListByStatus, pageable, total);
+        Page<TradeInfoResponse> searchResults = new PageImpl<>(tradeInfos, pageable, total);
 
         given(tradeRepository.searchByTradeStatusAndTradeId(tradeSearchCondition, pageable))
-            .willReturn(result);
+            .willReturn(searchResults);
 
-        Page<TradeInfoResponse> tradeInfos = tradeService
+        Page<TradeInfoResponse> executionResults = tradeService
             .getTradeInfos(tradeSearchCondition, pageable);
 
-        assertThat(tradeInfos.getContent().size()).isEqualTo(tradeInfoListByStatus.size());
+        assertThat(executionResults.getTotalElements()).isEqualTo(searchResults.getTotalElements());
+        assertThat(executionResults.getContent().get(0).getStatus()).isEqualTo(searchResults.getContent().get(0).getStatus());
+        assertThat(executionResults.getContent().get(0).getId()).isEqualTo(searchResults.getContent().get(0).getId());
     }
-
 
     @DisplayName("관리자가 상품 출고 후 운송장 번호를 입력한다.")
     @Test

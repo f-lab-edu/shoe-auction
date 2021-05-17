@@ -2,8 +2,8 @@ package com.flab.shoeauction.domain.trade;
 
 import static com.flab.shoeauction.domain.trade.QTrade.trade;
 
-import com.flab.shoeauction.controller.dto.UserDto.TradeInfoResponse;
-import com.flab.shoeauction.controller.dto.UserDto.TradeSearchCondition;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeInfoResponse;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeSearchCondition;
 import com.flab.shoeauction.domain.users.user.User;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
@@ -44,27 +44,78 @@ public class SearchTradeRepositoryImpl implements SearchTradeRepository {
     @Override
     public Page<TradeInfoResponse> searchByTradeStatusAndTradeId(TradeSearchCondition searchRequest,
         Pageable pageable) {
+
+        if (searchRequest.isSearchBySeller()) {
+            return searchBySellerEmail(searchRequest.getSellersEmail(), pageable);
+        }
+
+        if (searchRequest.isSearchByBuyer()) {
+            return searchByBuyerEmail(searchRequest.getBuyersEmail(), pageable);
+        }
+
+        return searchByTradeId(searchRequest.getTradeId(), pageable);
+
+    }
+
+    private Page<TradeInfoResponse> searchByTradeId(Long tradeId, Pageable pageable) {
         QueryResults<TradeInfoResponse> results = jpaQueryFactory
             .select(Projections.fields(TradeInfoResponse.class,
                 trade.id,
-                trade.status,
-                trade.seller.email))
+                trade.status))
             .from(trade)
             .where(
-                tradeStatusEq(searchRequest.getTradeStatus()),
-                tradeIdEq(searchRequest.getTradeId())
+                tradeIdEq(tradeId)
             ).offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetchResults();
-
         List<TradeInfoResponse> infoResponseList = results.getResults();
         long total = results.getTotal();
 
         return new PageImpl<>(infoResponseList, pageable, total);
     }
 
-    private BooleanExpression tradeStatusEq(TradeStatus tradeStatus) {
-        return tradeStatus != null ? trade.status.eq(tradeStatus) : null;
+    private Page<TradeInfoResponse> searchByBuyerEmail(String buyerEmail, Pageable pageable) {
+        QueryResults<TradeInfoResponse> results = jpaQueryFactory
+            .select(Projections.fields(TradeInfoResponse.class,
+                trade.id,
+                trade.status))
+            .from(trade)
+            .innerJoin(trade.buyer)
+            .where(
+                tradeBuyerEq(buyerEmail)
+            ).offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetchResults();
+        List<TradeInfoResponse> infoResponseList = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(infoResponseList, pageable, total);
+    }
+
+    private Page<TradeInfoResponse> searchBySellerEmail(String sellerEmail, Pageable pageable) {
+        QueryResults<TradeInfoResponse> results = jpaQueryFactory
+            .select(Projections.fields(TradeInfoResponse.class,
+                trade.id,
+                trade.status))
+            .from(trade)
+            .innerJoin(trade.seller)
+            .where(
+                tradeSellerEq(sellerEmail)
+            ).offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetchResults();
+        List<TradeInfoResponse> infoResponseList = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(infoResponseList, pageable, total);
+    }
+
+    private BooleanExpression tradeSellerEq(String sellerEmail) {
+        return sellerEmail != null ? trade.seller.email.eq(sellerEmail) : null;
+    }
+
+    private BooleanExpression tradeBuyerEq(String buyerEmail) {
+        return buyerEmail != null ? trade.buyer.email.eq(buyerEmail) : null;
     }
 
     private BooleanExpression tradeIdEq(Long tradeId) {
