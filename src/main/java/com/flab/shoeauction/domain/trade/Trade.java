@@ -1,6 +1,7 @@
 package com.flab.shoeauction.domain.trade;
 
 import com.flab.shoeauction.controller.dto.TradeDto.TradeBidResponse;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeCompleteInfo;
 import com.flab.shoeauction.domain.BaseTimeEntity;
 import com.flab.shoeauction.domain.addressBook.Address;
 import com.flab.shoeauction.domain.product.Product;
@@ -89,6 +90,14 @@ public class Trade extends BaseTimeEntity {
             .price(this.price)
             .productId(product.getId())
             .productSize(this.productSize)
+            .build();
+    }
+
+    public TradeCompleteInfo toTradeCompleteInfo() {
+        return TradeCompleteInfo.builder()
+            .productSize(this.productSize)
+            .price(this.price)
+            .completeTime(this.getModifiedDate())
             .build();
     }
 

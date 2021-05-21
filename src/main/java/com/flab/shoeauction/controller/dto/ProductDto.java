@@ -2,6 +2,7 @@ package com.flab.shoeauction.controller.dto;
 
 import com.flab.shoeauction.controller.dto.BrandDto.BrandInfo;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeBidResponse;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeCompleteInfo;
 import com.flab.shoeauction.domain.brand.Brand;
 import com.flab.shoeauction.domain.product.Product;
 import com.flab.shoeauction.domain.product.common.Currency;
@@ -135,6 +136,7 @@ public class ProductDto {
         private BrandInfo brand;
         private List<TradeBidResponse> saleBids = new ArrayList<>();
         private List<TradeBidResponse> purchaseBids = new ArrayList<>();
+        private List<TradeCompleteInfo> tradeCompleteInfos = new ArrayList<>();
 
     }
 

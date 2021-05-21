@@ -1,9 +1,12 @@
 package com.flab.shoeauction.domain.product;
 
+import static java.util.stream.Collectors.toList;
+
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoByTrade;
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoResponse;
 import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeBidResponse;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeCompleteInfo;
 import com.flab.shoeauction.domain.BaseTimeEntity;
 import com.flab.shoeauction.domain.brand.Brand;
 import com.flab.shoeauction.domain.product.common.Currency;
@@ -17,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -112,8 +114,17 @@ public class Product extends BaseTimeEntity {
             .resizedImagePath(this.resizedImagePath)
             .saleBids(getSaleBids())
             .purchaseBids(getPurchaseBids())
+            .tradeCompleteInfos(getTradeCompletes())
             .brand(brand.toBrandInfo())
             .build();
+    }
+
+    private List<TradeCompleteInfo> getTradeCompletes() {
+        return trades.stream()
+            .filter(t->t.getStatus().equals(TradeStatus.TRADE_COMPLETE))
+            .map(Trade::toTradeCompleteInfo)
+            .sorted(Comparator.comparing(TradeCompleteInfo::getCompleteTime).reversed())
+            .collect(toList());
     }
 
 
@@ -164,7 +175,7 @@ public class Product extends BaseTimeEntity {
             .filter(v -> v.getStatus() == TradeStatus.PRE_CONCLUSION && v.getBuyer() == null)
             .sorted(Comparator.comparing(Trade::getPrice))
             .map(Trade::toTradeBidResponse)
-            .collect(Collectors.toList());
+            .collect(toList());
     }
 
     private List<TradeBidResponse> getPurchaseBids() {
@@ -172,7 +183,7 @@ public class Product extends BaseTimeEntity {
             .filter(v -> v.getStatus() == TradeStatus.PRE_CONCLUSION && v.getSeller() == null)
             .sorted(Comparator.comparing(Trade::getPrice).reversed())
             .map(Trade::toTradeBidResponse)
-            .collect(Collectors.toList());
+            .collect(toList());
     }
 
 

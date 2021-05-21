@@ -180,6 +180,19 @@ class ProductServiceTest {
             .shippingAddress(address)
             .build();
         list.add(purchase);
+
+        Trade completeTrade = Trade.builder()
+            .publisher(user)
+            .seller(user)
+            .buyer(null)
+            .product(product)
+            .status(TradeStatus.TRADE_COMPLETE)
+            .price(300000L)
+            .productSize(260.0)
+            .returnAddress(address)
+            .shippingAddress(null)
+            .build();
+        list.add(completeTrade);
         return list;
     }
 

@@ -7,6 +7,7 @@ import com.flab.shoeauction.domain.product.Product;
 import com.flab.shoeauction.domain.trade.Trade;
 import com.flab.shoeauction.domain.trade.TradeStatus;
 import com.flab.shoeauction.domain.users.user.User;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -175,7 +176,6 @@ public class TradeDto {
     @Getter
     @NoArgsConstructor
     public static class TradeInfoResponse {
-
         private Long id;
         private TradeStatus status;
 
@@ -183,6 +183,21 @@ public class TradeDto {
         public TradeInfoResponse(Long id, TradeStatus status) {
             this.id = id;
             this.status = status;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class TradeCompleteInfo {
+        private double productSize;
+        private Long price;
+        private LocalDateTime completeTime;
+
+        @Builder
+        public TradeCompleteInfo(double productSize, Long price, LocalDateTime completeTime) {
+            this.productSize = productSize;
+            this.price = price;
+            this.completeTime = completeTime;
         }
     }
 }

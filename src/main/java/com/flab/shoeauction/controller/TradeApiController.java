@@ -117,13 +117,14 @@ public class TradeApiController {
 
     @LoginCheck(authority = UserLevel.AUTH)
     @PatchMapping("/{id}/purchase-confirmation")
-    public void ConfirmPurchase(@PathVariable Long id, @CurrentUser String email) {
+    public void confirmPurchase(@PathVariable Long id, @CurrentUser String email) {
         tradeService.confirmPurchase(id, email);
     }
 
     @LoginCheck(authority = UserLevel.ADMIN)
     @GetMapping
-    public Page<TradeInfoResponse> getTradeInfos(TradeSearchCondition tradeSearchCondition, Pageable pageable) {
+    public Page<TradeInfoResponse> getTradeInfos(TradeSearchCondition tradeSearchCondition,
+        Pageable pageable) {
         return tradeService.getTradeInfos(tradeSearchCondition, pageable);
     }
 }

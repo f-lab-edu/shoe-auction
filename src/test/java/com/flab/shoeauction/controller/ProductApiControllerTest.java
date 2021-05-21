@@ -28,6 +28,7 @@ import com.flab.shoeauction.controller.dto.ProductDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.ProductDto.SearchCondition;
 import com.flab.shoeauction.controller.dto.ProductDto.ThumbnailResponse;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeBidResponse;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeCompleteInfo;
 import com.flab.shoeauction.domain.product.common.Currency;
 import com.flab.shoeauction.domain.product.common.OrderStandard;
 import com.flab.shoeauction.domain.product.common.SizeClassification;
@@ -37,6 +38,7 @@ import com.flab.shoeauction.service.ProductService;
 import com.flab.shoeauction.service.SessionLoginService;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -143,7 +145,19 @@ class ProductApiControllerTest {
                 "https://shoeauction-brands-resized.s3.ap-northeast-2.amazonaws.com/brand.png")
             .purchaseBids(createPurchaseBids())
             .saleBids(createSales())
+            .tradeCompleteInfos(createCompleteTrades())
             .build();
+    }
+
+    private List<TradeCompleteInfo> createCompleteTrades() {
+        List<TradeCompleteInfo> list = new ArrayList<>();
+        TradeCompleteInfo tradeCompleteInfo = TradeCompleteInfo.builder()
+            .completeTime(LocalDateTime.now())
+            .price(300000L)
+            .productSize(280.0)
+            .build();
+        list.add(tradeCompleteInfo);
+        return list;
     }
 
     private ThumbnailResponse createProductThumbnail() {
@@ -340,7 +354,13 @@ class ProductApiControllerTest {
                     fieldWithPath("purchaseBids.[].productSize").type(JsonFieldType.NUMBER)
                         .description("구매 입찰 물품 사이즈"),
                     fieldWithPath("purchaseBids.[].price").type(JsonFieldType.NUMBER)
-                        .description("구매 입찰 물품 가격")
+                        .description("구매 입찰 물품 가격"),
+                    fieldWithPath("tradeCompleteInfos.[].productSize").type(JsonFieldType.NUMBER)
+                        .description("완료된 거래의 물품 사이즈"),
+                    fieldWithPath("tradeCompleteInfos.[].price").type(JsonFieldType.NUMBER)
+                        .description("완료된 거래의 물품 가격"),
+                    fieldWithPath("tradeCompleteInfos.[].completeTime").type(JsonFieldType.STRING)
+                        .description("거래 완료 시간")
                 )
             ));
     }
