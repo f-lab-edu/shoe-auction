@@ -8,10 +8,12 @@ import com.flab.shoeauction.domain.trade.Trade;
 import com.flab.shoeauction.domain.trade.TradeStatus;
 import com.flab.shoeauction.domain.users.user.User;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class TradeDto {
 
@@ -176,6 +178,7 @@ public class TradeDto {
     @Getter
     @NoArgsConstructor
     public static class TradeInfoResponse {
+
         private Long id;
         private TradeStatus status;
 
@@ -189,15 +192,42 @@ public class TradeDto {
     @Getter
     @NoArgsConstructor
     public static class TradeCompleteInfo {
+
         private double productSize;
         private Long price;
-        private LocalDateTime completeTime;
+        private LocalDateTime completeDate;
 
         @Builder
-        public TradeCompleteInfo(double productSize, Long price, LocalDateTime completeTime) {
+        public TradeCompleteInfo(double productSize, Long price, LocalDateTime completeDate) {
             this.productSize = productSize;
             this.price = price;
-            this.completeTime = completeTime;
+            this.completeDate = completeDate;
         }
     }
+
+    @Getter
+    public static class DateSearchCondition {
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        private LocalDateTime searchDate;
+
+        public LocalDateTime getEndDate() {
+            return searchDate.with(TemporalAdjusters.lastDayOfMonth()).plusDays(1);
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class TradeVolumeResponse {
+        private Long productId;
+        private Long count;
+        private LocalDateTime completeDate;
+
+        @Builder
+        public TradeVolumeResponse(Long productId, Long count, LocalDateTime completeDate) {
+            this.productId = productId;
+            this.count = count;
+            this.completeDate = completeDate;
+        }
+    }
+
 }

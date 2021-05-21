@@ -123,7 +123,7 @@ public class Product extends BaseTimeEntity {
         return trades.stream()
             .filter(t->t.getStatus().equals(TradeStatus.TRADE_COMPLETE))
             .map(Trade::toTradeCompleteInfo)
-            .sorted(Comparator.comparing(TradeCompleteInfo::getCompleteTime).reversed())
+            .sorted(Comparator.comparing(TradeCompleteInfo::getCompleteDate).reversed())
             .collect(toList());
     }
 

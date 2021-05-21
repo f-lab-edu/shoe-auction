@@ -38,4 +38,6 @@ public class AdminService {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("존재하지 않는 회원입니다."));
         user.updateUserStatus(userStatus);
     }
+
+
 }

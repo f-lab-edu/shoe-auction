@@ -97,7 +97,7 @@ public class Trade extends BaseTimeEntity {
         return TradeCompleteInfo.builder()
             .productSize(this.productSize)
             .price(this.price)
-            .completeTime(this.getModifiedDate())
+            .completeDate(this.getModifiedDate())
             .build();
     }
 
