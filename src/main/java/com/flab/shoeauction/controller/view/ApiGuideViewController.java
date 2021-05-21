@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ApiGuideViewController {
 
-    @GetMapping("docs")
+    @GetMapping("/docs")
     public String apiGuideDocs() {
         return "api-guide";
     }
