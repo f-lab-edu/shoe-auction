@@ -9,8 +9,6 @@ Andy Wilkinson;
 :operation-curl-request-title: Example request
 :operation-http-response-title: Example response
 
-
-
 [[overview_http_verbs]]
 == HTTP Methods
 
@@ -69,7 +67,7 @@ The response body will include an error providing further information
 This code is used in situations where the user might be able to resolve the conflict and resubmit the request.
 |===
 
-== USER
+== USER API
 
 === 1. CREATE USER
 
@@ -571,8 +569,9 @@ include::{snippets}/users/my-infos/response-fields.adoc[]
 NOTE: 현재 로그인되어있는 사용자의 my-infos 리소스를 가져옵니다.
 
 ---
+== PRODUCT API
 
-=== 6. 상품 관련 조회
+=== 1. 상품 관련 조회
 
 ---
 
@@ -704,7 +703,85 @@ include::{snippets}/products/get/order-standards/http-response.adoc[]
 
 ---
 
-=== 7. 브랜드 조회
+=== 2. 상품 추가
+
+**curl**
+
+include::{snippets}/products/create/curl-request.adoc[]
+
+**request-fields**
+
+include::{snippets}/products/create/request-part-requestDto-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/products/create/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/products/create/http-response.adoc[]
+
+---
+
+=== 3. 상품 정보 수정
+
+**curl**
+
+include::{snippets}/products/update/curl-request.adoc[]
+
+**request-fields**
+
+include::{snippets}/products/update/request-part-requestDto-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/products/update/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/products/update/http-response.adoc[]
+
+---
+
+=== 4. 상품 삭제
+
+**curl**
+
+include::{snippets}/products/delete/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/products/delete/path-parameters.adoc[]
+
+**Example request**
+
+include::{snippets}/products/delete/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/products/delete/http-response.adoc[]
+
+== BRAND API
+
+=== 1. 브랜드 조회
+
+==== 특정 브랜드 조회
+
+**curl**
+
+include::{snippets}/brands/get/details/curl-request.adoc[]
+
+**response-fields**
+
+include::{snippets}/brands/get/details/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/brands/get/details/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/brands/get/details/http-response.adoc[]
 
 ---
 
@@ -727,12 +804,70 @@ include::{snippets}/brands/get/http-request.adoc[]
 include::{snippets}/brands/get/http-response.adoc[]
 
 ---
+=== 2. 브랜드 생성
+**curl**
 
-=== 8. 거래 기능
+include::{snippets}/brands/create/curl-request.adoc[]
+
+**request-fields**
+
+include::{snippets}/brands/create/request-part-requestDto-fields.adoc[]
+
+**request-parts(Optional)**
+
+include::{snippets}/brands/create/request-parts.adoc[]
+
+**Example request**
+
+include::{snippets}/brands/create/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/brands/create/http-response.adoc[]
+
+---
+=== 3. 브랜드 수정
+
+**curl**
+
+include::{snippets}/brands/update/curl-request.adoc[]
+
+**request-fields**
+
+include::{snippets}/brands/update/request-part-requestDto-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/brands/update/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/brands/update/http-response.adoc[]
+---
+=== 4. 브랜드 삭제
+
+**curl**
+
+include::{snippets}/brands/delete/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/brands/delete/path-parameters.adoc[]
+
+**Example request**
+
+include::{snippets}/brands/delete/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/brands/delete/http-response.adoc[]
+
+---
+== TRADE API
 
 ---
 
-==== 거래 등록 정보 조회
+==== 입찰 등록시 필요한 정보 조회
 
 **curl**
 
@@ -742,13 +877,19 @@ include::{snippets}/trade/getResource/curl-request.adoc[]
 
 include::{snippets}/trade/getResource/path-parameters.adoc[]
 
-**request-fields**
+**request-parameters**
 
 include::{snippets}/trade/getResource/request-parameters.adoc[]
 
 **example request**
 
 include::{snippets}/trade/getResource/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/trade/getResource/http-response.adoc[]
+
+include::{snippets}/trade/getResource/http-response.adoc[]
 
 ---
 
@@ -832,7 +973,7 @@ include::{snippets}/trade/buy/immediately/http-response.adoc[]
 
 ---
 
-==== 거래 삭제
+==== 입찰 내역 삭제
 
 **curl**
 
@@ -873,204 +1014,6 @@ include::{snippets}/trade/update/receiving-tracking-number/http-request.adoc[]
 **example response**
 
 include::{snippets}/trade/update/receiving-tracking-number/http-response.adoc[]
-
----
-
-==== 거래 완료
-
-**curl**
-
-include::{snippets}/trade/confirm/purchase/curl-request.adoc[]
-
-**path-parameters**
-
-include::{snippets}/trade/confirm/purchase/path-parameters.adoc[]
-
-**example request**
-
-include::{snippets}/trade/confirm/purchase/http-request.adoc[]
-
-**example response**
-
-include::{snippets}/trade/confirm/purchase/http-response.adoc[]
-
-== ADMIN
-
----
-
-=== 1. 회원 관리
-
----
-
-=== 2. 브랜드 관리
-
----
-
-==== 브랜드 생성
-
-**curl**
-
-include::{snippets}/brands/create/curl-request.adoc[]
-
-**request-fields**
-
-include::{snippets}/brands/create/request-part-requestDto-fields.adoc[]
-
-**request-parts(Optional)**
-
-include::{snippets}/brands/create/request-parts.adoc[]
-
-**Example request**
-
-include::{snippets}/brands/create/http-request.adoc[]
-
-**Example response**
-
-include::{snippets}/brands/create/http-response.adoc[]
-
----
-
-==== 브랜드 정보 조회
-
-**curl**
-
-include::{snippets}/brands/get/details/curl-request.adoc[]
-
-**path-parameters**
-
-include::{snippets}/brands/get/details/path-parameters.adoc[]
-
-**response-fields**
-
-include::{snippets}/brands/get/details/response-fields.adoc[]
-
-**Example request**
-
-include::{snippets}/brands/get/details/http-request.adoc[]
-
-**Example response**
-
-include::{snippets}/brands/get/details/http-response.adoc[]
-
----
-
-==== 브랜드 수정
-
-**curl**
-
-include::{snippets}/brands/update/curl-request.adoc[]
-
-**path-parameters**
-
-include::{snippets}/brands/update/path-parameters.adoc[]
-
-**request-fields**
-
-include::{snippets}/brands/update/request-part-requestDto-fields.adoc[]
-
-**request-parts(Optional)**
-
-include::{snippets}/brands/update/request-parts.adoc[]
-
-**Example request**
-
-include::{snippets}/brands/update/http-request.adoc[]
-
----
-
-==== 브랜드 삭제
-
-**curl**
-
-include::{snippets}/brands/delete/curl-request.adoc[]
-
-**path-parameters**
-
-include::{snippets}/brands/delete/path-parameters.adoc[]
-
-**Example request**
-
-include::{snippets}/brands/delete/http-request.adoc[]
-
-**Example response**
-
-include::{snippets}/brands/delete/http-response.adoc[]
-
----
-
-=== 3. 상품 관리
-
----
-
-==== 상품 생성
-
-**curl**
-
-include::{snippets}/products/create/curl-request.adoc[]
-
-**request-fields**
-
-include::{snippets}/products/create/request-part-requestDto-fields.adoc[]
-
-**request-parts(Optional)**
-
-include::{snippets}/products/create/request-parts.adoc[]
-
-**Example request**
-
-include::{snippets}/products/create/http-request.adoc[]
-
-**Example response**
-
-include::{snippets}/products/create/http-response.adoc[]
-
----
-
-==== 상품 수정
-
-**curl**
-
-include::{snippets}/products/update/curl-request.adoc[]
-
-**path-parameters**
-
-include::{snippets}/products/update/path-parameters.adoc[]
-
-**request-fields**
-
-include::{snippets}/products/update/request-part-requestDto-fields.adoc[]
-
-**request-parts(Optional)**
-
-include::{snippets}/products/update/request-parts.adoc[]
-
-**Example request**
-
-include::{snippets}/products/update/http-request.adoc[]
-
----
-
-==== 상품 삭제
-
-**curl**
-
-include::{snippets}/products/delete/curl-request.adoc[]
-
-**path-parameters**
-
-include::{snippets}/products/delete/path-parameters.adoc[]
-
-**Example request**
-
-include::{snippets}/products/delete/http-request.adoc[]
-
-**Example response**
-
-include::{snippets}/products/delete/http-response.adoc[]
-
----
-
-=== 4. 거래 관리
 
 ---
 
@@ -1175,5 +1118,309 @@ include::{snippets}/trade/update/forwarding-tracking-number/http-request.adoc[]
 **example response**
 
 include::{snippets}/trade/update/forwarding-tracking-number/http-response.adoc[]
+
+---
+
+==== 거래 완료
+
+**curl**
+
+include::{snippets}/trade/confirm/purchase/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/trade/confirm/purchase/path-parameters.adoc[]
+
+**example request**
+
+include::{snippets}/trade/confirm/purchase/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/trade/confirm/purchase/http-response.adoc[]
+
+---
+==== 거래 검색
+
+**curl**
+
+include::{snippets}/trade/search/curl-request.adoc[]
+
+**request-parameters**
+
+include::{snippets}/trade/search/request-parameters.adoc[]
+
+**response-fields**
+
+include::{snippets}/trade/search/response-fields.adoc[]
+
+**example request**
+
+include::{snippets}/trade/search/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/trade/search/http-response.adoc[]
+
+
+== ADMIN API
+
+---
+
+==== 회원 전체 조회
+
+**curl**
+
+include::{snippets}/admin/get/findAll/curl-request.adoc[]
+
+**response-fields**
+
+include::{snippets}/admin/get/findAll/response-fields.adoc[]
+
+**example request**
+
+include::{snippets}/admin/get/findAll/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/admin/get/findAll/http-response.adoc[]
+
+---
+
+==== 회원 조회(IDX)
+
+**curl**
+
+include::{snippets}/admin/get/findById/curl-request.adoc[]
+
+**request-parameters**
+
+include::{snippets}/admin/get/findById/request-parameters.adoc[]
+
+**response-fields**
+
+include::{snippets}/admin/get/findById/response-fields.adoc[]
+
+**example request**
+
+include::{snippets}/admin/get/findById/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/admin/get/findById/http-response.adoc[]
+
+---
+
+==== 회원 조회(User Level)
+
+**curl**
+
+include::{snippets}/admin/get/findByUserLevel/curl-request.adoc[]
+
+**request-parameters**
+
+include::{snippets}/admin/get/findByUserLevel/request-parameters.adoc[]
+
+**response-fields**
+
+include::{snippets}/admin/get/findByUserLevel/response-fields.adoc[]
+
+**example request**
+
+include::{snippets}/admin/get/findByUserLevel/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/admin/get/findByUserLevel/http-response.adoc[]
+
+---
+
+==== 회원 조회(Email)
+
+**curl**
+
+include::{snippets}/admin/get/findByEmail/curl-request.adoc[]
+
+**request-parameters**
+
+include::{snippets}/admin/get/findByEmail/request-parameters.adoc[]
+
+**response-fields**
+
+include::{snippets}/admin/get/findByEmail/response-fields.adoc[]
+
+**example request**
+
+include::{snippets}/admin/get/findByEmail/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/admin/get/findByEmail/http-response.adoc[]
+
+---
+
+==== 회원 상세 조회
+
+**curl**
+
+include::{snippets}/admin/get/details/curl-request.adoc[]
+
+**path-parameters**
+
+include::{snippets}/admin/get/details/path-parameters.adoc[]
+
+**response-fields**
+
+include::{snippets}/admin/get/details/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/admin/get/details/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/admin/get/details/http-response.adoc[]
+
+---
+
+==== 회원 정지
+
+**curl**
+
+include::{snippets}/admin/ban/curl-request.adoc[]
+
+**example request**
+
+include::{snippets}/admin/ban/http-request.adoc[]
+
+**example response**
+
+include::{snippets}/admin/ban/http-response.adoc[]
+
+== CART API
+
+==== 장바구니 조회
+**curl**
+
+include::{snippets}/users/carts/getWishList/curl-request.adoc[]
+
+**response-fields**
+
+include::{snippets}/users/carts/getWishList/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/users/carts/getWishList/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/users/carts/getWishList/http-response.adoc[]
+
+---
+==== 장바구니 추가
+**curl**
+
+include::{snippets}/users/carts/addWishList/curl-request.adoc[]
+
+**request-fields**
+include::{snippets}/users/carts/addWishList/request-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/users/carts/addWishList/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/users/carts/addWishList/http-response.adoc[]
+
+---
+==== 장바구니 삭제
+**curl**
+
+include::{snippets}/users/carts/deleteWishList/curl-request.adoc[]
+
+**request-fields**
+include::{snippets}/users/carts/deleteWishList/request-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/users/carts/deleteWishList/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/users/carts/deleteWishList/http-response.adoc[]
+
+
+== POINT API
+
+==== 포인트 충전(AJAX)
+**curl**
+
+include::{snippets}/points/charging/curl-request.adoc[]
+
+**request-fields**
+include::{snippets}/points/charging/request-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/points/charging/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/points/charging/http-response.adoc[]
+
+---
+
+==== 포인트 출금
+**curl**
+
+include::{snippets}/points/withdrawal/curl-request.adoc[]
+
+**request-fields**
+include::{snippets}/points/withdrawal/request-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/points/withdrawal/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/points/withdrawal/http-response.adoc[]
+
+---
+
+==== 포인트 차감 내역 조회
+**curl**
+
+include::{snippets}/points/history/deduction/curl-request.adoc[]
+
+**response-fields**
+include::{snippets}/points/history/deduction/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/points/history/deduction/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/points/history/deduction/http-response.adoc[]
+
+---
+
+==== 포인트 충전(대금 수령) 내역 조회
+**curl**
+
+include::{snippets}/points/history/charging/curl-request.adoc[]
+
+**response-fields**
+include::{snippets}/points/history/charging/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/points/history/charging/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/points/history/charging/http-response.adoc[]
 
 ---

@@ -572,6 +572,10 @@ class TradeApiControllerTest {
             .andDo(print())
             .andExpect(status().isOk())
             .andDo(document("trade/search",
+                requestParameters(
+                    parameterWithName("sellersEmail").description("판매자 로그인 eamil")
+                ),
+
                 responseFields(
                     fieldWithPath("content.[].id").type(JsonFieldType.NUMBER).description("ID"),
                     fieldWithPath("content.[].status").type(JsonFieldType.STRING)

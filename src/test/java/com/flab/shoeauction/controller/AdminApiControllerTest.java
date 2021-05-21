@@ -170,6 +170,8 @@ class AdminApiControllerTest {
                     fieldWithPath("content.[].id").type(JsonFieldType.NUMBER).description("ID"),
                     fieldWithPath("content.[].email").type(JsonFieldType.STRING)
                         .description("email"),
+                    fieldWithPath("content.[].userLevel").type(JsonFieldType.STRING)
+                        .description("userLevel"),
                     fieldWithPath("content.[].userLevel").ignored(),
                     fieldWithPath("pageable.offset").ignored(),
                     fieldWithPath("pageable.pageSize").ignored(),

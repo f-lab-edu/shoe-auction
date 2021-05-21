@@ -2,7 +2,7 @@ package com.flab.shoeauction.controller;
 
 import com.flab.shoeauction.common.annotation.CurrentUser;
 import com.flab.shoeauction.common.annotation.LoginCheck;
-import com.flab.shoeauction.controller.dto.ProductDto;
+import com.flab.shoeauction.controller.dto.ProductDto.IdRequest;
 import com.flab.shoeauction.controller.dto.ProductDto.WishItemResponse;
 import com.flab.shoeauction.service.CartService;
 import java.util.Set;
@@ -29,13 +29,13 @@ public class CartApiController {
 
     @LoginCheck
     @PostMapping
-    public void addWishList(@CurrentUser String email, @RequestBody ProductDto.IdRequest idRequest) {
+    public void addWishList(@CurrentUser String email, @RequestBody IdRequest idRequest) {
         cartService.addWishList(email, idRequest);
     }
 
     @LoginCheck
     @DeleteMapping
-    public void deleteWishList(@RequestBody ProductDto.IdRequest idRequest) {
+    public void deleteWishList(@RequestBody IdRequest idRequest) {
         cartService.deleteWishList(idRequest);
     }
 }
