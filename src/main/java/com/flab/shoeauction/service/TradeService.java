@@ -24,7 +24,6 @@ import com.flab.shoeauction.exception.user.NotAuthorizedException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.message.MessageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -66,7 +65,7 @@ public class TradeService {
     }
 
     @Transactional
-    @CacheEvict(value = "product", key = "#requestDto.productId")
+//    @CacheEvict(value = "product", key = "#requestDto.productId")
     public void createSalesBid(String email, SaveRequest requestDto) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
@@ -80,7 +79,7 @@ public class TradeService {
     }
 
     @Transactional
-    @CacheEvict(value = "product", key = "#requestDto.productId")
+//    @CacheEvict(value = "product", key = "#requestDto.productId")
     public void createPurchaseBid(String email, SaveRequest requestDto) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
@@ -99,7 +98,7 @@ public class TradeService {
     }
 
     @Transactional
-    @CacheEvict(value = "product", key = "#requestDto.productId")
+//    @CacheEvict(value = "product", key = "#requestDto.productId")
     public void immediatePurchase(String email, ImmediateTradeRequest requestDto) {
         User buyer = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
@@ -119,7 +118,7 @@ public class TradeService {
     }
 
     @Transactional
-    @CacheEvict(value = "product", key = "#requestDto.productId")
+//    @CacheEvict(value = "product", key = "#requestDto.productId")
     public void immediateSale(String email, ImmediateTradeRequest requestDto) {
         User seller = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));

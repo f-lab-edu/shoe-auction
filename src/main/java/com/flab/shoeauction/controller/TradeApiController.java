@@ -41,7 +41,7 @@ public class TradeApiController {
         return resourceForBid;
     }
 
-//    @LoginCheck(authority = UserLevel.AUTH)
+    @LoginCheck(authority = UserLevel.AUTH)
     @PostMapping("/sell/bid")
     @ResponseStatus(HttpStatus.CREATED)
     public void salesBid(@CurrentUser String email, @RequestBody TradeDto.SaveRequest requestDto) {
