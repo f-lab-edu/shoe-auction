@@ -192,7 +192,7 @@ public class ProductDto {
 
     @Getter
     @Builder
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class ThumbnailResponse {
 
@@ -206,7 +206,7 @@ public class ProductDto {
 
     @Builder
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class SearchCondition {
 
