@@ -47,7 +47,7 @@ public class AwsProperties {
         return credentials.getSecretKey();
     }
 
-    public String getBrnadBucket() {
+    public String getBrandBucket() {
         return s3.getBrand();
     }
 

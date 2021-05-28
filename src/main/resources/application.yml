@@ -1,11 +1,9 @@
 # profile을 타지않는 전역 설정
-# format_sql : query의 출력 내용을 서식에 맞게 가독성을 향상시켜 출
-
+# format_sql : query의 출력 내용을 서식에 맞게 가독성을 향상시켜 출력
 
 spring:
   profiles:
     active: dev
-
   jpa:
     properties:
       hibernate:

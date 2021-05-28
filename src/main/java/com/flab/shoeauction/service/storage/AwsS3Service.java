@@ -44,7 +44,7 @@ public class AwsS3Service implements StorageService {
     }
 
     public String uploadBrandImage(MultipartFile file) {
-        return upload(file, awsProperties.getBrnadBucket());
+        return upload(file, awsProperties.getBrandBucket());
     }
 
     public String uploadProductImage(MultipartFile file) {
@@ -72,7 +72,7 @@ public class AwsS3Service implements StorageService {
     }
 
     public void deleteBrandImage(String key) {
-        delete(awsProperties.getBrnadBucket(), key);
+        delete(awsProperties.getBrandBucket(), key);
     }
 
     public void deleteProductImage(String key) {
