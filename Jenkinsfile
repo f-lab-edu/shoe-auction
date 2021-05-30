@@ -52,7 +52,9 @@ pipeline {
       }
 
       steps {
-        mainBranch = true
+        script {
+          mainBranch = true
+        }
       }
     }
 
