@@ -176,6 +176,7 @@ public class TradeDto {
     @Getter
     @NoArgsConstructor
     public static class TradeInfoResponse {
+
         private Long id;
         private TradeStatus status;
 
@@ -189,6 +190,7 @@ public class TradeDto {
     @Getter
     @NoArgsConstructor
     public static class TradeCompleteInfo {
+
         private double productSize;
         private Long price;
         private LocalDateTime completeTime;
@@ -200,4 +202,18 @@ public class TradeDto {
             this.completeTime = completeTime;
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class TradeMonthSearchCondition {
+        private String year;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class MonthlyTradingVolumesResponse {
+        private String date;
+        private Long count;
+    }
 }
+

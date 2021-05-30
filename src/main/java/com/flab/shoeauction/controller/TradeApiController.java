@@ -5,13 +5,16 @@ import com.flab.shoeauction.common.annotation.LoginCheck;
 import com.flab.shoeauction.controller.dto.TradeDto;
 import com.flab.shoeauction.controller.dto.TradeDto.ChangeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.ImmediateTradeRequest;
+import com.flab.shoeauction.controller.dto.TradeDto.MonthlyTradingVolumesResponse;
 import com.flab.shoeauction.controller.dto.TradeDto.ReasonRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.TrackingNumberRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeInfoResponse;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeMonthSearchCondition;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeResource;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeSearchCondition;
 import com.flab.shoeauction.domain.users.common.UserLevel;
 import com.flab.shoeauction.service.TradeService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -126,5 +129,11 @@ public class TradeApiController {
     public Page<TradeInfoResponse> getTradeInfos(TradeSearchCondition tradeSearchCondition,
         Pageable pageable) {
         return tradeService.getTradeInfos(tradeSearchCondition, pageable);
+    }
+
+    @LoginCheck(authority =UserLevel.ADMIN)
+    @GetMapping("/month-volumes")
+    public List<MonthlyTradingVolumesResponse> getMonthVolumes(TradeMonthSearchCondition tradeMonthSearchCondition) {
+        return tradeService.getMonthlyTradingVolumes(tradeMonthSearchCondition);
     }
 }

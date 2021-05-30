@@ -7,8 +7,10 @@ import static com.flab.shoeauction.domain.trade.TradeStatus.PRE_WAREHOUSING;
 import com.flab.shoeauction.controller.dto.ProductDto.ProductInfoByTrade;
 import com.flab.shoeauction.controller.dto.TradeDto.ChangeRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.ImmediateTradeRequest;
+import com.flab.shoeauction.controller.dto.TradeDto.MonthlyTradingVolumesResponse;
 import com.flab.shoeauction.controller.dto.TradeDto.SaveRequest;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeInfoResponse;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeMonthSearchCondition;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeResource;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeSearchCondition;
 import com.flab.shoeauction.controller.dto.UserDto.TradeUserInfo;
@@ -23,6 +25,7 @@ import com.flab.shoeauction.domain.users.user.UserRepository;
 import com.flab.shoeauction.exception.user.NotAuthorizedException;
 import com.flab.shoeauction.exception.user.UserNotFoundException;
 import com.flab.shoeauction.service.message.MessageService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
@@ -217,5 +220,10 @@ public class TradeService {
         trade.endTrade();
 
         pointService.salesPointReceive(trade.getSeller(), trade.getPrice());
+    }
+
+    public List<MonthlyTradingVolumesResponse> getMonthlyTradingVolumes(
+        TradeMonthSearchCondition tradeMonthSearchCondition) {
+        return tradeRepository.searchTradeVolumeByMonth(tradeMonthSearchCondition);
     }
 }

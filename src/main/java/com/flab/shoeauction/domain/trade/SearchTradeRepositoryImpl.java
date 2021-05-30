@@ -2,12 +2,17 @@ package com.flab.shoeauction.domain.trade;
 
 import static com.flab.shoeauction.domain.trade.QTrade.trade;
 
+import com.flab.shoeauction.controller.dto.TradeDto.MonthlyTradingVolumesResponse;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeInfoResponse;
+import com.flab.shoeauction.controller.dto.TradeDto.TradeMonthSearchCondition;
 import com.flab.shoeauction.controller.dto.TradeDto.TradeSearchCondition;
 import com.flab.shoeauction.domain.users.user.User;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +59,32 @@ public class SearchTradeRepositoryImpl implements SearchTradeRepository {
         }
 
         return searchByTradeId(searchRequest.getTradeId(), pageable);
+    }
 
+    @Override
+    public List<MonthlyTradingVolumesResponse> searchTradeVolumeByMonth(
+        TradeMonthSearchCondition tradeMonthSearchCondition) {
+
+        StringTemplate dateFormat = Expressions.stringTemplate(
+            "DATE_FORMAT({0}, {1})", trade.modifiedDate, ConstantImpl.create("%Y-%m"));
+
+        List<MonthlyTradingVolumesResponse> results = jpaQueryFactory
+            .select(Projections.fields(MonthlyTradingVolumesResponse.class,
+                trade.id.count().as("count"),
+                dateFormat.as("date")
+            )).from(trade)
+            .where(statusEqAndDateContains(tradeMonthSearchCondition, dateFormat))
+            .groupBy(dateFormat)
+            .fetch();
+
+        return results;
+    }
+
+    private BooleanExpression statusEqAndDateContains(
+        TradeMonthSearchCondition tradeMonthSearchCondition,
+        StringTemplate dateFormat) {
+        return trade.status.eq(TradeStatus.TRADE_COMPLETE).and(dateFormat.contains(
+            tradeMonthSearchCondition.getYear()));
     }
 
     private Page<TradeInfoResponse> searchByTradeId(Long tradeId, Pageable pageable) {
