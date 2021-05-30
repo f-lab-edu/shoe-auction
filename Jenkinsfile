@@ -65,23 +65,22 @@ pipeline {
         }
       }
 
-      steps {
-        steps([$class: 'BapSshPromotionPublisherPlugin']) {
-          sshPublisher(
-            continueOnError: false, failOnError: true,
-            publishers: [
-              sshPublisherDesc(
-                configName: "shoe-auction-reverse-proxy",
-                verbose: true,
-                transfers: [
-                  sshTransfer(
-                    execCommand: "sh start.sh"
-                  )
-                ]
-              )
-            ]
-          )
-        }
+
+      steps([$class: 'BapSshPromotionPublisherPlugin']) {
+        sshPublisher(
+          continueOnError: false, failOnError: true,
+          publishers: [
+             sshPublisherDesc(
+              configName: "shoe-auction-reverse-proxy",
+              verbose: true,
+              transfers: [
+                sshTransfer(
+                  execCommand: "sh start.sh"
+                )
+              ]
+            )
+          ]
+        )
       }
     }
 
