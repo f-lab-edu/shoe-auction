@@ -75,7 +75,7 @@ pipeline {
               verbose: true,
               transfers: [
                 sshTransfer(
-                  execCommand: "sh start.sh"
+                  execCommand: "sh /root/.scripts/stop.sh"
                 )
               ]
             )
@@ -100,7 +100,7 @@ pipeline {
               verbose: true,
               transfers: [
                 sshTransfer(
-                  execCommand: "sh health.sh"
+                  execCommand: "sh /root/.scripts/start.sh"
                 )
               ]
             )
@@ -125,7 +125,7 @@ pipeline {
               verbose: true,
               transfers: [
                 sshTransfer(
-                  execCommand: "sh stop.sh"
+                  execCommand: "sh /root/.scripts/health.sh"
                 )
               ]
             )
