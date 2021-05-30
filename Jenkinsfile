@@ -48,7 +48,7 @@ pipeline {
 
     stage('Check Branch') {
       when {
-        branch 'main'
+        branch 'develop'
       }
 
       steps {
